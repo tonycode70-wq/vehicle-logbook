@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* VehicleManager Pro - Design System
+   Palette automotive professionale con accenti blu/grigio
+   Tutti i colori in HSL
+*/
+
+@layer base {
+  :root {
+    /* Sfondo principale - grigio chiaro elegante */
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+
+    /* Card - bianco puro */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Blu automotive */
+    --primary: 217 91% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Grigio neutro */
+    --secondary: 210 20% 95%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted - Grigio chiaro */
+    --muted: 210 20% 94%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent - Blu chiaro */
+    --accent: 217 91% 95%;
+    --accent-foreground: 217 91% 35%;
+
+    /* Destructive - Rosso */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Warning - Arancione */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Success - Verde */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    /* Bordi e input */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 45%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 32% 20%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 217 32% 25%;
+    --sidebar-ring: 217 91% 60%;
+  }
+
+  .dark {
+    /* Nuovo tema ultra-dark con gradienti viola/fucsia */
+    --background: 0 0% 2%;
+    --foreground: 210 40% 98%;
+
+    /* Card con sfondo scuro */
+    --card: 217 33% 10%;
+    --card-foreground: 210 40% 98%;
+
+    /* Popover */
+    --popover: 217 33% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary - Viola/Fucsia vibrante */
+    --primary: 263 70% 58%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Secondary */
+    --secondary: 217 33% 14%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* Muted */
+    --muted: 217 33% 14%;
+    --muted-foreground: 215 20% 65%;
+
+    /* Accent - Teal/Verde acqua */
+    --accent: 160 84% 60%;
+    --accent-foreground: 222 47% 6%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Warning */
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+
+    /* Success */
+    --success: 142 76% 42%;
+    --success-foreground: 222 47% 11%;
+
+    /* Bordi scuri sottili */
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 263 70% 58%;
+
+    /* Sidebar ultra-dark */
+    --sidebar-background: 217 33% 10%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 263 70% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 217 33% 14%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 263 70% 58%;
+
+    /* Chart colors - gradienti vivaci */
+    --chart-1: 263 70% 58%;
+    --chart-2: 160 84% 60%;
+    --chart-3: 292 84% 61%;
+    --chart-4: 190 95% 50%;
+    --chart-5: 30 80% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Scrollbar personalizzata */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
