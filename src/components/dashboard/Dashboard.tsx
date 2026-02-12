@@ -597,8 +597,6 @@ export function Dashboard() {
 
             <div className="text-2xl font-sans font-bolt font-medium text-blue-600">{formatCurrency(kpiData.totalExpensesSelected)}</div>
 
-            <div className="text-2xl font-bold text-primary">{formatCurrency(kpiData.totalExpensesSelected)}</div>
-
             <p className="text-xs text-muted-foreground mt-1 truncate">
               {selectedVehicle ? `${selectedVehicle.brand} ${selectedVehicle.model}` : 'Selezionato'}
             </p>
