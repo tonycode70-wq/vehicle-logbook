@@ -24,7 +24,7 @@ export function Header({ currentTab, onTabChange }: HeaderProps) {
   const currentTabConfig = tabs.find(t => t.id === currentTab);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+    <header className="sticky top-0 z-50 w-full glass-nav">
       <div className="container flex h-14 items-center justify-between px-4">
         {/* Logo e menu mobile */}
         <div className="flex items-center gap-3">

@@ -9,7 +9,7 @@ interface SidebarNavProps {
 
 export function SidebarNav({ currentTab, onTabChange }: SidebarNavProps) {
   return (
-    <aside className="hidden md:flex md:w-56 lg:w-64 flex-col border-r bg-card">
+    <aside className="hidden md:flex md:w-56 lg:w-64 flex-col glass-sidebar">
       <nav className="flex flex-1 flex-col gap-1 p-3">
         {tabs.map(tab => {
           const Icon = tab.icon;

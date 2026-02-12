@@ -20,19 +20,19 @@ export function GlassmorphicCard({
 }: GlassmorphicCardProps) {
   
   const variantStyles = {
-    default: "bg-card/40 border-white/10",
-    primary: "bg-gradient-to-br from-violet-500/60 via-purple-500/40 to-fuchsia-500/30 border-white/20 shadow-[0_0_50px_rgba(139,92,246,0.35),0_0_100px_rgba(168,85,247,0.12),inset_0_1px_0_0_rgba(255,255,255,0.15)]",
-    accent: "bg-gradient-to-br from-teal-500/50 via-cyan-500/30 to-emerald-500/20 border-white/20 shadow-[0_0_40px_rgba(20,184,166,0.25),inset_0_1px_0_0_rgba(255,255,255,0.1)]",
-    success: "bg-gradient-to-br from-emerald-500/50 via-green-500/30 to-teal-500/20 border-white/20 shadow-[0_0_40px_rgba(16,185,129,0.25),inset_0_1px_0_0_rgba(255,255,255,0.1)]",
-    warning: "bg-gradient-to-br from-amber-500/50 via-orange-500/30 to-yellow-500/20 border-white/20 shadow-[0_0_40px_rgba(245,158,11,0.25),inset_0_1px_0_0_rgba(255,255,255,0.1)]",
+    default: "glass-card",
+    primary: "glass-card bg-gradient-to-br from-blue-50/80 to-indigo-50/60 border-blue-200/30",
+    accent: "glass-card bg-gradient-to-br from-sky-50/80 to-cyan-50/60 border-sky-200/30",
+    success: "glass-card bg-gradient-to-br from-emerald-50/80 to-green-50/60 border-emerald-200/30",
+    warning: "glass-card bg-gradient-to-br from-amber-50/80 to-orange-50/60 border-amber-200/30",
   };
   
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-3xl backdrop-blur-xl border p-6 transition-all duration-300",
+        "relative overflow-hidden p-6 transition-all duration-300",
         variantStyles[variant],
-        hover && "hover:shadow-[0_0_60px_rgba(139,92,246,0.45)] hover:border-white/30 hover:-translate-y-1",
+        hover && "hover:shadow-lg hover:-translate-y-0.5",
         className
       )}
     >
@@ -55,10 +55,10 @@ export function GlassmorphicCardHeader({ children, icon, className }: Glassmorph
     <div className={cn("mb-5", className)}>
       {icon && (
         <div className="flex items-center gap-2 mb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
             {icon}
           </div>
-          <span className="text-sm font-medium text-white/80">
+          <span className="text-sm font-medium text-muted-foreground">
             {typeof children === 'string' ? children : null}
           </span>
         </div>
@@ -87,7 +87,7 @@ export function GlassmorphicCardTitle({ children, className, size = 'lg' }: Glas
   
   return (
     <p className={cn(
-      "font-bold tracking-tight text-white",
+      "font-bold tracking-tight text-foreground",
       sizeStyles[size],
       className
     )}>
@@ -106,7 +106,7 @@ interface GlassmorphicCardDescriptionProps {
  */
 export function GlassmorphicCardDescription({ children, className }: GlassmorphicCardDescriptionProps) {
   return (
-    <p className={cn("text-base text-white/60 mt-1", className)}>
+    <p className={cn("text-base text-muted-foreground mt-1", className)}>
       {children}
     </p>
   );
@@ -124,15 +124,15 @@ interface GlassmorphicBadgeProps {
  */
 export function GlassmorphicBadge({ children, icon, variant = 'info', className }: GlassmorphicBadgeProps) {
   const variantStyles = {
-    success: "bg-emerald-300/10 text-emerald-300",
-    warning: "bg-amber-300/10 text-amber-300",
-    info: "bg-white/10 text-white/60",
+    success: "bg-emerald-50 text-emerald-700",
+    warning: "bg-amber-50 text-amber-700",
+    info: "bg-gray-100 text-muted-foreground",
   };
   
   const iconColor = {
-    success: "text-emerald-300",
-    warning: "text-amber-300",
-    info: "text-white/60",
+    success: "text-emerald-600",
+    warning: "text-amber-600",
+    info: "text-muted-foreground",
   };
   
   return (

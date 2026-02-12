@@ -107,6 +107,7 @@ export function VehicleForm({ vehicle, onComplete }: VehicleFormProps) {
         // NUOVI CAMPI
         registrationDate: data.registrationDate || undefined,
         disabilityExemption: data.disabilityExemption || false,
+        euroClass: (data as any).euroClass || '',
       };
 
       if (vehicle) {

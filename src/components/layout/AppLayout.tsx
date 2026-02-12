@@ -13,19 +13,16 @@ interface AppLayoutProps {
 
 export function AppLayout({ children, currentTab, onTabChange }: AppLayoutProps) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#030303] overflow-hidden">
-      {/* Ambient background orbs - Ultra dark theme with violet/teal/fuchsia */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        aria-hidden="true"
-      >
-        <div className="absolute left-[-30%] top-[0%] h-[500px] w-[500px] rounded-full bg-violet-600/20 blur-[150px]" />
-        <div className="absolute right-[-20%] top-[15%] h-[400px] w-[400px] rounded-full bg-teal-500/12 blur-[130px]" />
-        <div className="absolute left-[10%] bottom-[5%] h-[450px] w-[450px] rounded-full bg-fuchsia-600/12 blur-[160px]" />
-        <div className="absolute right-[-10%] bottom-[30%] h-[350px] w-[350px] rounded-full bg-indigo-500/10 blur-[120px]" />
+    <div className="relative flex min-h-screen flex-col overflow-hidden" style={{
+      background: 'linear-gradient(165deg, #f8fafc 0%, #eef4fb 35%, #f0f4f8 65%, #f5f7fa 100%)'
+    }}>
+      {/* iOS ambient blobs - very subtle */}
+      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+        <div className="absolute left-[-10%] top-[-5%] h-[600px] w-[600px] rounded-full bg-blue-200/20 blur-[120px]" />
+        <div className="absolute right-[-10%] top-[20%] h-[500px] w-[500px] rounded-full bg-indigo-100/25 blur-[100px]" />
+        <div className="absolute left-[20%] bottom-[0%] h-[500px] w-[500px] rounded-full bg-sky-100/20 blur-[130px]" />
       </div>
 
-      {/* Main content wrapper with z-index to stay above orbs */}
       <div className="relative z-10 flex min-h-screen flex-col">
         <Header currentTab={currentTab} onTabChange={onTabChange} />
         
