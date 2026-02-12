@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { 
   Car, 
   Bike, 
@@ -496,7 +497,12 @@ export function Dashboard() {
   }
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
+    <motion.div 
+      className="space-y-6 pb-20 md:pb-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* === 1) HEADER DASHBOARD === */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -552,24 +558,29 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* === 2) KPI CARDS - AGGIORNATI CON NUOVE LOGICHE === */}
+      {/* === 2) KPI CARDS === */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
-        {/* KPI 1: Efficienza (NUOVO) */}
+        {/* KPI 1: Efficienza */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4 }}>
         <GlassmorphicCard className="border-l-2 border-l-violet-500">
           <CardContent className="p-4">
-            <p className="text-[10px] font-bold text-violet-400 uppercase tracking-widest mb-1">Efficienza Media</p>
-            <div className="text-2xl font-black text-white">{fleetStats.avgEfficiency}/100</div>
+            <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest mb-1">Efficienza Media</p>
+            <div className="text-2xl font-black text-foreground">{fleetStats.avgEfficiency}/100</div>
           </CardContent>
         </GlassmorphicCard>
+        </motion.div>
 
-        {/* KPI 2: Esenzioni (NUOVO) */}
+        {/* KPI 2: Esenzioni */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }}>
         <GlassmorphicCard className="border-l-2 border-l-teal-500">
           <CardContent className="p-4">
-            <p className="text-[10px] font-bold text-teal-400 uppercase tracking-widest mb-1">Esenti Bollo</p>
-            <div className="text-2xl font-black text-white">{fleetStats.totalTaxExempt}</div>
+            <p className="text-[10px] font-bold text-teal-600 uppercase tracking-widest mb-1">Esenti Bollo</p>
+            <div className="text-2xl font-black text-foreground">{fleetStats.totalTaxExempt}</div>
           </CardContent>
         </GlassmorphicCard>
+        </motion.div>
 
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4 }}>
         <Card>
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
@@ -583,7 +594,9 @@ export function Dashboard() {
             </p>
           </CardContent>
         </Card>
+        </motion.div>
 
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4 }}>
         <Card>
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
@@ -591,11 +604,13 @@ export function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">
-            <div className="text-2xl font-bold">{formatCurrency(kpiData.monthlyAverage)}</div>
+            <div className="text-2xl font-bold text-foreground">{formatCurrency(kpiData.monthlyAverage)}</div>
             <p className="text-xs text-muted-foreground mt-1">Ultimi 12 mesi</p>
           </CardContent>
         </Card>
+        </motion.div>
 
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4 }}>
         <Card className={cn(activeAlerts > 0 && "border-warning/50 bg-warning/5")}>
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
@@ -604,12 +619,13 @@ export function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">
-            <div className={cn("text-2xl font-bold", activeAlerts > 0 && "text-warning")}>{activeAlerts}</div>
+            <div className={cn("text-2xl font-bold", activeAlerts > 0 ? "text-warning" : "text-foreground")}>{activeAlerts}</div>
             <p className="text-xs text-muted-foreground mt-1">
               {alerts.filter(a => a.status === 'scaduto').length} scaduti
             </p>
           </CardContent>
         </Card>
+        </motion.div>
       </div>
 
       {/* === 3) STATO LEGALE === */}
@@ -719,6 +735,6 @@ export function Dashboard() {
           </Card>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
