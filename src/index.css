@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* VehicleManager Pro - iOS Glass UI Design System
+   Frosted glass autentico Apple - Light theme only
+   Tutti i colori in HSL
+*/
+
+@layer base {
+  :root {
+    /* Sfondo iOS - bianco caldo con sfumatura */
+    --background: 220 20% 97%;
+    --foreground: 222 20% 18%;
+
+    /* Card glass */
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 18%;
+
+    /* Popover glass */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 18%;
+
+    /* Primary - Blu sistema iOS #007AFF */
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Grigio iOS */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 25%;
+
+    /* Muted */
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 10% 46%;
+
+    /* Accent */
+    --accent: 211 100% 96%;
+    --accent-foreground: 211 100% 42%;
+
+    /* Destructive - Rosso iOS */
+    --destructive: 0 100% 59%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Warning - Arancione iOS */
+    --warning: 28 100% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Success - Verde iOS */
+    --success: 142 72% 42%;
+    --success-foreground: 0 0% 100%;
+
+    /* Bordi sottilissimi */
+    --border: 220 15% 91%;
+    --input: 220 15% 91%;
+    --ring: 211 100% 50%;
+
+    --radius: 1rem;
+
+    /* Sidebar glass */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 20% 18%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 211 100% 96%;
+    --sidebar-accent-foreground: 211 100% 42%;
+    --sidebar-border: 220 15% 92%;
+    --sidebar-ring: 211 100% 50%;
+
+    /* Chart colors - iOS palette */
+    --chart-1: 211 100% 50%;
+    --chart-2: 142 72% 42%;
+    --chart-3: 28 100% 55%;
+    --chart-4: 280 80% 58%;
+    --chart-5: 340 82% 55%;
+  }
+
+  /* DARK MODE - ULTRA DARK PALETTE */
+  .dark {
+    --background: 0 0% 3%;                /* #030303 */
+    --foreground: 0 0% 100%;              /* bianco */
+    --card: 217 33% 10%;                  /* quasi nero */
+    --card-foreground: 0 0% 100%;
+    --popover: 217 33% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 263 70% 58%;               /* violet */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 18%;             /* grigio scuro */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 14% 12%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 160 84% 60%;                /* teal */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 59%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 28 100% 55%;
+    --warning-foreground: 0 0% 100%;
+    --success: 142 72% 42%;
+    --success-foreground: 0 0% 100%;
+    --border: 0 0% 100% / 10%;
+    --input: 0 0% 100% / 10%;
+    --ring: 263 70% 58%;
+    --radius: 1rem;
+
+    --sidebar-background: 217 33% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 263 70% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 84% 60%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 100% / 10%;
+    --sidebar-ring: 263 70% 58%;
+
+    /* Chart colors - puoi lasciarli uguali o renderli più vividi */
+    --chart-1: 263 70% 58%;
+    --chart-2: 160 84% 60%;
+    --chart-3: 28 100% 55%;
+    --chart-4: 280 80% 58%;
+    --chart-5: 340 82% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* iOS Glass utilities - AUTENTICO */
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 22px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.06),
+      0 2px 8px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.08),
+      0 4px 12px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .glass-sidebar {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-right: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
+  }
+
+  .glass-bottom {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .ios-button-press {
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .ios-button-press:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.35);
+  }
+}
