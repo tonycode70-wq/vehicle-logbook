@@ -76,7 +76,11 @@ export function Header({ currentTab, onTabChange }: HeaderProps) {
               <span className="text-lg">🚗</span>
             </div>
             <div className="hidden sm:block">
+<<<<<<< HEAD
               <h1 className="text-lg font-bold text-foreground">Baron's Veicoli</h1>
+=======
+              <h1 className="text-lg font-bold text-foreground">VehicleManager</h1>
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
             </div>
           </div>
         </div>

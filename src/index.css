@@ -74,6 +74,7 @@
     --chart-5: 340 82% 55%;
   }
 
+<<<<<<< HEAD
   /* DARK MODE - ULTRA DARK PALETTE */
   .dark {
     --background: 0 0% 3%;                /* #030303 */
@@ -90,12 +91,31 @@
     --muted-foreground: 0 0% 70%;
     --accent: 160 84% 60%;                /* teal */
     --accent-foreground: 0 0% 100%;
+=======
+  /* Force light - override dark class */
+  .dark {
+    --background: 220 20% 97%;
+    --foreground: 222 20% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 18%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 25%;
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 10% 46%;
+    --accent: 211 100% 96%;
+    --accent-foreground: 211 100% 42%;
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
     --destructive: 0 100% 59%;
     --destructive-foreground: 0 0% 100%;
     --warning: 28 100% 55%;
     --warning-foreground: 0 0% 100%;
     --success: 142 72% 42%;
     --success-foreground: 0 0% 100%;
+<<<<<<< HEAD
     --border: 0 0% 100% / 10%;
     --input: 0 0% 100% / 10%;
     --ring: 263 70% 58%;
@@ -113,6 +133,21 @@
     /* Chart colors - puoi lasciarli uguali o renderli più vividi */
     --chart-1: 263 70% 58%;
     --chart-2: 160 84% 60%;
+=======
+    --border: 220 15% 91%;
+    --input: 220 15% 91%;
+    --ring: 211 100% 50%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 20% 18%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 211 100% 96%;
+    --sidebar-accent-foreground: 211 100% 42%;
+    --sidebar-border: 220 15% 92%;
+    --sidebar-ring: 211 100% 50%;
+    --chart-1: 211 100% 50%;
+    --chart-2: 142 72% 42%;
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
     --chart-3: 28 100% 55%;
     --chart-4: 280 80% 58%;
     --chart-5: 340 82% 55%;
@@ -206,4 +241,8 @@
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.35);
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11

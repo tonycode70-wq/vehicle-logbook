@@ -506,7 +506,11 @@ export function Dashboard() {
       {/* === 1) HEADER DASHBOARD === */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
+<<<<<<< HEAD
           <h1 className="text-2xl font-sans font-bold tracking-tight md:text-3xl">Dashboard</h1>
+=======
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Dashboard</h1>
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
           <p className="text-sm text-muted-foreground">Centro di controllo veicoli</p>
         </div>
         
@@ -564,8 +568,13 @@ export function Dashboard() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4 }}>
         <GlassmorphicCard className="border-l-2 border-l-violet-500">
           <CardContent className="p-4">
+<<<<<<< HEAD
             <p className="text-[13px] font-sans font-bold text-red-600 uppercase tracking-widest mb-1">Efficienza Media</p>
             <div className="text-2xl font-bold text-blue-600 text-foreground">{fleetStats.avgEfficiency}/100</div>
+=======
+            <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest mb-1">Efficienza Media</p>
+            <div className="text-2xl font-black text-foreground">{fleetStats.avgEfficiency}/100</div>
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
           </CardContent>
         </GlassmorphicCard>
         </motion.div>
@@ -574,8 +583,13 @@ export function Dashboard() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }}>
         <GlassmorphicCard className="border-l-2 border-l-teal-500">
           <CardContent className="p-4">
+<<<<<<< HEAD
             <p className="text-[11px] font-sans text--primary uppercase tracking-widest mb-1">Esenti Bollo</p>
             <div className="text-2xl font-sans font-medium text-foreground">{fleetStats.totalTaxExempt}</div>
+=======
+            <p className="text-[10px] font-bold text-teal-600 uppercase tracking-widest mb-1">Esenti Bollo</p>
+            <div className="text-2xl font-black text-foreground">{fleetStats.totalTaxExempt}</div>
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
           </CardContent>
         </GlassmorphicCard>
         </motion.div>
@@ -588,7 +602,11 @@ export function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">
+<<<<<<< HEAD
             <div className="text-2xl font-sans font-bolt font-medium text-blue-600">{formatCurrency(kpiData.totalExpensesSelected)}</div>
+=======
+            <div className="text-2xl font-bold text-primary">{formatCurrency(kpiData.totalExpensesSelected)}</div>
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
             <p className="text-xs text-muted-foreground mt-1 truncate">
               {selectedVehicle ? `${selectedVehicle.brand} ${selectedVehicle.model}` : 'Selezionato'}
             </p>
@@ -631,7 +649,11 @@ export function Dashboard() {
       {/* === 3) STATO LEGALE === */}
       <GlassmorphicCard>
         <GlassmorphicCardHeader>
+<<<<<<< HEAD
           <GlassmorphicCardTitle className="flex items-center gap-2 text-lg font-sans font-semibold">
+=======
+          <GlassmorphicCardTitle className="flex items-center gap-2">
+>>>>>>> 07f5e1392baba5af084410addb44cccc9c944a11
             <Shield className="h-5 w-5 text-primary" />
             Stato Legale & Verifiche
           </GlassmorphicCardTitle>
