@@ -79,8 +79,6 @@ export function Header({ currentTab, onTabChange }: HeaderProps) {
 
               <h1 className="text-lg font-bold text-foreground">Baron's Veicoli</h1>
 
-              <h1 className="text-lg font-bold text-foreground">Baron's Veicoli</h1>
-
             </div>
           </div>
         </div>
