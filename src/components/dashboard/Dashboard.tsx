@@ -509,8 +509,6 @@ export function Dashboard() {
 
           <h1 className="text-2xl font-sans font-bold tracking-tight md:text-3xl">Dashboard</h1>
 
-          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Dashboard</h1>
-
           <p className="text-sm text-muted-foreground">Centro di controllo veicoli</p>
         </div>
         
@@ -571,9 +569,6 @@ export function Dashboard() {
 
             <p className="text-[13px] font-sans font-bold text-red-600 uppercase tracking-widest mb-1">Efficienza Media</p>
             <div className="text-2xl font-bold text-blue-600 text-foreground">{fleetStats.avgEfficiency}/100</div>
-=======
-            <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest mb-1">Efficienza Media</p>
-            <div className="text-2xl font-black text-foreground">{fleetStats.avgEfficiency}/100</div>
 
           </CardContent>
         </GlassmorphicCard>
@@ -586,11 +581,8 @@ export function Dashboard() {
 
             <p className="text-[11px] font-sans text--primary uppercase tracking-widest mb-1">Esenti Bollo</p>
             <div className="text-2xl font-sans font-medium text-foreground">{fleetStats.totalTaxExempt}</div>
-=======
-            <p className="text-[10px] font-bold text-teal-600 uppercase tracking-widest mb-1">Esenti Bollo</p>
-            <div className="text-2xl font-black text-foreground">{fleetStats.totalTaxExempt}</div>
 
-          </CardContent>
+            </CardContent>
         </GlassmorphicCard>
         </motion.div>
 
@@ -604,7 +596,7 @@ export function Dashboard() {
           <CardContent className="px-4 pb-4">
 
             <div className="text-2xl font-sans font-bolt font-medium text-blue-600">{formatCurrency(kpiData.totalExpensesSelected)}</div>
-=======
+
             <div className="text-2xl font-bold text-primary">{formatCurrency(kpiData.totalExpensesSelected)}</div>
 
             <p className="text-xs text-muted-foreground mt-1 truncate">
