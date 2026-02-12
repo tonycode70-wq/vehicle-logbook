@@ -11,15 +11,15 @@
   :root {
     /* Sfondo iOS - bianco caldo con sfumatura */
     --background: 220 20% 97%;
-    --foreground: 220 20% 14%;
+    --foreground: 222 20% 18%;
 
     /* Card glass */
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 14%;
+    --card-foreground: 222 20% 18%;
 
     /* Popover glass */
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 14%;
+    --popover-foreground: 222 20% 18%;
 
     /* Primary - Blu sistema iOS #007AFF */
     --primary: 211 100% 50%;
@@ -58,7 +58,7 @@
 
     /* Sidebar glass */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 20% 14%;
+    --sidebar-foreground: 222 20% 18%;
     --sidebar-primary: 211 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 211 100% 96%;
@@ -77,11 +77,11 @@
   /* Force light - override dark class */
   .dark {
     --background: 220 20% 97%;
-    --foreground: 220 20% 14%;
+    --foreground: 222 20% 18%;
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 14%;
+    --card-foreground: 222 20% 18%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 14%;
+    --popover-foreground: 222 20% 18%;
     --primary: 211 100% 50%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 14% 96%;
@@ -100,7 +100,7 @@
     --input: 220 15% 91%;
     --ring: 211 100% 50%;
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 20% 14%;
+    --sidebar-foreground: 222 20% 18%;
     --sidebar-primary: 211 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 211 100% 96%;
@@ -127,37 +127,50 @@
   }
 }
 
-/* iOS Glass utilities */
+/* iOS Glass utilities - AUTENTICO */
 @layer utilities {
   .glass-card {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 20px;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 22px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.06),
+      0 2px 8px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
     transition: all 0.3s ease;
   }
 
+  .glass-card:hover {
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.08),
+      0 4px 12px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
   .glass-nav {
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   }
 
   .glass-sidebar {
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-right: 0.5px solid rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-right: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
   }
 
   .glass-bottom {
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
   }
 
   .ios-button-press {
