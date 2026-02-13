@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  LayoutDashboard, 
+  Gauge, 
   Car, 
   FileText, 
   Wrench, 
@@ -31,7 +31,7 @@ export interface TabConfig {
 }
 
 export const tabs: TabConfig[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, shortLabel: 'Home' },
+  { id: 'dashboard', label: 'Dashboard', icon: Gauge, shortLabel: 'Home' },
   { id: 'vehicles', label: 'Veicoli', icon: Car },
   { id: 'legal', label: 'Stato Legale', icon: FileText, shortLabel: 'Legale' },
   { id: 'maintenance', label: 'Manutenzioni', icon: Wrench, shortLabel: 'Manut.' },

@@ -39,7 +39,13 @@ import {
 
 export function Dashboard() {
   const { data, isLoaded } = useVehicleContext();
-  const [selectedVehicleId, setSelectedVehicleId] = useState<string | 'all'>('all');
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | 'all'>(() => {
+    const saved = localStorage.getItem('selectedVehicleId');
+    return (saved && saved.length > 0 ? saved : 'all') as 'all' | string;
+  });
+  useEffect(() => {
+    localStorage.setItem('selectedVehicleId', selectedVehicleId as string);
+  }, [selectedVehicleId]);
   
   // Canvas refs per grafici
   const monthlyChartRef = useRef<HTMLCanvasElement>(null);
@@ -55,22 +61,40 @@ export function Dashboard() {
   const fleetStats = useMemo(() => {
     if (data.vehicles.length === 0) return { avgEfficiency: 0, totalTaxExempt: 0 };
 
-    const totalEfficiency = data.vehicles.reduce((acc, v) => {
-      const vMaintenances = data.maintenance.filter(m => m.vehicleId === v.id);
-      return acc + calculateEfficiencyIndex(v, vMaintenances).score;
-    }, 0);
-
     const exemptVehicles = data.vehicles.filter(v => {
       const age = v.registrationDate ? calculateVehicleAge(v.registrationDate).ageYears : 0;
       const status = calculateRoadTaxStatus(v, age);
       return status.includes('Exempt');
     }).length;
 
+    if (selectedVehicleId !== 'all') {
+      const vehicle = data.vehicles.find(v => v.id === selectedVehicleId);
+      if (!vehicle) {
+        return {
+          avgEfficiency: 0,
+          totalTaxExempt: exemptVehicles
+        };
+      }
+
+      const vMaintenances = data.maintenance.filter(m => m.vehicleId === vehicle.id);
+      const efficiency = calculateEfficiencyIndex(vehicle, vMaintenances).score;
+
+      return {
+        avgEfficiency: efficiency,
+        totalTaxExempt: exemptVehicles
+      };
+    }
+
+    const totalEfficiency = data.vehicles.reduce((acc, v) => {
+      const vMaintenances = data.maintenance.filter(m => m.vehicleId === v.id);
+      return acc + calculateEfficiencyIndex(v, vMaintenances).score;
+    }, 0);
+
     return {
       avgEfficiency: Math.round(totalEfficiency / data.vehicles.length),
       totalTaxExempt: exemptVehicles
     };
-  }, [data]);
+  }, [data, selectedVehicleId]);
 
   // Filtra dati per veicolo selezionato - MEMOIZED
   const filteredExpenses = useMemo(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -34,7 +34,13 @@ const ACTION_LABELS: Record<string, string> = {
 
 export function History() {
   const { data } = useVehicleContext();
-  const [selectedVehicle, setSelectedVehicle] = useState<string>('all');
+  const [selectedVehicle, setSelectedVehicle] = useState<string>(() => {
+    const saved = localStorage.getItem('selectedVehicleId');
+    return saved || 'all';
+  });
+  useEffect(() => {
+    localStorage.setItem('selectedVehicleId', selectedVehicle);
+  }, [selectedVehicle]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAction, setSelectedAction] = useState<string>('all');
 

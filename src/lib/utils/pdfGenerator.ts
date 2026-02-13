@@ -7,6 +7,7 @@ import {
   EfficiencyIndexResult,
   RoadTaxStatus
 } from './vehicleCalculations';
+import { estimateEuroClass } from './vehicleCalculations';
 
 /**
  * Interfaccia per i dati completi del veicolo da includere nel PDF
@@ -70,6 +71,53 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
     acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
     return acc;
   }, {} as Record<string, number>);
+  
+  // Calcola totali annuali (spese + manutenzioni)
+  const totalsByYear = [...expenses.map(e => ({ date: e.date, amount: e.amount })), ...maintenance.map(m => ({ date: m.date, amount: m.cost }))].reduce((acc, item) => {
+    const y = new Date(item.date).getFullYear();
+    acc[y] = (acc[y] || 0) + item.amount;
+    return acc;
+  }, {} as Record<number, number>);
+  const totalsByYearRows = Object.keys(totalsByYear)
+    .sort((a, b) => Number(a) - Number(b))
+    .map(y => `<tr><td style="width:120px">${y}</td><td>${formatCurrency(totalsByYear[Number(y)])}</td></tr>`)
+    .join('');
+  
+  // Costo medio per km
+  const costPerKm = vehicle.currentKm > 0 ? (totalCostOfOwnership / vehicle.currentKm) : 0;
+  
+  // Stato assicurazione / revisione
+  const insuranceStatus = legal.insurance?.endDate ? (new Date(legal.insurance.endDate).getTime() - new Date().getTime() < 0 ? 'Scaduto' : ((new Date(legal.insurance.endDate).getTime() - new Date().getTime()) / (1000*60*60*24) <= 30 ? 'In Scadenza' : 'OK')) : 'N/D';
+  const inspectionStatus = legal.inspection?.nextDate ? (new Date(legal.inspection.nextDate).getTime() - new Date().getTime() < 0 ? 'Scaduto' : ((new Date(legal.inspection.nextDate).getTime() - new Date().getTime()) / (1000*60*60*24) <= 30 ? 'In Scadenza' : 'OK')) : 'N/D';
+  
+  // Stato tagliando
+  const lastService = maintenance
+    .filter(m => m.vehicleId === vehicle.id && m.type === 'tagliando')
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+  const tagliandoNextDate = lastService?.nextMaintenanceDate || null;
+  let tagliandoStatus = 'N/D';
+  if (tagliandoNextDate) {
+    const diffDays = (new Date(tagliandoNextDate).getTime() - new Date().getTime()) / (1000*60*60*24);
+    tagliandoStatus = diffDays < 0 ? 'Scaduto' : (diffDays <= 30 ? 'In Scadenza' : 'OK');
+  }
+  
+  // Motivazione bollo
+  const roadTaxReason = (() => {
+    switch (roadTaxStatus) {
+      case 'Exempt (Law 104/Disability)': return 'Esenzione Legge 104/Disabilità';
+      case 'Exempt (Historic Vehicle)': return 'Veicolo storico (≥30 anni)';
+      case 'Exempt (Electric < 5y)': return 'Elettrico con età ≤ 5 anni';
+      case 'Exempt/Check Region (Hybrid)': return 'Ibrido (verifica regole regionali)';
+      default: return 'Dovuto';
+    }
+  })();
+  
+  // Traduzione stato bollo per UI
+  const roadTaxStatusLabel = (() => {
+    if (roadTaxStatus === 'Payable') return 'Da Pagare';
+    if (roadTaxStatus === 'Paid') return 'Pagato';
+    return 'Esente';
+  })();
 
   return `
 <!DOCTYPE html>
@@ -87,77 +135,77 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
     
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
+      line-height: 1.4;
       color: #1a1a1a;
       background: #fff;
-      padding: 40px;
-      font-size: 12px;
+      padding: 12px;
+      font-size: 11px;
     }
     
     .header {
-      border-bottom: 4px solid #8b5cf6;
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+      border-bottom: 2px solid #8b5cf6;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
     }
     
     .header h1 {
       color: #8b5cf6;
-      font-size: 28px;
-      margin-bottom: 8px;
+      font-size: 20px;
+      margin-bottom: 4px;
     }
     
     .header .subtitle {
       color: #666;
-      font-size: 14px;
+      font-size: 11px;
     }
     
     .section {
-      margin-bottom: 30px;
+      margin-bottom: 12px;
       page-break-inside: avoid;
     }
     
     .section-title {
       background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
       color: white;
-      padding: 10px 15px;
-      font-size: 16px;
+      padding: 6px 10px;
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
       border-radius: 6px;
     }
     
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px 30px;
-      margin-bottom: 15px;
+      gap: 8px 16px;
+      margin-bottom: 8px;
     }
     
     .info-item {
-      padding: 8px 0;
-      border-bottom: 1px solid #e5e5e5;
+      padding: 4px 0;
+      border-bottom: 1px solid #eee;
     }
     
     .info-label {
       font-weight: 600;
       color: #666;
-      font-size: 11px;
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
+      letter-spacing: 0.3px;
+      margin-bottom: 2px;
     }
     
     .info-value {
-      font-size: 13px;
+      font-size: 11px;
       color: #1a1a1a;
       font-weight: 500;
     }
     
     .badge {
       display: inline-block;
-      padding: 4px 12px;
+      padding: 3px 8px;
       border-radius: 20px;
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -172,30 +220,30 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
     
     .index-card {
       background: #f8f9fa;
-      border-left: 4px solid #8b5cf6;
-      padding: 15px;
-      margin-bottom: 15px;
+      border-left: 3px solid #8b5cf6;
+      padding: 10px;
+      margin-bottom: 10px;
       border-radius: 6px;
     }
     
     .index-card h3 {
-      font-size: 14px;
+      font-size: 12px;
       color: #8b5cf6;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     
     .index-score {
-      font-size: 32px;
+      font-size: 22px;
       font-weight: bold;
       color: #1a1a1a;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 11px;
+      margin-top: 6px;
+      font-size: 10px;
     }
     
     table thead {
@@ -203,43 +251,39 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
     }
     
     table th {
-      padding: 10px;
+      padding: 6px;
       text-align: left;
       font-weight: 600;
       color: #666;
-      border-bottom: 2px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
       text-transform: uppercase;
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 0.5px;
     }
     
     table td {
-      padding: 10px;
+      padding: 6px;
       border-bottom: 1px solid #e5e5e5;
-    }
-    
-    table tbody tr:hover {
-      background: #fafafa;
     }
     
     .total-row {
       background: #f8f9fa;
       font-weight: 600;
-      border-top: 2px solid #8b5cf6;
+      border-top: 1px solid #8b5cf6;
     }
     
     .footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 2px solid #e5e5e5;
+      margin-top: 16px;
+      padding-top: 8px;
+      border-top: 1px solid #e5e5e5;
       text-align: center;
       color: #999;
-      font-size: 10px;
+      font-size: 9px;
     }
     
     @media print {
       body {
-        padding: 20px;
+        padding: 8px;
       }
       
       .section {
@@ -258,6 +302,10 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
   <div class="section">
     <div class="section-title">📋 Identità Veicolo</div>
     <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Tipo Veicolo</div>
+        <div class="info-value">${vehicle.type.toUpperCase()}</div>
+      </div>
       <div class="info-item">
         <div class="info-label">Marca</div>
         <div class="info-value">${vehicle.brand}</div>
@@ -279,6 +327,10 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
         <div class="info-value">${vehicle.vin}</div>
       </div>
       <div class="info-item">
+        <div class="info-label">Km Attuali</div>
+        <div class="info-value">${vehicle.currentKm.toLocaleString('it-IT')} km</div>
+      </div>
+      <div class="info-item">
         <div class="info-label">Data Immatricolazione</div>
         <div class="info-value">${formatDate(vehicle.registrationDate) || formatDate(vehicle.createdAt)}</div>
       </div>
@@ -295,6 +347,14 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
         <div class="info-value">${vehicle.year}</div>
       </div>
       <div class="info-item">
+        <div class="info-label">Classe Ambientale</div>
+        <div class="info-value">Euro ${estimateEuroClass(vehicle)}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Esenzione Bollo</div>
+        <div class="info-value">${vehicle.disabilityExemption ? 'Si (Legge 104)' : 'No'}</div>
+      </div>
+      <div class="info-item">
         <div class="info-label">Colore</div>
         <div class="info-value">${vehicle.color}</div>
       </div>
@@ -305,6 +365,22 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
       <div class="info-item">
         <div class="info-label">Potenza</div>
         <div class="info-value">${vehicle.power} kW</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Stato Assicurazione</div>
+        <div class="info-value">${insuranceStatus}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Stato Bollo</div>
+        <div class="info-value">${roadTaxStatusLabel}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Stato Revisione</div>
+        <div class="info-value">${inspectionStatus}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Costo Medio per Km</div>
+        <div class="info-value">${formatCurrency(costPerKm)}</div>
       </div>
     </div>
   </div>
@@ -343,6 +419,10 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
           </span>
         </div>
       </div>
+      <div class="info-item">
+        <div class="info-label">Motivazione</div>
+        <div class="info-value">${roadTaxReason}</div>
+      </div>
       ${vehicle.disabilityExemption ? `
       <div class="info-item">
         <div class="info-label">Esenzione Disabilità</div>
@@ -354,8 +434,20 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
         <div class="info-value">${legal.insurance ? formatDate(legal.insurance.endDate) : 'N/A'}</div>
       </div>
       <div class="info-item">
+        <div class="info-label">Stato Assicurazione</div>
+        <div class="info-value">${insuranceStatus}</div>
+      </div>
+      <div class="info-item">
         <div class="info-label">Scadenza Revisione</div>
         <div class="info-value">${legal.inspection ? formatDate(legal.inspection.nextDate) : 'N/A'}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Stato Revisione</div>
+        <div class="info-value">${inspectionStatus}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Stato Tagliando</div>
+        <div class="info-value">${tagliandoStatus}${tagliandoNextDate ? ` (prox: ${formatDate(tagliandoNextDate)})` : ''}</div>
       </div>
     </div>
     
@@ -460,9 +552,13 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
       <thead>
         <tr>
           <th>Data</th>
-          <th>Km</th>
-          <th>Tipo</th>
-          <th>Officina</th>
+          <th>Chilometri</th>
+          <th>Tipo Intervento</th>
+          <th>Fai da te</th>
+          <th>Officina/Meccanico</th>
+          <th>Ricambi</th>
+          <th>Note</th>
+          <th>Prossima Manutenzione</th>
           <th>Costo</th>
         </tr>
       </thead>
@@ -472,7 +568,11 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
           <td>${formatDate(m.date)}</td>
           <td>${m.km.toLocaleString('it-IT')}</td>
           <td>${m.type}</td>
-          <td>${m.isDiy ? '🔧 Fai-da-te' : m.workshop}</td>
+          <td>${m.isDiy ? 'SI' : 'NO'}</td>
+          <td>${m.isDiy ? '-' : (m.workshop || '-')}</td>
+          <td>${m.spareParts || '-'}</td>
+          <td>${m.notes || '-'}</td>
+          <td>${m.nextMaintenanceKm ? (m.nextMaintenanceKm.toLocaleString('it-IT') + ' km') : (m.nextMaintenanceDate ? formatDate(m.nextMaintenanceDate) : '-')}</td>
           <td>${formatCurrency(m.cost)}</td>
         </tr>
         `).join('')}
@@ -522,6 +622,28 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
       </div>
     </div>
     ` : '<p style="color: #999; text-align: center; padding: 20px;">Nessuna spesa registrata</p>'}
+  </div>
+  
+  <!-- SEZIONE 7: TOTALI ANNUALI -->
+  <div class="section">
+    <div class="section-title">📅 Totali Annuali</div>
+    ${totalsByYearRows ? `
+    <table>
+      <thead>
+        <tr>
+          <th>Anno</th>
+          <th>Totale</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${totalsByYearRows}
+        <tr class="total-row">
+          <td style="text-align: right;">Totale Complessivo</td>
+          <td>${formatCurrency(totalCostOfOwnership)}</td>
+        </tr>
+      </tbody>
+    </table>
+    ` : '<p style="color: #999; text-align: center; padding: 20px;">Nessun dato annuale</p>'}
   </div>
 
   <!-- FOOTER -->

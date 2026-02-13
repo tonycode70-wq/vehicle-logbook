@@ -18,7 +18,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { downloadJSON, generateVehiclePDF } from '@/lib/utils/export';
+import { downloadJSON } from '@/lib/utils/export';
+import { downloadVehiclePDF } from '@/lib/utils/pdfGenerator';
+import { calculateVehicleAge, calculateRoadTaxStatus, calculateEfficiencyIndex } from '@/lib/utils/vehicleCalculations';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Settings as SettingsIcon, 
@@ -117,7 +119,33 @@ export function Settings() {
     const vehicleMaintenance = data.maintenance.filter(m => m.vehicleId === vehicleId);
     const vehicleExpenses = data.expenses.filter(e => e.vehicleId === vehicleId);
 
-    generateVehiclePDF(vehicle, vehicleMaintenance, vehicleExpenses);
+    const legal = data.legal.find(l => l.vehicleId === vehicleId) || { insurance: null, tax: null, inspection: null };
+    const battery = data.batteries.find(b => b.vehicleId === vehicleId);
+    const tire = data.tires.find(t => t.vehicleId === vehicleId);
+
+    const ageData = vehicle.registrationDate ? calculateVehicleAge(vehicle.registrationDate) : { ageYears: 0, category: 'New' as any };
+    const roadTaxStatus = calculateRoadTaxStatus(vehicle, ageData.ageYears);
+    const efficiencyIndex = calculateEfficiencyIndex(vehicle, vehicleMaintenance);
+    const totalCostOfOwnership = vehicleExpenses.reduce((s, e) => s + e.amount, 0) + vehicleMaintenance.reduce((s, m) => s + m.cost, 0);
+
+    downloadVehiclePDF({
+      vehicle,
+      ageData,
+      roadTaxStatus,
+      efficiencyIndex,
+      legal: {
+        insurance: legal.insurance || undefined,
+        tax: legal.tax || undefined,
+        inspection: legal.inspection || undefined,
+      },
+      technical: {
+        battery: battery || undefined,
+        tire: tire || undefined,
+      },
+      maintenance: vehicleMaintenance,
+      expenses: vehicleExpenses,
+      totalCostOfOwnership
+    });
     
     toast({
       title: 'Report PDF generato',
@@ -346,6 +374,9 @@ export function Settings() {
             <p>Versione 1.0.0</p>
             <p className="mt-2">
               Gestione completa per auto e moto
+            </p>
+            <p className="mt-2 text-foreground" style={{ fontFamily: "'Aerotis', sans-serif" }}>
+              App creata da Tony
             </p>
             <div className="flex justify-center gap-2 mt-3">
               <Badge variant="outline">PWA</Badge>

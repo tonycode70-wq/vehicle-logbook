@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Plus, Edit, Shield, FileCheck, Calendar, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -37,7 +37,13 @@ type LegalTab = 'insurance' | 'tax' | 'inspection';
 
 export function LegalStatus() {
   const { data } = useVehicleContext();
-  const [selectedVehicle, setSelectedVehicle] = useState<string>('all');
+  const [selectedVehicle, setSelectedVehicle] = useState<string>(() => {
+    const saved = localStorage.getItem('selectedVehicleId');
+    return saved || 'all';
+  });
+  useEffect(() => {
+    localStorage.setItem('selectedVehicleId', selectedVehicle);
+  }, [selectedVehicle]);
   const [activeTab, setActiveTab] = useState<LegalTab>('insurance');
   const [showForm, setShowForm] = useState<{ type: LegalTab; vehicleId: string } | null>(null);
 

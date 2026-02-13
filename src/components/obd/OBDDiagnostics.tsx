@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,13 @@ export function OBDDiagnostics() {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [selectedVehicle, setSelectedVehicle] = useState<string>(data.vehicles[0]?.id || '');
+  const [selectedVehicle, setSelectedVehicle] = useState<string>(() => {
+    const saved = localStorage.getItem('selectedVehicleId');
+    return saved || data.vehicles[0]?.id || '';
+  });
+  useEffect(() => {
+    if (selectedVehicle) localStorage.setItem('selectedVehicleId', selectedVehicle);
+  }, [selectedVehicle]);
   const [manualCodes, setManualCodes] = useState('');
   const [manualNotes, setManualNotes] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);

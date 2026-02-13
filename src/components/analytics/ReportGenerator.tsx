@@ -3,11 +3,46 @@ import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Download, Printer, Car, Euro } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { formatDate } from '@/lib/utils/dates';
 
 export function ReportGenerator() {
   const { data, getVehicleAnalytics, getLegalDeadlines } = useVehicleContext();
+  const isMobile = useIsMobile();
+
+  const exportCSV = () => {
+    const rows = [
+      ['Veicolo', 'Targa', 'KM', 'Costo/KM', 'Scadenza Bollo', 'Prossima Revisione']
+    ];
+    data.vehicles.forEach(vehicle => {
+      const stats = getVehicleAnalytics(vehicle.id);
+      const legal = getLegalDeadlines(vehicle.id);
+      rows.push([
+        `${vehicle.brand} ${vehicle.model}`,
+        vehicle.plate,
+        String(vehicle.currentKm),
+        stats?.costPerKm ?? '0.00',
+        legal?.nextTax === 'Esente' ? 'Esente' : (legal?.nextTax ? formatDate(legal.nextTax) : ''),
+        legal?.nextInspection ? formatDate(legal.nextInspection) : ''
+      ]);
+    });
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'report-flotta.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const handlePrint = () => {
+    if (isMobile) {
+      exportCSV();
+      return;
+    }
     window.print();
   };
 
@@ -18,9 +53,14 @@ export function ReportGenerator() {
           <FileText className="h-6 w-6 text-primary" />
           Report Esportazione Flotta
         </h2>
-        <Button onClick={handlePrint} className="gap-2">
-          <Printer className="h-4 w-4" /> Stampa Report / Salva PDF
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handlePrint} className="gap-2">
+            <Printer className="h-4 w-4" /> {isMobile ? 'Scarica CSV' : 'Stampa / Salva PDF'}
+          </Button>
+          <Button onClick={exportCSV} variant="outline" className="gap-2">
+            <Download className="h-4 w-4" /> Scarica CSV
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 print:block">
@@ -51,14 +91,16 @@ export function ReportGenerator() {
                     <p className="text-[10px] uppercase text-muted-foreground">Costo Reale/KM</p>
                     <p className="font-bold text-primary">€ {stats?.costPerKm}</p>
                   </div>
-                  <div>
+          <div>
                     <p className="text-[10px] uppercase text-muted-foreground">Scadenza Bollo</p>
-                    <p className="font-bold">{legal?.nextTax}</p>
+            <p className="font-bold">
+              {legal?.nextTax === 'Esente' ? 'Esente' : (legal?.nextTax ? formatDate(legal.nextTax) : '')}
+            </p>
                   </div>
                   <div>
                     <p className="text-[10px] uppercase text-muted-foreground">Prossima Revisione</p>
                     <p className={`font-bold ${legal?.isUrgent ? 'text-destructive' : ''}`}>
-                      {legal?.nextInspection}
+              {legal?.nextInspection ? formatDate(legal.nextInspection) : ''}
                     </p>
                   </div>
                 </div>

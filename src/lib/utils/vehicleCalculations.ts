@@ -91,11 +91,9 @@ export function calculateRoadTaxStatus(
 
   // 1. Controllo esenzione disabilità (Legge 104)
   // Supporta sia booleano che stringa "true" (comune nei form/database)
-  if (
-    vehicle.disabilityExemption === true || 
-    (vehicle as any).disabilityExemption === 'true' ||
-    vehicle.notes?.toLowerCase().includes('legge 104')
-  ) {
+  const disabField = (vehicle as Record<string, unknown>).disabilityExemption;
+  const isDisabExempt = disabField === true || (typeof disabField === 'string' && disabField.toLowerCase() === 'true');
+  if (isDisabExempt || vehicle.notes?.toLowerCase().includes('legge 104')) {
     return 'Exempt (Law 104/Disability)';
   }
   
@@ -287,4 +285,27 @@ export function estimateRoadTaxCost(powerKw: number, euroClass: number = 6): num
   } else {
     return (100 * rateUnder100) + ((powerKw - 100) * rateOver100);
   }
+}
+
+/**
+ * Stima la classe ambientale (Euro) in base all'anno di prima immatricolazione.
+ * Mappa indicativa per coprire i casi in cui il dato non sia stato salvato.
+ */
+export function estimateEuroClass(vehicle: Vehicle): string {
+  if (vehicle.euroClass && vehicle.euroClass.trim().length > 0 && vehicle.euroClass !== 'N/D') {
+    return vehicle.euroClass;
+  }
+  const year = vehicle.registrationDate
+    ? new Date(vehicle.registrationDate).getFullYear()
+    : vehicle.year;
+
+  if (!year || isNaN(year)) return 'N/D';
+
+  if (year < 1993) return '0';
+  if (year < 1997) return '1';
+  if (year < 2001) return '2';
+  if (year < 2006) return '3';
+  if (year < 2011) return '4';
+  if (year < 2015) return '5';
+  return '6';
 }

@@ -17,11 +17,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { formatKm, formatDate } from '@/lib/utils/dates';
-import { calculateVehicleAge, calculateRoadTaxStatus } from '@/lib/utils/vehicleCalculations';
+import { calculateVehicleAge, calculateRoadTaxStatus, estimateEuroClass } from '@/lib/utils/vehicleCalculations';
 import { cn } from '@/lib/utils';
 import { Vehicle } from '@/types/vehicle';
+import { InsuranceForm } from '@/components/legal/InsuranceForm';
+import { TaxForm } from '@/components/legal/TaxForm';
+import { InspectionForm } from '@/components/legal/InspectionForm';
 
 interface VehicleDetailProps {
   vehicleId: string;
@@ -31,6 +35,7 @@ interface VehicleDetailProps {
 
 export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps) {
   const { data } = useVehicleContext();
+  const [showDocForm, setShowDocForm] = useState<null | 'insurance' | 'tax' | 'inspection'>(null);
   
   const vehicle = useMemo(() => 
     data.vehicles.find(v => v.id === vehicleId), 
@@ -133,7 +138,7 @@ export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps)
               <div className="flex justify-between py-2 border-b">
                 <span className="text-muted-foreground text-sm">Classe Ambientale</span>
                 <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  Euro {vehicle.euroClass || 'N/D'}
+                  Euro {estimateEuroClass(vehicle)}
                 </Badge>
               </div>
               <div className="flex justify-between py-2 border-b">
@@ -186,7 +191,7 @@ export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps)
                 </div>
                 <Button variant="ghost" size="sm">Vedi</Button>
               </div>
-              <Button variant="outline" className="w-full border-dashed gap-2">
+              <Button variant="outline" className="w-full border-dashed gap-2" onClick={() => setShowDocForm('insurance')}>
                 <Plus className="h-4 w-4" />
                 Aggiungi Documento
               </Button>
@@ -204,6 +209,37 @@ export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps)
           </Card>
         </TabsContent>
       </Tabs>
+      
+      <Dialog open={!!showDocForm} onOpenChange={(open) => !open && setShowDocForm(null)}>
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {showDocForm === 'insurance' && 'Assicurazione'}
+              {showDocForm === 'tax' && 'Bollo'}
+              {showDocForm === 'inspection' && 'Revisione'}
+            </DialogTitle>
+            <DialogDescription>
+              Gestisci documenti per questo veicolo
+            </DialogDescription>
+          </DialogHeader>
+          {showDocForm === 'insurance' && (
+            <InsuranceForm vehicleId={vehicleId} onComplete={() => setShowDocForm(null)} />
+          )}
+          {showDocForm === 'tax' && (
+            <TaxForm vehicleId={vehicleId} onComplete={() => setShowDocForm(null)} />
+          )}
+          {showDocForm === 'inspection' && (
+            <InspectionForm vehicleId={vehicleId} onComplete={() => setShowDocForm(null)} />
+          )}
+          {!['insurance','tax','inspection'].includes(String(showDocForm)) && (
+            <div className="grid gap-2">
+              <Button variant="secondary" onClick={() => setShowDocForm('insurance')}>Aggiungi Assicurazione</Button>
+              <Button variant="secondary" onClick={() => setShowDocForm('tax')}>Aggiungi Bollo</Button>
+              <Button variant="secondary" onClick={() => setShowDocForm('inspection')}>Aggiungi Revisione</Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

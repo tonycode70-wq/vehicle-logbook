@@ -2,6 +2,7 @@ import React from 'react';
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Calendar, Bell } from "lucide-react";
+import { formatDate } from '@/lib/utils/dates';
 
 export function FleetAlerts() {
   const { data, getLegalDeadlines } = useVehicleContext();
@@ -35,7 +36,7 @@ export function FleetAlerts() {
           <AlertDescription className="mt-2 text-sm">
             La revisione per <strong>{vehicle.brand} {vehicle.model}</strong> scade il: 
             <span className="ml-2 font-mono font-bold underline">
-              {deadlines?.nextInspection}
+              {deadlines?.nextInspection ? formatDate(deadlines.nextInspection) : '-'}
             </span>
           </AlertDescription>
         </Alert>

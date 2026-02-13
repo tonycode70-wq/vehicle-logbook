@@ -13,6 +13,7 @@ import {
   ChainLube,
   Settings 
 } from '@/types/vehicle';
+import { estimateEuroClass } from '@/lib/utils/vehicleCalculations';
 
 const STORAGE_KEY = 'vehicleManagerData';
 
@@ -82,12 +83,29 @@ export function useVehicleData() {
 
     const vehicleExpenses = data.expenses.filter(e => e.vehicleId === vehicleId);
     const vehicleMaintenance = data.maintenance.filter(m => m.vehicleId === vehicleId);
+    const legal = data.legal.find(l => l.vehicleId === vehicleId);
 
-    const totalExpenses = vehicleExpenses.reduce((sum, e) => sum + e.amount, 0);
+    let totalExpenses = vehicleExpenses.reduce((sum, e) => sum + e.amount, 0);
+    if (legal?.insurance?.amount) totalExpenses += legal.insurance.amount;
+    if (legal?.tax?.amount) totalExpenses += legal.tax.amount;
     const totalMaintenance = vehicleMaintenance.reduce((sum, m) => sum + m.cost, 0);
     const totalCost = totalExpenses + totalMaintenance;
 
-    const costPerKm = vehicle.currentKm > 0 ? (totalCost / vehicle.currentKm).toFixed(2) : "0.00";
+    // Km percorsi da quando si usa l'app: differenza tra max e min km registrati
+    const kmValues = [
+      ...vehicleExpenses.map(e => e.km || 0),
+      ...vehicleMaintenance.map(m => m.km || 0),
+    ].filter(k => typeof k === 'number' && k > 0);
+    let traveledKm = 0;
+    if (kmValues.length >= 2) {
+      const minKm = Math.min(...kmValues);
+      const maxKm = Math.max(...kmValues);
+      traveledKm = Math.max(0, maxKm - minKm);
+    }
+    // Fallback: se non ci sono dati, usa currentKm
+    if (traveledKm === 0 && vehicle.currentKm > 0) traveledKm = vehicle.currentKm;
+
+    const costPerKm = traveledKm > 0 ? (totalCost / traveledKm).toFixed(2) : "0.00";
 
     return {
       totalCost,
@@ -102,37 +120,64 @@ export function useVehicleData() {
   // --- LEGAL DEADLINES (NUOVO - PUNTO 3 REPORT) ---
   const getLegalDeadlines = useCallback((vehicleId: string) => {
     const vehicle = data.vehicles.find(v => v.id === vehicleId);
-    if (!vehicle || !vehicle.registrationDate) return null;
+    if (!vehicle) return null;
+    const legal = data.legal.find(l => l.vehicleId === vehicleId);
+
+    if (vehicle.disabilityExemption === true) {
+      return {
+        nextInspection: legal?.inspection?.nextDate || (vehicle.registrationDate ? new Date(new Date(vehicle.registrationDate).setFullYear(new Date(vehicle.registrationDate).getFullYear() + 4)).toISOString().split('T')[0] : undefined),
+        nextTax: 'Esente',
+        isUrgent: false
+      };
+    }
+
+    if (!vehicle.registrationDate) {
+      return {
+        nextInspection: legal?.inspection?.nextDate || undefined,
+        nextTax: legal?.tax?.dueDate || undefined,
+        isUrgent: false
+      };
+    }
 
     const regDate = new Date(vehicle.registrationDate);
     const today = new Date();
 
-    // Calcolo Revisione (4 anni prima volta, poi ogni 2)
-    const yearsSinceReg = today.getFullYear() - regDate.getFullYear();
-    let nextInspectionYear = regDate.getFullYear() + (yearsSinceReg < 4 ? 4 : Math.ceil(yearsSinceReg / 2) * 2);
-    if (nextInspectionYear === today.getFullYear() && today.getMonth() > regDate.getMonth()) {
-        nextInspectionYear += 2;
+    let nextInspectionStr: string | undefined = undefined;
+    if (legal?.inspection?.nextDate) {
+      nextInspectionStr = legal.inspection.nextDate;
+    } else {
+      const yearsSinceReg = today.getFullYear() - regDate.getFullYear();
+      let nextInspectionYear = regDate.getFullYear() + (yearsSinceReg < 4 ? 4 : Math.ceil(yearsSinceReg / 2) * 2);
+      if (nextInspectionYear === today.getFullYear() && today.getMonth() > regDate.getMonth()) {
+          nextInspectionYear += 2;
+      }
+      const nextInspection = new Date(regDate);
+      nextInspection.setFullYear(nextInspectionYear);
+      nextInspectionStr = nextInspection.toISOString().split('T')[0];
     }
-    const nextInspection = new Date(regDate);
-    nextInspection.setFullYear(nextInspectionYear);
 
-    // Calcolo Bollo (Esempio semplificato: scadenza annuale basata su mese immatricolazione)
-    const nextTax = new Date(today.getFullYear(), regDate.getMonth(), regDate.getDate());
-    if (nextTax < today) nextTax.setFullYear(today.getFullYear() + 1);
+    let nextTaxStr: string | undefined = undefined;
+    if (legal?.tax?.dueDate) {
+      nextTaxStr = legal.tax.dueDate;
+    } else {
+      const nextTax = new Date(today.getFullYear(), regDate.getMonth(), regDate.getDate());
+      if (nextTax < today) nextTax.setFullYear(today.getFullYear() + 1);
+      nextTaxStr = nextTax.toISOString().split('T')[0];
+    }
 
     return {
-      nextInspection: nextInspection.toISOString().split('T')[0],
-      nextTax: nextTax.toISOString().split('T')[0],
-      isUrgent: (nextInspection.getTime() - today.getTime()) / (1000 * 60 * 60 * 24) < 30
+      nextInspection: nextInspectionStr,
+      nextTax: nextTaxStr,
+      isUrgent: nextInspectionStr ? ((new Date(nextInspectionStr).getTime() - today.getTime()) / (1000 * 60 * 60 * 24) < 30) : false
     };
-  }, [data.vehicles]);
+  }, [data.vehicles, data.legal]);
 
   // CRUD Veicoli - AGGIORNATO CON NUOVI CAMPI REPORT
   const addVehicle = useCallback((vehicle: Omit<Vehicle, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newVehicle: Vehicle = {
       ...vehicle,
       id: crypto.randomUUID(),
-      euroClass: vehicle.euroClass || 'N/D',
+      euroClass: vehicle.euroClass && vehicle.euroClass.trim().length > 0 ? vehicle.euroClass : estimateEuroClass(vehicle as Vehicle),
       registrationDate: vehicle.registrationDate || new Date().toISOString().split('T')[0],
       power: vehicle.power || 0,
       createdAt: new Date().toISOString(),
@@ -147,7 +192,11 @@ export function useVehicleData() {
     update(prev => {
       const vehicle = prev.vehicles.find(v => v.id === id);
       if (!vehicle) return prev;
-      const updatedVehicle = { ...vehicle, ...updates, updatedAt: new Date().toISOString() };
+      const merged = { ...vehicle, ...updates } as Vehicle;
+      if (!updates.euroClass || updates.euroClass.trim().length === 0 || updates.euroClass === 'N/D') {
+        merged.euroClass = estimateEuroClass(merged);
+      }
+      const updatedVehicle = { ...merged, updatedAt: new Date().toISOString() };
       return { ...prev, vehicles: prev.vehicles.map(v => v.id === id ? updatedVehicle : v) };
     });
     

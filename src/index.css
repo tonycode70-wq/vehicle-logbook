@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font Aerotis - pronto per il caricamento quando aggiungerai il file */
+@font-face {
+  font-family: 'Aerotis';
+  src:
+    url('/fonts/Aerotis.ttf') format('truetype'),
+    url('/fonts/Aerotis.otf') format('opentype'),
+    url('/fonts/Aerotis.woff2') format('woff2'),
+    url('/fonts/Aerotis.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* VehicleManager Pro - iOS Glass UI Design System
    Frosted glass autentico Apple - Light theme only
    Tutti i colori in HSL
@@ -74,44 +87,43 @@
     --chart-5: 340 82% 55%;
   }
 
-  /* Force light - override dark class */
   .dark {
-    --background: 220 20% 97%;
-    --foreground: 222 20% 18%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 20% 18%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 20% 18%;
-    --primary: 211 100% 50%;
+    --background: 222 24% 9%;
+    --foreground: 210 20% 96%;
+    --card: 222 24% 12%;
+    --card-foreground: 210 20% 96%;
+    --popover: 222 24% 12%;
+    --popover-foreground: 210 20% 96%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 20% 25%;
-    --muted: 220 14% 95%;
-    --muted-foreground: 220 10% 46%;
-    --accent: 211 100% 96%;
-    --accent-foreground: 211 100% 42%;
-    --destructive: 0 100% 59%;
+    --secondary: 217 16% 20%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 217 16% 18%;
+    --muted-foreground: 216 12% 65%;
+    --accent: 217 16% 22%;
+    --accent-foreground: 210 20% 96%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --warning: 28 100% 55%;
-    --warning-foreground: 0 0% 100%;
-    --success: 142 72% 42%;
+    --warning: 38 92% 60%;
+    --warning-foreground: 0 0% 10%;
+    --success: 142 70% 45%;
     --success-foreground: 0 0% 100%;
-    --border: 220 15% 91%;
-    --input: 220 15% 91%;
-    --ring: 211 100% 50%;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 20% 18%;
-    --sidebar-primary: 211 100% 50%;
+    --border: 217 16% 25%;
+    --input: 217 16% 25%;
+    --ring: 217 91% 60%;
+    --sidebar-background: 222 24% 11%;
+    --sidebar-foreground: 210 20% 96%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 211 100% 96%;
-    --sidebar-accent-foreground: 211 100% 42%;
-    --sidebar-border: 220 15% 92%;
-    --sidebar-ring: 211 100% 50%;
-    --chart-1: 211 100% 50%;
-    --chart-2: 142 72% 42%;
-    --chart-3: 28 100% 55%;
-    --chart-4: 280 80% 58%;
-    --chart-5: 340 82% 55%;
+    --sidebar-accent: 217 16% 22%;
+    --sidebar-accent-foreground: 210 20% 96%;
+    --sidebar-border: 217 16% 25%;
+    --sidebar-ring: 217 91% 60%;
+    --chart-1: 217 91% 60%;
+    --chart-2: 142 70% 45%;
+    --chart-3: 38 92% 60%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 0 84% 60%;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -38,7 +38,13 @@ const MAINTENANCE_LABELS: Record<string, string> = {
 
 export function Analytics() {
   const { data } = useVehicleContext();
-  const [selectedVehicle, setSelectedVehicle] = useState<string>('all');
+  const [selectedVehicle, setSelectedVehicle] = useState<string>(() => {
+    const saved = localStorage.getItem('selectedVehicleId');
+    return saved || 'all';
+  });
+  useEffect(() => {
+    localStorage.setItem('selectedVehicleId', selectedVehicle);
+  }, [selectedVehicle]);
   const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString());
 
   // Filtra dati per veicolo
