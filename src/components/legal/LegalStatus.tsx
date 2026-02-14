@@ -36,7 +36,7 @@ import { cn } from '@/lib/utils';
 type LegalTab = 'insurance' | 'tax' | 'inspection';
 
 export function LegalStatus() {
-  const { data } = useVehicleContext();
+  const { data, updateLegalDocument, sospendiPolizza, riattivaPolizza } = useVehicleContext();
   const [selectedVehicle, setSelectedVehicle] = useState<string>(() => {
     const saved = localStorage.getItem('selectedVehicleId');
     return saved || 'all';
@@ -325,6 +325,63 @@ export function LegalStatus() {
                             </div>
                           )}
                         </div>
+                        {vehicle.type === 'moto' && (
+                          <div className="mt-3 space-y-3">
+                            <div className="flex items-center justify-between">
+                              <Badge variant={insurance.statoPolizza === 'sospesa' ? 'warning' : 'success'}>
+                                {insurance.statoPolizza === 'sospesa' ? 'Sospesa' : 'Attiva'}
+                              </Badge>
+                              <Button
+                                size="sm"
+                                variant={insurance.statoPolizza === 'sospesa' ? 'default' : 'outline'}
+                                onClick={() => {
+                                  if (insurance.statoPolizza === 'sospesa') {
+                                    riattivaPolizza(vehicle.id);
+                                  } else {
+                                    sospendiPolizza(vehicle.id);
+                                  }
+                                }}
+                              >
+                                {insurance.statoPolizza === 'sospesa' ? 'Riattiva Polizza' : 'Sospendi Polizza'}
+                              </Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Giorni di sospensione residui: <span className="font-medium">
+                                {insurance.giorniSospensioneResidui ?? 0}
+                              </span> su <span className="font-medium">
+                                {insurance.giorniSospensioneTotali ?? 305}
+                              </span>
+                            </p>
+                            {insurance.richiedeNuovoDocumento && (
+                              <div className="rounded-md border border-warning/30 bg-warning/10 p-3">
+                                <p className="text-sm font-medium text-warning mb-2">
+                                  Hai riattivato la polizza, carica il nuovo certificato PDF
+                                </p>
+                                <input
+                                  type="file"
+                                  accept="application/pdf"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    const reader = new FileReader();
+                                    reader.onload = () => {
+                                      const dataUrl = String(reader.result || '');
+                                      updateLegalDocument(vehicle.id, {
+                                        insurance: {
+                                          ...insurance,
+                                          insuranceDocumentName: file.name,
+                                          insuranceDocumentDataUrl: dataUrl,
+                                          richiedeNuovoDocumento: false,
+                                        },
+                                      });
+                                    };
+                                    reader.readAsDataURL(file);
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
                         <Button 
                           variant="outline" 
                           size="sm" 

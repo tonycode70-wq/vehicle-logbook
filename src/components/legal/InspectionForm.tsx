@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { format, addYears } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { DatePresets } from '@/components/ui/date-presets';
@@ -18,6 +19,7 @@ import {
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { parseDateInput } from '@/lib/utils/dates';
 
 const inspectionSchema = z.object({
   lastDate: z.date({ required_error: 'Data ultima revisione obbligatoria' }),
@@ -107,7 +109,25 @@ export function InspectionForm({ vehicleId, onComplete }: InspectionFormProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                  <Calendar 
+                    mode="single" 
+                    selected={field.value} 
+                    onSelect={field.onChange} 
+                    captionLayout="dropdown"
+                    fromYear={1980}
+                    toYear={new Date().getFullYear()}
+                    initialFocus 
+                  />
+                  <div className="border-t px-3 py-2">
+                    <Input 
+                      placeholder="gg/mm/aaaa" 
+                      defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                      onBlur={e => {
+                        const d = parseDateInput(e.target.value);
+                        if (d) field.onChange(d);
+                      }}
+                    />
+                  </div>
                 </PopoverContent>
               </Popover>
               <FormMessage />
@@ -127,8 +147,24 @@ export function InspectionForm({ vehicleId, onComplete }: InspectionFormProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                  <div className="border-t px-3 py-2">
+                  <Calendar 
+                    mode="single" 
+                    selected={field.value} 
+                    onSelect={field.onChange} 
+                    captionLayout="dropdown"
+                    fromYear={new Date().getFullYear()}
+                    toYear={new Date().getFullYear() + 5}
+                    initialFocus 
+                  />
+                  <div className="border-t px-3 py-2 space-y-2">
+                    <Input 
+                      placeholder="gg/mm/aaaa" 
+                      defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                      onBlur={e => {
+                        const d = parseDateInput(e.target.value);
+                        if (d) field.onChange(d);
+                      }}
+                    />
                     <DatePresets baseDate={lastDate} onSelect={field.onChange} presets={[2, 3, 4]} />
                   </div>
                 </PopoverContent>

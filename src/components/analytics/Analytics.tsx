@@ -167,11 +167,15 @@ export function Analytics() {
     );
   }
 
+  const selectedVehicleName = selectedVehicle === 'all'
+    ? 'Report Veicoli Generale'
+    : (data.vehicles.find(v => v.id === selectedVehicle) ? `Report Storico: ${data.vehicles.find(v => v.id === selectedVehicle)!.brand} ${data.vehicles.find(v => v.id === selectedVehicle)!.model}` : 'Report Veicoli Generale');
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Analisi & Grafici</h1>
+          <h1 className="text-2xl font-bold">{selectedVehicleName}</h1>
           <p className="text-muted-foreground">Statistiche e andamento costi</p>
         </div>
         
@@ -425,8 +429,8 @@ export function Analytics() {
               <FileText className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold">Generazione Documentazione PEC</h3>
-              <p className="text-sm text-muted-foreground">Esporta il report tecnico completo della flotta in formato PDF per l'archiviazione ufficiale.</p>
+              <h3 className="text-lg font-bold">{selectedVehicleName}</h3>
+              <p className="text-sm text-muted-foreground">Esporta il report tecnico completo in PDF.</p>
             </div>
           </div>
           <ReportGenerator />

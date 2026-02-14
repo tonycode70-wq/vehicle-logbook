@@ -16,6 +16,7 @@ import {
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { parseDateInput } from '@/lib/utils/dates';
 
 const taxSchema = z.object({
   year: z.number().min(2000).max(2100),
@@ -128,7 +129,25 @@ export function TaxForm({ vehicleId, onComplete }: TaxFormProps) {
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                <Calendar mode="single" selected={field.value || undefined} onSelect={field.onChange} initialFocus />
+                <Calendar 
+                  mode="single" 
+                  selected={field.value || undefined} 
+                  onSelect={field.onChange} 
+                  captionLayout="dropdown"
+                  fromYear={new Date().getFullYear() - 10}
+                  toYear={new Date().getFullYear()}
+                  initialFocus 
+                />
+                <div className="border-t px-3 py-2">
+                  <Input 
+                    placeholder="gg/mm/aaaa" 
+                    defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                    onBlur={e => {
+                      const d = parseDateInput(e.target.value);
+                      field.onChange(d || null);
+                    }}
+                  />
+                </div>
               </PopoverContent>
             </Popover>
             <FormMessage />
@@ -148,8 +167,24 @@ export function TaxForm({ vehicleId, onComplete }: TaxFormProps) {
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                <div className="border-t px-3 py-2">
+                <Calendar 
+                  mode="single" 
+                  selected={field.value} 
+                  onSelect={field.onChange} 
+                  captionLayout="dropdown"
+                  fromYear={new Date().getFullYear() - 1}
+                  toYear={new Date().getFullYear() + 2}
+                  initialFocus 
+                />
+                <div className="border-t px-3 py-2 space-y-2">
+                  <Input 
+                    placeholder="gg/mm/aaaa" 
+                    defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                    onBlur={e => {
+                      const d = parseDateInput(e.target.value);
+                      if (d) field.onChange(d);
+                    }}
+                  />
                   <DatePresets baseDate={paidDate || undefined} onSelect={field.onChange} presets={[1]} />
                 </div>
               </PopoverContent>

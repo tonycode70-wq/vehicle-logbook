@@ -14,7 +14,7 @@ import { CalendarIcon } from 'lucide-react';
 import { format, differenceInMonths } from 'date-fns';
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Battery, BatteryStatus } from '@/types/vehicle';
-import { formatDate } from '@/lib/utils/dates';
+import { formatDate, parseDateInput } from '@/lib/utils/dates';
 import { cn } from '@/lib/utils';
 
 function getBatteryStatus(installDate: string, replaceDate: string | null): BatteryStatus {
@@ -172,7 +172,25 @@ export function BatteryManager() {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                  <Calendar mode="single" selected={formInstallDate} onSelect={(d) => d && setFormInstallDate(d)} initialFocus />
+                  <Calendar 
+                    mode="single" 
+                    selected={formInstallDate} 
+                    onSelect={(d) => d && setFormInstallDate(d)} 
+                    captionLayout="dropdown"
+                    fromYear={new Date().getFullYear() - 15}
+                    toYear={new Date().getFullYear()}
+                    initialFocus 
+                  />
+                  <div className="border-t px-3 py-2">
+                    <Input 
+                      placeholder="gg/mm/aaaa" 
+                      defaultValue={format(formInstallDate, "dd/MM/yyyy")} 
+                      onBlur={e => {
+                        const d = parseDateInput(e.target.value);
+                        if (d) setFormInstallDate(d);
+                      }}
+                    />
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>

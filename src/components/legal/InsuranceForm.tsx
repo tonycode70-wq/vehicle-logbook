@@ -16,6 +16,7 @@ import {
 import { useVehicleContext } from '@/contexts/VehicleContext';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { parseDateInput } from '@/lib/utils/dates';
 
 const insuranceSchema = z.object({
   company: z.string().min(1, 'Compagnia obbligatoria'),
@@ -23,6 +24,8 @@ const insuranceSchema = z.object({
   startDate: z.date({ required_error: 'Data inizio obbligatoria' }),
   endDate: z.date({ required_error: 'Data fine obbligatoria' }),
   amount: z.number().min(0, 'Importo non valido'),
+  // Solo Moto: plafond annuo sospensione
+  giorniTotali: z.number().min(1).max(365).optional(),
   notes: z.string().optional(),
 });
 
@@ -36,6 +39,8 @@ interface InsuranceFormProps {
 export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
   const { data, updateLegalDocument } = useVehicleContext();
   const existing = data.legal.find(l => l.vehicleId === vehicleId)?.insurance;
+  const vehicle = data.vehicles.find(v => v.id === vehicleId);
+  const isMoto = vehicle?.type === 'moto';
 
   const form = useForm<InsuranceFormData>({
     resolver: zodResolver(insuranceSchema),
@@ -46,6 +51,7 @@ export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
       endDate: existing?.endDate ? new Date(existing.endDate) : undefined,
       amount: existing?.amount || 0,
       notes: existing?.notes || '',
+      giorniTotali: (existing as any)?.giorniSospensioneTotali || 305,
     },
   });
 
@@ -59,6 +65,12 @@ export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
   }, [startDate, existing?.endDate, form]);
 
   const onSubmit = (formData: InsuranceFormData) => {
+    const giorniTotali = isMoto ? (formData.giorniTotali || 305) : undefined;
+    const currentResidui = (existing as any)?.giorniSospensioneResidui as number | undefined;
+    const residuiCalcolati = isMoto
+      ? (typeof currentResidui === 'number' ? Math.min(currentResidui, giorniTotali!) : giorniTotali)
+      : undefined;
+
     updateLegalDocument(vehicleId, {
       insurance: {
         id: existing?.id || crypto.randomUUID(),
@@ -69,6 +81,10 @@ export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
         endDate: formData.endDate.toISOString(),
         amount: formData.amount,
         notes: formData.notes || '',
+        ...(isMoto ? {
+          giorniSospensioneTotali: giorniTotali,
+          giorniSospensioneResidui: residuiCalcolati,
+        } : {}),
       },
     });
     toast({ title: 'Assicurazione salvata', description: 'Dati assicurazione aggiornati con successo' });
@@ -108,7 +124,25 @@ export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                  <Calendar 
+                    mode="single" 
+                    selected={field.value} 
+                    onSelect={field.onChange} 
+                    captionLayout="dropdown"
+                    fromYear={new Date().getFullYear() - 10}
+                    toYear={new Date().getFullYear() + 1}
+                    initialFocus 
+                  />
+                  <div className="border-t px-3 py-2">
+                    <Input 
+                      placeholder="gg/mm/aaaa" 
+                      defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                      onBlur={e => {
+                        const d = parseDateInput(e.target.value);
+                        if (d) field.onChange(d);
+                      }}
+                    />
+                  </div>
                 </PopoverContent>
               </Popover>
               <FormMessage />
@@ -128,8 +162,24 @@ export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                  <div className="border-t px-3 py-2">
+                  <Calendar 
+                    mode="single" 
+                    selected={field.value} 
+                    onSelect={field.onChange} 
+                    captionLayout="dropdown"
+                    fromYear={new Date().getFullYear()}
+                    toYear={new Date().getFullYear() + 2}
+                    initialFocus 
+                  />
+                  <div className="border-t px-3 py-2 space-y-2">
+                    <Input 
+                      placeholder="gg/mm/aaaa" 
+                      defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                      onBlur={e => {
+                        const d = parseDateInput(e.target.value);
+                        if (d) field.onChange(d);
+                      }}
+                    />
                     <DatePresets baseDate={startDate} onSelect={field.onChange} presets={[1]} />
                   </div>
                 </PopoverContent>
@@ -148,6 +198,25 @@ export function InsuranceForm({ vehicleId, onComplete }: InsuranceFormProps) {
             <FormMessage />
           </FormItem>
         )} />
+
+        {isMoto && (
+          <FormField control={form.control} name="giorniTotali" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Giorni sospensione totali (annuali)</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  min={1} 
+                  max={365} 
+                  placeholder="Es. 305"
+                  {...field} 
+                  onChange={e => field.onChange(parseInt(e.target.value || '0', 10) || 0)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        )}
 
         <FormField control={form.control} name="notes" render={({ field }) => (
           <FormItem>

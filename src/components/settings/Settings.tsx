@@ -149,7 +149,7 @@ export function Settings() {
     
     toast({
       title: 'Report PDF generato',
-      description: `Report per ${vehicle.brand} ${vehicle.model} pronto per la stampa`,
+      description: `Report storico generato correttamente per: ${vehicle.brand} ${vehicle.model}`,
     });
   };
 
@@ -371,11 +371,11 @@ export function Settings() {
         <CardContent className="pt-6">
           <div className="text-center text-sm text-muted-foreground">
             <p className="font-medium text-foreground">VehicleManager Pro</p>
-            <p>Versione 1.0.0</p>
+            <p>Versione 2.0.0</p>
             <p className="mt-2">
               Gestione completa per auto e moto
             </p>
-            <p className="mt-2 text-foreground" style={{ fontFamily: "'Aerotis', sans-serif" }}>
+            <p className="mt-2 text-foreground" style={{ fontFamily: "cursive, 'Apple Chancery', 'Segoe Script', sans-serif" }}>
               App creata da Tony
             </p>
             <div className="flex justify-center gap-2 mt-3">

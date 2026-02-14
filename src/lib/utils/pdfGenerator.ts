@@ -10,6 +10,23 @@ import {
 import { estimateEuroClass } from './vehicleCalculations';
 
 /**
+ * Calcola risparmio/ammortamento da sospensione polizza moto
+ */
+function calcolaRisparmioAssicurazione(costoAnnuale: number, giorniSospesiTotali: number) {
+  const GIORNI_ANNO = 365;
+  const costoGiornaliero = costoAnnuale / GIORNI_ANNO;
+  const valoreRecuperato = giorniSospesiTotali * costoGiornaliero;
+  const mesiEffettivi = (GIORNI_ANNO + giorniSospesiTotali) / 30.44;
+  const costoMensileReale = costoAnnuale / mesiEffettivi;
+  return {
+    valoreRecuperato: Number(valoreRecuperato.toFixed(2)),
+    costoMensileReale: Number(costoMensileReale.toFixed(2)),
+    estensioneGiorni: giorniSospesiTotali,
+    percentualeRisparmio: Number(((valoreRecuperato / (costoAnnuale || 1)) * 100).toFixed(1))
+  };
+}
+
+/**
  * Interfaccia per i dati completi del veicolo da includere nel PDF
  */
 export interface VehiclePDFData {
@@ -87,9 +104,38 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
   const costPerKm = vehicle.currentKm > 0 ? (totalCostOfOwnership / vehicle.currentKm) : 0;
   
   // Stato assicurazione / revisione
-  const insuranceStatus = legal.insurance?.endDate ? (new Date(legal.insurance.endDate).getTime() - new Date().getTime() < 0 ? 'Scaduto' : ((new Date(legal.insurance.endDate).getTime() - new Date().getTime()) / (1000*60*60*24) <= 30 ? 'In Scadenza' : 'OK')) : 'N/D';
+  const insuranceStatus = legal.insurance?.endDate ? (new Date((legal.insurance as any).dataScadenzaAttuale || legal.insurance.endDate).getTime() - new Date().getTime() < 0 ? 'Scaduto' : ((new Date((legal.insurance as any).dataScadenzaAttuale || legal.insurance.endDate).getTime() - new Date().getTime()) / (1000*60*60*24) <= 30 ? 'In Scadenza' : 'OK')) : 'N/D';
   const inspectionStatus = legal.inspection?.nextDate ? (new Date(legal.inspection.nextDate).getTime() - new Date().getTime() < 0 ? 'Scaduto' : ((new Date(legal.inspection.nextDate).getTime() - new Date().getTime()) / (1000*60*60*24) <= 30 ? 'In Scadenza' : 'OK')) : 'N/D';
   
+  // Box assicurazione stagionale (solo moto)
+  const assicurazioneStagionaleHtml = (() => {
+    if (vehicle.type !== 'moto' || !legal.insurance) return '';
+    const ins: any = legal.insurance;
+    const scadenza = ins.dataScadenzaAttuale || ins.endDate;
+    const statoLabel = ins.statoPolizza === 'sospesa'
+      ? `<span style="color:#ef4444;font-weight:700;">STATO: SOSPESA${ins.dataInizioSospensione ? ' dal ' + new Date(ins.dataInizioSospensione).toLocaleDateString('it-IT') : ''}</span>`
+      : `<span style="color:#10b981;font-weight:700;">STATO: ATTIVA</span>`;
+    const residui = typeof ins.giorniSospensioneResidui === 'number' ? ins.giorniSospensioneResidui : null;
+    const totali = typeof ins.giorniSospensioneTotali === 'number' ? ins.giorniSospensioneTotali : null;
+    const sospesiTotali = typeof totali === 'number' && typeof residui === 'number' ? Math.max(0, totali - residui) : 0;
+    const costoAnnuale = Number(ins.amount || 0);
+    const econ = calcolaRisparmioAssicurazione(costoAnnuale, sospesiTotali);
+    const notaDoc = ins.richiedeNuovoDocumento ? `<div style="margin-top:6px;color:#b45309;font-size:10px;font-weight:600;">ATTENZIONE: Polizza riattivata, allegare il nuovo certificato assicurativo</div>` : '';
+    return `
+    <div style="margin-top:10px;border:1px solid #e5e7eb;border-left:3px solid #f59e0b;border-radius:6px;padding:8px;background:#fffbeb;">
+      <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px;">Gestione Stagionale (Moto)</div>
+      <div class="info-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="info-item"><div class="info-label">Stato Polizza</div><div class="info-value">${statoLabel}</div></div>
+        <div class="info-item"><div class="info-label">Scadenza Assicurazione</div><div class="info-value">${scadenza ? new Date(scadenza).toLocaleDateString('it-IT') : '-'}</div></div>
+        <div class="info-item"><div class="info-label">Giorni Residui Sospensione</div><div class="info-value">${residui !== null && totali !== null ? `${residui} su ${totali}` : '-'}</div></div>
+        <div class="info-item"><div class="info-label">Risparmio/Recupero da Sospensione</div><div class="info-value">${formatCurrency(econ.valoreRecuperato)}</div></div>
+        <div class="info-item"><div class="info-label">Costo Mensile Reale</div><div class="info-value">${formatCurrency(econ.costoMensileReale)}</div></div>
+        <div class="info-item"><div class="info-label">Estensione Giorni</div><div class="info-value">${econ.estensioneGiorni} giorni</div></div>
+      </div>
+      ${notaDoc}
+    </div>`;
+  })();
+
   // Stato tagliando
   const lastService = maintenance
     .filter(m => m.vehicleId === vehicle.id && m.type === 'tagliando')
@@ -112,11 +158,14 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
     }
   })();
   
-  // Traduzione stato bollo per UI
+  // Traduzione stato bollo per UI/PDF (integra pagato)
   const roadTaxStatusLabel = (() => {
-    if (roadTaxStatus === 'Payable') return 'Da Pagare';
-    if (roadTaxStatus === 'Paid') return 'Pagato';
-    return 'Esente';
+    // Se risulta pagato nel documento legale, prevale "Pagato"
+    if (legal.tax?.paidDate) return 'Pagato';
+    // Se esente da calcolo, mostra "Esente"
+    if (roadTaxStatus !== 'Payable') return 'Esente';
+    // Altrimenti "Da Pagare"
+    return 'Da Pagare';
   })();
 
   return `
@@ -294,7 +343,7 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
 </head>
 <body>
   <div class="header">
-    <h1>${vehicle.brand} ${vehicle.model}</h1>
+    <h1>Report Storico: ${vehicle.brand} ${vehicle.model}</h1>
     <div class="subtitle">${vehicle.version || ''} - Targa: ${vehicle.plate}</div>
   </div>
 
@@ -415,7 +464,7 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
         <div class="info-label">Stato Bollo Auto</div>
         <div class="info-value">
           <span class="badge ${roadTaxStatus === 'Payable' ? 'badge-payable' : 'badge-exempt'}">
-            ${roadTaxStatus}
+            ${roadTaxStatusLabel}
           </span>
         </div>
       </div>
@@ -467,7 +516,12 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
           <div class="info-label">Premio Annuale</div>
           <div class="info-value">${formatCurrency(legal.insurance.amount)}</div>
         </div>
+        <div class="info-item">
+          <div class="info-label">Scadenza Assicurazione</div>
+          <div class="info-value">${(legal.insurance as any).dataScadenzaAttuale ? new Date((legal.insurance as any).dataScadenzaAttuale).toLocaleDateString('it-IT') : (legal.insurance.endDate ? new Date(legal.insurance.endDate).toLocaleDateString('it-IT') : 'N/A')}</div>
+        </div>
       </div>
+      ${assicurazioneStagionaleHtml}
     </div>
     ` : ''}
   </div>

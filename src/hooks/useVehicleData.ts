@@ -287,9 +287,29 @@ export function useVehicleData() {
   // CRUD Documenti Legali
   const updateLegalDocument = useCallback((vehicleId: string, updates: Partial<LegalDocument>) => {
     update(prev => {
+      const vehicle = prev.vehicles.find(v => v.id === vehicleId);
       const existing = prev.legal.find(l => l.vehicleId === vehicleId);
+      const isMoto = vehicle?.type === 'moto';
+
+      // Se stiamo aggiornando l'assicurazione e il veicolo è una moto, applica i default se mancanti
+      const patchedUpdates: Partial<LegalDocument> = { ...updates };
+      if (isMoto && updates.insurance) {
+        const ins = updates.insurance;
+        const defaults = {
+          statoPolizza: ins.statoPolizza ?? 'attiva',
+          dataScadenzaAttuale: ins.dataScadenzaAttuale ?? ins.endDate,
+          dataInizioSospensione: ins.dataInizioSospensione ?? null,
+          giorniSospensioneTotali: ins.giorniSospensioneTotali ?? 305,
+          giorniSospensioneResidui: ins.giorniSospensioneResidui ?? 305,
+          richiedeNuovoDocumento: ins.richiedeNuovoDocumento ?? false,
+          insuranceDocumentName: ins.insuranceDocumentName ?? null,
+          insuranceDocumentDataUrl: ins.insuranceDocumentDataUrl ?? null,
+        };
+        patchedUpdates.insurance = { ...ins, ...defaults };
+      }
+
       if (existing) {
-        return { ...prev, legal: prev.legal.map(l => l.vehicleId === vehicleId ? { ...l, ...updates } : l) };
+        return { ...prev, legal: prev.legal.map(l => l.vehicleId === vehicleId ? { ...l, ...patchedUpdates } : l) };
       } else {
         const newLegal: LegalDocument = {
           id: crypto.randomUUID(),
@@ -297,12 +317,72 @@ export function useVehicleData() {
           insurance: null,
           tax: null,
           inspection: null,
-          ...updates,
+          ...patchedUpdates,
         };
         return { ...prev, legal: [...prev.legal, newLegal] };
       }
     });
     addLog(vehicleId, 'DOCUMENTO_AGGIORNATO', 'Documento legale aggiornato');
+  }, [update, addLog]);
+
+  // Sospensione/Riattivazione Polizza (Moto)
+  const sospendiPolizza = useCallback((vehicleId: string) => {
+    update(prev => {
+      const vehicle = prev.vehicles.find(v => v.id === vehicleId);
+      if (!vehicle || vehicle.type !== 'moto') return prev;
+      const legal = prev.legal.find(l => l.vehicleId === vehicleId);
+      if (!legal?.insurance) return prev;
+      const insurance = legal.insurance;
+      const residui = insurance.giorniSospensioneResidui ?? 0;
+      if (residui <= 0) return prev;
+      if (insurance.statoPolizza === 'sospesa') return prev;
+      const today = new Date().toISOString().split('T')[0];
+      const updatedInsurance = {
+        ...insurance,
+        statoPolizza: 'sospesa' as const,
+        dataInizioSospensione: today,
+      };
+      const updatedLegal = { ...legal, insurance: updatedInsurance };
+      return { ...prev, legal: prev.legal.map(l => l.vehicleId === vehicleId ? updatedLegal : l) };
+    });
+    addLog(vehicleId, 'POLIZZA_SOSPESA', 'Sospensione polizza moto avviata');
+  }, [update, addLog]);
+
+  const riattivaPolizza = useCallback((vehicleId: string) => {
+    update(prev => {
+      const vehicle = prev.vehicles.find(v => v.id === vehicleId);
+      if (!vehicle || vehicle.type !== 'moto') return prev;
+      const legal = prev.legal.find(l => l.vehicleId === vehicleId);
+      if (!legal?.insurance) return prev;
+      const insurance = legal.insurance;
+      if (insurance.statoPolizza !== 'sospesa' || !insurance.dataInizioSospensione) return prev;
+
+      const start = new Date(insurance.dataInizioSospensione);
+      const todayDate = new Date();
+      const startUTC = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+      const todayUTC = Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+      let diffDays = Math.max(0, Math.round((todayUTC - startUTC) / (1000 * 60 * 60 * 24)));
+      if (diffDays === 0) diffDays = 1; // Minimo 1 giorno
+
+      const residui = Math.max(0, (insurance.giorniSospensioneResidui ?? 0) - diffDays);
+
+      const currentEnd = new Date(insurance.endDate);
+      currentEnd.setDate(currentEnd.getDate() + diffDays);
+      const newEndISO = currentEnd.toISOString();
+
+      const updatedInsurance = {
+        ...insurance,
+        giorniSospensioneResidui: residui,
+        statoPolizza: 'attiva' as const,
+        dataInizioSospensione: null,
+        endDate: newEndISO,
+        dataScadenzaAttuale: newEndISO,
+        richiedeNuovoDocumento: true,
+      };
+      const updatedLegal = { ...legal, insurance: updatedInsurance };
+      return { ...prev, legal: prev.legal.map(l => l.vehicleId === vehicleId ? updatedLegal : l) };
+    });
+    addLog(vehicleId, 'POLIZZA_RIATTIVATA', 'Polizza moto riattivata e scadenza aggiornata');
   }, [update, addLog]);
 
   // CRUD OBD
@@ -406,6 +486,8 @@ export function useVehicleData() {
     isLoaded,
     getVehicleAnalytics,
     getLegalDeadlines, // Esponiamo la nuova funzione per le scadenze
+    sospendiPolizza,
+    riattivaPolizza,
     addVehicle, updateVehicle, deleteVehicle,
     addMaintenance, updateMaintenance, deleteMaintenance,
     addExpense, updateExpense, deleteExpense,

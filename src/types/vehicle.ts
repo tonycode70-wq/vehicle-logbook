@@ -69,6 +69,16 @@ export interface Insurance {
   endDate: string;
   amount: number;
   notes: string;
+  // Campi specifici Moto - sospensione/riattivazione
+  statoPolizza?: 'attiva' | 'sospesa';
+  dataScadenzaAttuale?: string;
+  dataInizioSospensione?: string | null;
+  giorniSospensioneTotali?: number;
+  giorniSospensioneResidui?: number;
+  richiedeNuovoDocumento?: boolean;
+  // Archiviazione semplice del certificato
+  insuranceDocumentName?: string | null;
+  insuranceDocumentDataUrl?: string | null;
 }
 
 export interface Tax {

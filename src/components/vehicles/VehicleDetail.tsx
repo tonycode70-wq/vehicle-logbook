@@ -173,8 +173,27 @@ export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps)
                   <div>
                     <p className="text-sm font-medium">Assicurazione</p>
                     <p className="text-xs text-muted-foreground">
-                      Scade il {legalInfo?.insurance?.endDate ? formatDate(legalInfo.insurance.endDate) : 'N/D'}
+                      Scade il {legalInfo?.insurance ? formatDate((legalInfo.insurance as any).dataScadenzaAttuale || legalInfo.insurance.endDate) : 'N/D'}
                     </p>
+                    {vehicle.type === 'moto' && legalInfo?.insurance && (
+                      (() => {
+                        const ins: any = legalInfo.insurance;
+                        const totali = typeof ins.giorniSospensioneTotali === 'number' ? ins.giorniSospensioneTotali : 0;
+                        const residui = typeof ins.giorniSospensioneResidui === 'number' ? ins.giorniSospensioneResidui : 0;
+                        const sospesiTotali = Math.max(0, totali - residui);
+                        const costoAnnuale = Number(ins.amount || 0);
+                        const costoGiornaliero = costoAnnuale / 365;
+                        const valoreRecuperato = sospesiTotali * costoGiornaliero;
+                        const mesiEffettivi = (365 + sospesiTotali) / 30.44;
+                        const costoMensileReale = mesiEffettivi > 0 ? (costoAnnuale / mesiEffettivi) : 0;
+                        return (
+                          <div className="mt-1 text-[11px] text-muted-foreground">
+                            Risparmio/Recupero da Sospensione: <span className="font-medium">{valoreRecuperato.toFixed(2)}€</span>{' '}
+                            · Costo Mensile Reale: <span className="font-medium">{costoMensileReale.toFixed(2)}€</span>
+                          </div>
+                        );
+                      })()
+                    )}
                   </div>
                 </div>
                 <Button variant="ghost" size="sm">Vedi</Button>
@@ -203,7 +222,7 @@ export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps)
           <Card>
             <CardContent className="py-10 text-center">
               <p className="text-sm text-muted-foreground italic">
-                Report storico generato per pratica PEC: consultare tab Analytics per esportazione PDF.
+                Report storico generato correttamente per: {vehicle.brand} {vehicle.model}. Consulta la tab Analytics per esportare il PDF.
               </p>
             </CardContent>
           </Card>

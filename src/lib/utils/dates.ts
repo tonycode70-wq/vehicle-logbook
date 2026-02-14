@@ -1,4 +1,4 @@
-import { format, differenceInDays, parseISO, isValid } from 'date-fns';
+import { format, differenceInDays, parseISO, isValid, parse } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { LegalStatus } from '@/types/vehicle';
 
@@ -6,6 +6,14 @@ export function formatDate(date: string | Date, formatStr: string = 'dd/MM/yyyy'
   const parsed = typeof date === 'string' ? parseISO(date) : date;
   if (!isValid(parsed)) return '-';
   return format(parsed, formatStr, { locale: it });
+}
+
+export function parseDateInput(input: string): Date | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  const d = parse(trimmed, 'dd/MM/yyyy', new Date(), { locale: it });
+  if (!isValid(d)) return null;
+  return d;
 }
 
 export function formatDateTime(date: string | Date): string {

@@ -20,6 +20,7 @@ import { useVehicleContext } from '@/contexts/VehicleContext';
 import { Expense, ExpenseCategory, PaymentMethod } from '@/types/vehicle';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { parseDateInput } from '@/lib/utils/dates';
 
 const expenseSchema = z.object({
   vehicleId: z.string().min(1, 'Seleziona un veicolo'),
@@ -198,7 +199,25 @@ export function ExpenseForm({ expense, onComplete }: ExpenseFormProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                  <Calendar 
+                    mode="single" 
+                    selected={field.value} 
+                    onSelect={field.onChange} 
+                    captionLayout="dropdown"
+                    fromYear={new Date().getFullYear() - 10}
+                    toYear={new Date().getFullYear() + 1}
+                    initialFocus 
+                  />
+                  <div className="border-t px-3 py-2">
+                    <Input 
+                      placeholder="gg/mm/aaaa" 
+                      defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                      onBlur={e => {
+                        const d = parseDateInput(e.target.value);
+                        if (d) field.onChange(d);
+                      }}
+                    />
+                  </div>
                 </PopoverContent>
               </Popover>
               <FormMessage />
@@ -267,7 +286,25 @@ export function ExpenseForm({ expense, onComplete }: ExpenseFormProps) {
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                        <Calendar mode="single" selected={field.value || undefined} onSelect={field.onChange} initialFocus />
+                        <Calendar 
+                          mode="single" 
+                          selected={field.value || undefined} 
+                          onSelect={field.onChange} 
+                          captionLayout="dropdown"
+                          fromYear={new Date().getFullYear() - 10}
+                          toYear={new Date().getFullYear() + 1}
+                          initialFocus 
+                        />
+                        <div className="border-t px-3 py-2">
+                          <Input 
+                            placeholder="gg/mm/aaaa" 
+                            defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                            onBlur={e => {
+                              const d = parseDateInput(e.target.value);
+                              if (d) field.onChange(d);
+                            }}
+                          />
+                        </div>
                       </PopoverContent>
                     </Popover>
                     <FormMessage />
@@ -287,8 +324,24 @@ export function ExpenseForm({ expense, onComplete }: ExpenseFormProps) {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-                      <Calendar mode="single" selected={field.value || undefined} onSelect={field.onChange} initialFocus />
-                      <div className="border-t px-3 py-2">
+                      <Calendar 
+                        mode="single" 
+                        selected={field.value || undefined} 
+                        onSelect={field.onChange} 
+                        captionLayout="dropdown"
+                        fromYear={new Date().getFullYear()}
+                        toYear={new Date().getFullYear() + 5}
+                        initialFocus 
+                      />
+                      <div className="border-t px-3 py-2 space-y-2">
+                        <Input 
+                          placeholder="gg/mm/aaaa" 
+                          defaultValue={field.value ? format(field.value, "dd/MM/yyyy") : ""} 
+                          onBlur={e => {
+                            const d = parseDateInput(e.target.value);
+                            if (d) field.onChange(d);
+                          }}
+                        />
                         <DatePresets onSelect={field.onChange} presets={[1, 2, 3, 5]} />
                       </div>
                     </PopoverContent>
