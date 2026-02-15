@@ -715,18 +715,21 @@ export function generateVehiclePDFContent(data: VehiclePDFData): string {
  */
 export async function downloadVehiclePDF(data: VehiclePDFData): Promise<void> {
   const htmlContent = generateVehiclePDFContent(data);
-  
-  // Apri una nuova finestra per la stampa
-  const printWindow = window.open('', '_blank');
-  if (!printWindow) {
-    throw new Error('Impossibile aprire la finestra di stampa. Controlla le impostazioni del browser.');
+
+  // Usa un Blob + ancora con target _blank per compat iOS Safari
+  const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  try {
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    // Non impostiamo "download" per favorire apertura in nuova scheda
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } finally {
+    // Ritarda la revoca per dare tempo all'apertura della nuova scheda
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
-  
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
-  
-  // Attendi che il contenuto sia caricato prima di stampare
-  printWindow.onload = () => {
-    printWindow.print();
-  };
 }
