@@ -20,8 +20,26 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#D4AF37",
+          foreground: "#0D0D0D",
+          gold: {
+            light: "#F5F5F5",
+            DEFAULT: "#D4AF37",
+            dark: "#8A6621",
+            premium: {
+              start: "#D4AF37",
+              end: "#8A6621",
+            }
+          }
+        },
+        luxury: {
+          black: "#0D0D0D",
+          anthracite: "#1A1A1B",
+          card: "#1E1E1E",
+          gold: "#D4AF37",
+          gold_muted: "rgba(212, 175, 55, 0.2)",
+          white: "#F5F5F5",
+          gray: "#A0A0A0",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, Legend
+  PieChart, Pie, Cell, LineChart, Line, Legend, AreaChart, Area
 } from 'recharts';
 import { formatCurrency, formatKm } from '@/lib/utils/dates';
 import { BarChart3, PieChart as PieChartIcon, TrendingUp, Calculator, FileText } from 'lucide-react';
@@ -13,7 +13,7 @@ import { BarChart3, PieChart as PieChartIcon, TrendingUp, Calculator, FileText }
 // --- INTEGRAZIONE PUNTO 4: IMPORT REPORT GENERATOR ---
 import { ReportGenerator } from './ReportGenerator';
 
-const COLORS = ['hsl(220, 70%, 50%)', 'hsl(160, 60%, 45%)', 'hsl(45, 90%, 50%)', 'hsl(350, 70%, 55%)', 'hsl(280, 60%, 55%)', 'hsl(200, 70%, 50%)'];
+const COLORS = ['#D4AF37', '#8A6621', '#F5F5F5', '#A0A0A0', '#C5A028', '#1E1E1E'];
 
 const CATEGORY_LABELS: Record<string, string> = {
   carburante: 'Carburante',
@@ -159,35 +159,35 @@ export function Analytics() {
 
   if (data.vehicles.length === 0) {
     return (
-      <div className="text-center py-12">
-        <BarChart3 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h1 className="text-2xl font-bold">Analisi & Grafici</h1>
-        <p className="text-muted-foreground mt-2">Aggiungi almeno un veicolo per visualizzare le statistiche</p>
+      <div className="text-center py-24 luxury-card max-w-2xl mx-auto border-dashed border-primary/20">
+        <BarChart3 className="h-20 w-20 mx-auto text-primary/20 mb-6" />
+        <h1 className="text-3xl font-extrabold text-white gold-text-gradient uppercase tracking-tight">Analisi & Grafici</h1>
+        <p className="text-muted-foreground mt-3 font-medium">Aggiungi almeno un veicolo per visualizzare le statistiche premium</p>
       </div>
     );
   }
 
   const selectedVehicleName = selectedVehicle === 'all'
-    ? 'Report Veicoli Generale'
-    : (data.vehicles.find(v => v.id === selectedVehicle) ? `Report Storico: ${data.vehicles.find(v => v.id === selectedVehicle)!.brand} ${data.vehicles.find(v => v.id === selectedVehicle)!.model}` : 'Report Veicoli Generale');
+    ? 'Report Flotta Premium'
+    : (data.vehicles.find(v => v.id === selectedVehicle) ? `Report Storico: ${data.vehicles.find(v => v.id === selectedVehicle)!.brand} ${data.vehicles.find(v => v.id === selectedVehicle)!.model}` : 'Report Flotta Premium');
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="space-y-8 max-w-7xl mx-auto pb-12">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div>
-          <h1 className="text-2xl font-bold">{selectedVehicleName}</h1>
-          <p className="text-muted-foreground">Statistiche e andamento costi</p>
+          <h1 className="text-3xl font-extrabold text-white gold-text-gradient uppercase tracking-tight">{selectedVehicleName}</h1>
+          <p className="text-muted-foreground font-medium">Statistiche avanzate e andamento costi automotive</p>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-3">
           <Select value={selectedVehicle} onValueChange={setSelectedVehicle}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[220px] h-12 luxury-card border-white/10 bg-white/5 font-bold">
               <SelectValue placeholder="Tutti i veicoli" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tutti i veicoli</SelectItem>
+            <SelectContent className="bg-black/95 backdrop-blur-xl border-primary/20 rounded-xl font-bold">
+              <SelectItem value="all" className="focus:bg-primary/10 focus:text-primary">Tutti i veicoli</SelectItem>
               {data.vehicles.map(v => (
-                <SelectItem key={v.id} value={v.id}>
+                <SelectItem key={v.id} value={v.id} className="focus:bg-primary/10 focus:text-primary">
                   {v.brand} {v.model}
                 </SelectItem>
               ))}
@@ -195,12 +195,12 @@ export function Analytics() {
           </Select>
           
           <Select value={selectedYear} onValueChange={setSelectedYear}>
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-[120px] h-12 luxury-card border-white/10 bg-white/5 font-bold text-primary">
               <SelectValue placeholder="Anno" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-black/95 backdrop-blur-xl border-primary/20 rounded-xl font-bold">
               {availableYears.map(year => (
-                <SelectItem key={year} value={year}>{year}</SelectItem>
+                <SelectItem key={year} value={year} className="focus:bg-primary/10 focus:text-primary">{year}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -208,233 +208,180 @@ export function Analytics() {
       </div>
 
       {/* Riepilogo totali */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-primary">{formatCurrency(totalExpenses)}</div>
-            <p className="text-sm text-muted-foreground">Spese {selectedYear}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-chart-2">{formatCurrency(totalMaintenance)}</div>
-            <p className="text-sm text-muted-foreground">Manutenzioni {selectedYear}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-2xl font-bold text-chart-4">{formatCurrency(grandTotal)}</div>
-            <p className="text-sm text-muted-foreground">Totale {selectedYear}</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="luxury-card p-8 border-primary/10 group hover:border-primary/30 transition-all">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2 opacity-60">Spese {selectedYear}</p>
+          <div className="text-3xl font-extrabold text-white gold-text-gradient">{formatCurrency(totalExpenses)}</div>
+        </div>
+        <div className="luxury-card p-8 border-white/5 group hover:border-primary/20 transition-all">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2 opacity-60">Manutenzioni {selectedYear}</p>
+          <div className="text-3xl font-extrabold text-white">{formatCurrency(totalMaintenance)}</div>
+        </div>
+        <div className="luxury-card p-8 border-white/10 group hover:border-primary/40 transition-all bg-primary/5">
+          <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-2">Totale {selectedYear}</p>
+          <div className="text-3xl font-extrabold text-white gold-text-gradient drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">{formatCurrency(grandTotal)}</div>
+        </div>
       </div>
 
-      <Tabs defaultValue="monthly" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="monthly" className="flex items-center gap-2">
+      <Tabs defaultValue="monthly" className="space-y-8">
+        <TabsList className="grid w-full grid-cols-4 luxury-card p-1.5 h-16 border-white/5 shadow-2xl">
+          <TabsTrigger value="monthly" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all gap-2">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Mensile</span>
           </TabsTrigger>
-          <TabsTrigger value="categories" className="flex items-center gap-2">
+          <TabsTrigger value="categories" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all gap-2">
             <PieChartIcon className="h-4 w-4" />
             <span className="hidden sm:inline">Categorie</span>
           </TabsTrigger>
-          <TabsTrigger value="trend" className="flex items-center gap-2">
+          <TabsTrigger value="trend" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all gap-2">
             <TrendingUp className="h-4 w-4" />
             <span className="hidden sm:inline">Trend</span>
           </TabsTrigger>
-          <TabsTrigger value="costperkm" className="flex items-center gap-2">
+          <TabsTrigger value="costperkm" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all gap-2">
             <Calculator className="h-4 w-4" />
             <span className="hidden sm:inline">€/km</span>
           </TabsTrigger>
         </TabsList>
 
-        {/* Grafico Mensile */}
-        <TabsContent value="monthly">
-          <Card>
-            <CardHeader>
-              <CardTitle>Spese e Manutenzioni Mensili</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px] sm:h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={monthlyData}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis dataKey="name" className="text-xs" />
-                    <YAxis className="text-xs" tickFormatter={(v) => `€${v}`} />
-                    <Tooltip 
-                      formatter={(value: number) => formatCurrency(value)}
-                      labelClassName="font-bold"
-                    />
-                    <Legend />
-                    <Bar dataKey="spese" name="Spese" fill="hsl(220, 70%, 50%)" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="manutenzioni" name="Manutenzioni" fill="hsl(160, 60%, 45%)" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+        <TabsContent value="monthly" className="luxury-card p-8 border-white/5 min-h-[450px]">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40">Andamento Mensile</h3>
+            <div className="flex gap-4">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-primary" />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase">Spese</span>
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-white/40" />
+                <span className="text-[10px] font-bold text-muted-foreground uppercase">Manutenzioni</span>
+              </div>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={monthlyData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(212,175,55,0.05)" />
+              <XAxis dataKey="name" stroke="#A0A0A0" fontSize={10} tickLine={false} axisLine={false} tick={{ fontWeight: 'bold' }} />
+              <YAxis stroke="#A0A0A0" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(value) => `€${value}`} tick={{ fontWeight: 'bold' }} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#0D0D0D', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '16px', color: '#F5F5F5' }}
+                itemStyle={{ fontWeight: 'bold', fontSize: '12px' }}
+                cursor={{ fill: 'rgba(212,175,55,0.05)' }}
+              />
+              <Bar dataKey="spese" fill="#D4AF37" radius={[4, 4, 0, 0]} barSize={20} />
+              <Bar dataKey="manutenzioni" fill="rgba(245, 245, 245, 0.4)" radius={[4, 4, 0, 0]} barSize={20} />
+            </BarChart>
+          </ResponsiveContainer>
         </TabsContent>
 
-        {/* Grafico Categorie */}
-        <TabsContent value="categories">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Distribuzione Spese</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px]">
-                  {categoryData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={categoryData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                          outerRadius={100}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {categoryData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="h-full flex items-center justify-center text-muted-foreground">
-                      Nessuna spesa registrata
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Distribuzione Manutenzioni</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px]">
-                  {maintenanceTypeData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={maintenanceTypeData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                          outerRadius={100}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {maintenanceTypeData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="h-full flex items-center justify-center text-muted-foreground">
-                      Nessuna manutenzione registrata
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+        <TabsContent value="categories" className="grid gap-8 md:grid-cols-2">
+          <div className="luxury-card p-8 border-white/5 min-h-[450px]">
+            <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 mb-8">Ripartizione Spese</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={categoryData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {categoryData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="rgba(0,0,0,0.5)" />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#0D0D0D', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '16px', color: '#F5F5F5' }}
+                />
+                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase' }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          
+          <div className="luxury-card p-8 border-white/5 min-h-[450px]">
+            <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 mb-8">Tipi di Manutenzione</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={maintenanceTypeData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {maintenanceTypeData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} stroke="rgba(0,0,0,0.5)" />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#0D0D0D', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '16px', color: '#F5F5F5' }}
+                />
+                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase' }} />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </TabsContent>
 
-        {/* Grafico Trend */}
-        <TabsContent value="trend">
-          <Card>
-            <CardHeader>
-              <CardTitle>Andamento Cumulativo</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px] sm:h-[400px]">
-                {trendData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={trendData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="name" className="text-xs" />
-                      <YAxis className="text-xs" tickFormatter={(v) => `€${v}`} />
-                      <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                      <Line 
-                        type="monotone" 
-                        dataKey="totale" 
-                        name="Totale Cumulativo"
-                        stroke="hsl(220, 70%, 50%)" 
-                        strokeWidth={3}
-                        dot={{ fill: 'hsl(220, 70%, 50%)' }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div className="h-full flex items-center justify-center text-muted-foreground">
-                    Nessun dato disponibile
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="trend" className="luxury-card p-8 border-white/5 min-h-[450px]">
+          <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 mb-8">Trend Costi Cumulativi</h3>
+          <ResponsiveContainer width="100%" height={350}>
+            <AreaChart data={trendData}>
+              <defs>
+                <linearGradient id="colorTotale" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(212,175,55,0.05)" />
+              <XAxis dataKey="name" stroke="#A0A0A0" fontSize={10} tickLine={false} axisLine={false} tick={{ fontWeight: 'bold' }} />
+              <YAxis stroke="#A0A0A0" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(value) => `€${value}`} tick={{ fontWeight: 'bold' }} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#0D0D0D', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '16px', color: '#F5F5F5' }}
+              />
+              <Area type="monotone" dataKey="totale" stroke="#D4AF37" strokeWidth={3} fillOpacity={1} fill="url(#colorTotale)" />
+            </AreaChart>
+          </ResponsiveContainer>
         </TabsContent>
 
-        {/* Costo al km */}
-        <TabsContent value="costperkm">
-          <Card>
-            <CardHeader>
-              <CardTitle>Costo per Chilometro</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {costPerKm.map((vehicle, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div>
-                      <p className="font-medium">{vehicle.name}</p>
-                      <p className="text-sm text-muted-foreground">{vehicle.plate} • {formatKm(vehicle.km)}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-primary">
-                        {vehicle.costPerKm.toFixed(3)} €/km
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Totale: {formatCurrency(vehicle.totalCost)}
-                      </p>
-                    </div>
+        <TabsContent value="costperkm" className="luxury-card p-8 border-white/5">
+          <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 mb-8">Efficienza Flotta (€/km)</h3>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {costPerKm.map((item, index) => (
+              <div key={index} className="p-6 luxury-card bg-white/5 border-white/5 group hover:border-primary/20 transition-all">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h4 className="font-extrabold text-white group-hover:text-primary transition-colors">{item.name}</h4>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-40">{item.plate}</p>
                   </div>
-                ))}
-                {costPerKm.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    Nessun veicolo registrato
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10">
+                    <Calculator className="h-5 w-5 text-primary" />
                   </div>
-                )}
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center py-2 border-b border-white/5">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">Costo Totale</span>
+                    <span className="text-sm font-extrabold text-white">{formatCurrency(item.totalCost)}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/5">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">Km Percorsi</span>
+                    <span className="text-sm font-extrabold text-white">{item.km.toLocaleString()} km</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-2">
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Costo al Km</span>
+                    <span className="text-xl font-extrabold text-white gold-text-gradient">€{item.costPerKm.toFixed(3)}</span>
+                  </div>
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
         </TabsContent>
       </Tabs>
-
-      {/* --- INTEGRAZIONE PUNTO 4: SEZIONE REPORT TECNICO FINALE --- */}
-      <div className="pt-8 border-t no-print">
-        <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-primary/10 rounded-lg text-primary">
-              <FileText className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold">{selectedVehicleName}</h3>
-              <p className="text-sm text-muted-foreground">Esporta il report tecnico completo in PDF.</p>
-            </div>
-          </div>
-          <ReportGenerator />
-        </div>
+      
+      <div className="luxury-card p-8 border-primary/20 bg-primary/5">
+        <ReportGenerator />
       </div>
     </div>
   );

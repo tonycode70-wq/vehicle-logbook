@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .playfair-display {
+    font-family: 'Playfair Display', serif;
+  }
+}
 
 /* Font Aerotis - pronto per il caricamento quando aggiungerai il file */
 @font-face {
@@ -22,108 +30,55 @@
 
 @layer base {
   :root {
-    /* Sfondo iOS - bianco caldo con sfumatura */
-    --background: 220 20% 97%;
-    --foreground: 222 20% 18%;
+    /* Background Luxury: Nero antracite / profondo */
+    --background: 220 3% 5%;
+    --foreground: 0 0% 96%;
 
-    /* Card glass */
-    --card: 0 0% 100%;
-    --card-foreground: 222 20% 18%;
+    /* Card Glassmorphism Scuro - #1E1E1E a opacità 80% */
+    --card: 0 0% 12% / 0.8;
+    --card-foreground: 0 0% 96%;
 
-    /* Popover glass */
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 20% 18%;
+    /* Popover */
+    --popover: 0 0% 10% / 0.95;
+    --popover-foreground: 0 0% 96%;
 
-    /* Primary - Blu sistema iOS #007AFF */
-    --primary: 211 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Oro Premium #D4AF37 */
+    --primary: 46 65% 52%;
+    --primary-foreground: 0 0% 5%;
 
-    /* Secondary - Grigio iOS */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 20% 25%;
+    /* Secondary - Grigio Fumo #A0A0A0 */
+    --secondary: 0 0% 63%;
+    --secondary-foreground: 0 0% 10%;
 
-    /* Muted */
-    --muted: 220 14% 95%;
-    --muted-foreground: 220 10% 46%;
+    /* Muted - Grigio Fumo #A0A0A0 */
+    --muted: 0 0% 63% / 0.2;
+    --muted-foreground: 0 0% 63%;
 
     /* Accent */
-    --accent: 211 100% 96%;
-    --accent-foreground: 211 100% 42%;
+    --accent: 46 65% 52% / 0.15;
+    --accent-foreground: 46 65% 52%;
 
-    /* Destructive - Rosso iOS */
-    --destructive: 0 100% 59%;
-    --destructive-foreground: 0 0% 100%;
+    /* Text Colors */
+    --title-white: 0 0% 96%; /* #F5F5F5 Ice White */
+    --text-smoke: 0 0% 63%; /* #A0A0A0 Smoke Gray */
 
-    /* Warning - Arancione iOS */
-    --warning: 28 100% 55%;
-    --warning-foreground: 0 0% 100%;
+    /* Bordi Oro sottili #D4AF37 con opacità 20% */
+    --border: 46 65% 52% / 0.2;
+    --input: 46 65% 52% / 0.2;
+    --ring: 46 65% 52%;
 
-    /* Success - Verde iOS */
-    --success: 142 72% 42%;
-    --success-foreground: 0 0% 100%;
-
-    /* Bordi sottilissimi */
-    --border: 220 15% 91%;
-    --input: 220 15% 91%;
-    --ring: 211 100% 50%;
-
+    /* Border radius richiesto 12-16px */
     --radius: 1rem;
 
-    /* Sidebar glass */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 20% 18%;
-    --sidebar-primary: 211 100% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 211 100% 96%;
-    --sidebar-accent-foreground: 211 100% 42%;
-    --sidebar-border: 220 15% 92%;
-    --sidebar-ring: 211 100% 50%;
-
-    /* Chart colors - iOS palette */
-    --chart-1: 211 100% 50%;
-    --chart-2: 142 72% 42%;
-    --chart-3: 28 100% 55%;
-    --chart-4: 280 80% 58%;
-    --chart-5: 340 82% 55%;
-  }
-
-  .dark {
-    --background: 222 24% 9%;
-    --foreground: 210 20% 96%;
-    --card: 222 24% 12%;
-    --card-foreground: 210 20% 96%;
-    --popover: 222 24% 12%;
-    --popover-foreground: 210 20% 96%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 16% 20%;
-    --secondary-foreground: 210 20% 96%;
-    --muted: 217 16% 18%;
-    --muted-foreground: 216 12% 65%;
-    --accent: 217 16% 22%;
-    --accent-foreground: 210 20% 96%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --warning: 38 92% 60%;
-    --warning-foreground: 0 0% 10%;
-    --success: 142 70% 45%;
-    --success-foreground: 0 0% 100%;
-    --border: 217 16% 25%;
-    --input: 217 16% 25%;
-    --ring: 217 91% 60%;
-    --sidebar-background: 222 24% 11%;
-    --sidebar-foreground: 210 20% 96%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 16% 22%;
-    --sidebar-accent-foreground: 210 20% 96%;
-    --sidebar-border: 217 16% 25%;
-    --sidebar-ring: 217 91% 60%;
-    --chart-1: 217 91% 60%;
-    --chart-2: 142 70% 45%;
-    --chart-3: 38 92% 60%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 0 84% 60%;
+    /* Sidebar Nero Solido */
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 0 0% 63%;
+    --sidebar-primary: 46 65% 52%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 46 65% 52%;
+    --sidebar-border: 46 65% 52% / 0.15;
+    --sidebar-ring: 46 65% 52%;
   }
 }
 
@@ -133,56 +88,78 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    background: radial-gradient(circle at center, #1A1A1B 0%, #0D0D0D 100%) fixed;
+    @apply text-foreground antialiased min-h-screen;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #F5F5F5;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  p, label, span:not(.gold-text-gradient) {
+    color: #A0A0A0;
+  }
 }
 
-/* iOS Glass utilities - AUTENTICO */
+/* Luxury Automotive utilities */
 @layer utilities {
-  .glass-card {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 22px;
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.06),
-      0 2px 8px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  .luxury-card {
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
   }
 
-  .glass-card:hover {
-    box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.08),
-      0 4px 12px rgba(0, 0, 0, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  .luxury-card:hover {
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.1);
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, #D4AF37 0%, #FBE795 50%, #C5A028 100%);
+  }
+
+  .gold-button {
+    background: linear-gradient(135deg, #D4AF37 0%, #8A6621 100%);
+    color: #000;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .gold-button:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .gold-text-gradient {
+    background: linear-gradient(135deg, #D4AF37 0%, #FBE795 50%, #C5A028 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3));
+  }
+
+  .vehicle-shadow {
+    filter: drop-shadow(0 15px 25px rgba(212, 175, 55, 0.2));
+  }
+
+  .vehicle-reflection {
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   }
 
   .glass-nav {
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    @apply bg-black/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-50;
   }
 
-  .glass-sidebar {
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border-right: 0.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
-  }
-
-  .glass-bottom {
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border-top: 0.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+  .shadow-soft {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   }
 
   .ios-button-press {
@@ -195,6 +172,7 @@
 
   .scrollbar-thin {
     scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.2) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -207,11 +185,11 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.2);
+    background: rgba(212, 175, 55, 0.2);
     border-radius: 4px;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.35);
+  .playfair-display {
+    font-family: 'Playfair Display', serif;
   }
 }

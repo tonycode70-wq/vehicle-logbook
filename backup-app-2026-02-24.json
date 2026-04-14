@@ -1,0 +1,193 @@
+{
+  "properties": [
+    {
+      "mainMq": 51,
+      "address": "Via San Pietro 18",
+      "endDate": "2026-10-31",
+      "adminPec": "",
+      "adminRea": "570624",
+      "adminVat": "03879590986",
+      "bankIban": "IT03Y0873554460069000690771",
+      "bankName": "BTL Desenzano del Garda",
+      "adminName": "AMMI. COND. DI IBBA MARCO",
+      "inventory": [
+        {
+          "id": "1769719383179",
+          "name": "SALA & CUCINA",
+          "description": "Divano, tavolo cucina, 2 sedie, climatizzatore portatile, cucina completa di gas, forno, frigo, cappa"
+        },
+        {
+          "id": "1769719428563",
+          "name": "BAGNO",
+          "description": "rubinetteria, specchio, mobile porta oggetti, doccia a vetri trasparenti, colonna doccia relax, water, bidet, lavatrice"
+        },
+        {
+          "id": "1769719465996",
+          "name": "CAMERA LETTO",
+          "description": "Letto matrimoniale con spalliera e cassettone, materasso matrimoniale, armadio a 2 ante scorrevoli, mobile porta TV"
+        },
+        {
+          "id": "1769719483875",
+          "name": "ANTIBAGNO",
+          "description": "Armadio bianco a 2 ante all'interno c'è la caldaia e mensole, lampadario"
+        },
+        {
+          "id": "1769719511123",
+          "name": "RIPOSTIGLIO POSTO AUTO",
+          "description": "Scaffale, mobile porta TV"
+        }
+      ],
+      "startDate": "2026-01-01",
+      "adminEmail": "amministrazionisnc@gmail.com",
+      "adminPhone": "0307778382",
+      "comuneName": "Milano",
+      "fiscalCode": "01234567890",
+      "mainFoglio": "48",
+      "rentalType": "Transitorio",
+      "tenantName": "Bastianello Desiree",
+      "adminMobile": "348 3907005",
+      "imuAliquota": 10.6,
+      "mainRendita": 286.63,
+      "monthlyRent": 440,
+      "adminAddress": "Piazza Virgilio 29 - 25019 Sirmione",
+      "contatoreGas": "1683476",
+      "mainCategory": "A/2",
+      "pertinenzaMq": 16,
+      "contatoreLuce": "COD. 20E 4E5 LA1",
+      "contatoreAcqua": "IT-041-22-2213",
+      "mainParticella": "148",
+      "mainSubalterno": "3",
+      "scheduledItems": [
+        {
+          "id": "1769718147403",
+          "date": "2027-07-02",
+          "type": "manutenzione",
+          "title": "Revisione Caldaia",
+          "completed": false
+        },
+        {
+          "id": "1769718203698",
+          "date": "2026-06-16",
+          "type": "fiscale",
+          "title": "Pagamento IMU",
+          "completed": false
+        }
+      ],
+      "adminFiscalCode": "BBI MRC 82T11 B354W",
+      "condominiumFees": 60,
+      "condominiumName": "Condominio VIP",
+      "pertinenzaFoglio": "48",
+      "registrationDate": "2025-12-05",
+      "cedolareSeccaYear": "primo",
+      "mainSezioneUrbana": "NTC",
+      "pertinenzaRendita": 42.73,
+      "depositoCauzionale": "1000€",
+      "pertinenzaCategory": "C/6",
+      "registrationNumber": "T12345",
+      "pertinenzaParticella": "148",
+      "pertinenzaSubalterno": "8",
+      "pertinenzaSezioneUrbana": "NTC"
+    }
+  ],
+  "monthlyRecords": [
+    {
+      "year": 2026,
+      "month": 1,
+      "status": "registrato",
+      "receivedDate": "2026-01-01",
+      "rentReceived": 500,
+      "extraExpenses": [
+        {
+          "id": "1769718011452",
+          "date": "2026-01-29",
+          "amount": 38,
+          "category": "straordinaria",
+          "description": "Manutenzione Bagno"
+        }
+      ],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "status": "registrato",
+      "receivedDate": "2026-02-03",
+      "rentReceived": 500,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 5,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 7,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 8,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 9,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    },
+    {
+      "year": 2026,
+      "month": 10,
+      "status": "atteso",
+      "receivedDate": null,
+      "rentReceived": 0,
+      "extraExpenses": [],
+      "condominiumFees": 0
+    }
+  ],
+  "fiscalPayments": []
+}

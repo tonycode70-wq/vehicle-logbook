@@ -1,0 +1,1404 @@
+{
+  "vehicles": [
+    {
+      "type": "auto",
+      "brand": "Mercedes ",
+      "model": "CLA 180d",
+      "version": "Extra business automatic",
+      "year": 2017,
+      "color": "Grigio polare ",
+      "fuel": "diesel",
+      "displacement": 1500,
+      "power": 80,
+      "plate": "FM748HF",
+      "vin": "WDD1179121N607941",
+      "currentKm": 153014,
+      "notes": "",
+      "id": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "createdAt": "2026-02-10T06:17:33.707Z",
+      "updatedAt": "2026-02-12T15:53:15.082Z",
+      "registrationDate": "2017-11-15",
+      "disabilityExemption": false,
+      "euroClass": ""
+    },
+    {
+      "type": "moto",
+      "brand": "Kawasaki ",
+      "model": "Versys",
+      "version": "Touring ",
+      "year": 2012,
+      "color": "Nero",
+      "fuel": "benzina",
+      "displacement": 650,
+      "power": 48,
+      "plate": "DY06066",
+      "vin": "Xxxxxxxxxxxxxxxxx",
+      "currentKm": 30000,
+      "notes": "",
+      "id": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "createdAt": "2026-02-10T08:06:39.200Z",
+      "updatedAt": "2026-02-11T18:29:03.658Z"
+    },
+    {
+      "type": "auto",
+      "brand": "Hyundai ",
+      "model": "I10",
+      "version": "Connectline",
+      "year": 2023,
+      "color": "Grigio sabbia ",
+      "fuel": "benzina",
+      "displacement": 1000,
+      "power": 49,
+      "plate": "GP663EC",
+      "vin": "NLHDN51C7RZ233768",
+      "currentKm": 16550,
+      "notes": "Esenzione Legge 104",
+      "id": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "createdAt": "2026-02-11T15:35:26.953Z",
+      "updatedAt": "2026-02-12T16:26:30.628Z",
+      "registrationDate": "2023-09-29",
+      "disabilityExemption": true,
+      "euroClass": ""
+    },
+    {
+      "type": "auto",
+      "brand": "BMW",
+      "model": "Serie 1 F20",
+      "version": "Msport",
+      "year": 2019,
+      "color": "Nero",
+      "fuel": "diesel",
+      "displacement": 1995,
+      "power": 110,
+      "plate": "FT803SW",
+      "vin": "WBA1S510405L13353",
+      "currentKm": 162570,
+      "notes": "",
+      "registrationDate": "2019-02-27",
+      "disabilityExemption": false,
+      "euroClass": "6",
+      "id": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "createdAt": "2026-02-14T21:12:30.104Z",
+      "updatedAt": "2026-02-14T21:12:30.104Z"
+    }
+  ],
+  "maintenance": [
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2025-09-18T22:00:00.000Z",
+      "km": 149550,
+      "type": "tagliando",
+      "workshop": "Nemini ",
+      "isDiy": false,
+      "spareParts": "Olio, filtro olio, controllo generale, manodopera ",
+      "cost": 163,
+      "notes": "",
+      "nextMaintenanceKm": 164550,
+      "nextMaintenanceDate": "2027-02-10T06:24:58.199Z",
+      "id": "8298fdfc-84c2-48d0-84ee-387a4432ab1b",
+      "createdAt": "2026-02-10T06:25:00.618Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2025-02-21T23:00:00.000Z",
+      "km": 28540,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtr olio",
+      "cost": 80,
+      "notes": "",
+      "nextMaintenanceKm": 38540,
+      "nextMaintenanceDate": "2026-02-27T23:00:00.000Z",
+      "id": "4aad64e6-6989-49be-a853-d95ead2fe493",
+      "createdAt": "2026-02-10T08:13:35.878Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2024-12-30T23:00:00.000Z",
+      "km": 9000,
+      "type": "tagliando",
+      "workshop": "Bocchio",
+      "isDiy": false,
+      "spareParts": "Olio, filtro olio, filtro aria controllo generale ",
+      "cost": 264,
+      "notes": "",
+      "nextMaintenanceKm": 19000,
+      "nextMaintenanceDate": "2025-12-30T23:00:00.000Z",
+      "id": "bb5c2a61-f2fe-4e6e-8173-f9bcfc84c533",
+      "createdAt": "2026-02-11T15:37:52.763Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:37:56.958Z",
+      "km": 15800,
+      "type": "tagliando",
+      "workshop": "Bocchio ",
+      "isDiy": false,
+      "spareParts": "Olio, filtri olio e aria, filtri aria interna, controllol freno a mano e generali ",
+      "cost": 278,
+      "notes": "",
+      "nextMaintenanceKm": 25000,
+      "nextMaintenanceDate": "2026-12-29T23:00:00.000Z",
+      "id": "fd699e45-c1c3-4580-b123-4cd406ca5dfb",
+      "createdAt": "2026-02-11T15:41:09.023Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2022-11-13T23:00:00.000Z",
+      "km": 116000,
+      "type": "tagliando",
+      "workshop": "Ellegi motors",
+      "isDiy": false,
+      "spareParts": "Olio, filtri olio, aria, abitacolo, olio cambio automatico, pastiglie posteriori, cinghia Poly-V, kit distribuzione primaria con WP, ",
+      "cost": 0,
+      "notes": "Lavori eseguitiPrima dell’acquisto",
+      "nextMaintenanceKm": 128000,
+      "nextMaintenanceDate": "2023-09-11T22:00:00.000Z",
+      "id": "f7ab9717-3771-42c1-b6d3-ea06bf8c1662",
+      "createdAt": "2026-02-12T16:03:59.149Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2023-09-11T22:00:00.000Z",
+      "km": 128450,
+      "type": "tagliando",
+      "workshop": "Rapporto di manutenzione digitale",
+      "isDiy": false,
+      "spareParts": "Filtro antipolvere, olio e filtro olio",
+      "cost": 0,
+      "notes": "Lavori fatti da Mercedes il 12/9/2023",
+      "nextMaintenanceKm": 153450,
+      "nextMaintenanceDate": "2024-09-23T22:00:00.000Z",
+      "id": "b8ddf4ff-a211-4266-ae2b-30cf9ce40590",
+      "createdAt": "2026-02-12T16:07:46.438Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2024-09-23T22:00:00.000Z",
+      "km": 134500,
+      "type": "tagliando",
+      "workshop": "Ellegi motors ",
+      "isDiy": false,
+      "spareParts": "Olio motore, filtro aria, filtro carburante, filtro olio, filtro abitacolo",
+      "cost": 0,
+      "notes": "",
+      "nextMaintenanceKm": 150000,
+      "nextMaintenanceDate": "2025-09-14T22:00:00.000Z",
+      "id": "952da15f-7c8b-4232-b347-7c9454913658",
+      "createdAt": "2026-02-12T16:09:59.663Z"
+    },
+    {
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2025-05-13T22:00:00.000Z",
+      "km": 140000,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria , controllo generale ",
+      "cost": 110,
+      "notes": "",
+      "nextMaintenanceKm": 160000,
+      "nextMaintenanceDate": "2026-03-13T23:00:00.000Z",
+      "id": "87c639bb-93c9-495c-b986-645722a41972",
+      "createdAt": "2026-02-14T21:29:40.221Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2015-02-22T23:00:00.000Z",
+      "km": 8000,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria, controllo generale",
+      "cost": 90,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "7387abc0-110b-4bcd-978f-d7defaa38cdc",
+      "createdAt": "2026-02-11T14:00:41.843Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2016-02-21T23:00:00.000Z",
+      "km": 12580,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria, controllo generale",
+      "cost": 90,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "06812a7c-e5f7-420d-981e-fe685ddfbc97",
+      "createdAt": "2026-02-11T14:01:15.957Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2017-02-19T23:00:00.000Z",
+      "km": 0,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria, candele, controllo generale",
+      "cost": 0,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "7704833a-dd01-4064-857b-59e7ffe7b5de",
+      "createdAt": "2026-02-11T14:01:46.443Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2018-02-18T23:00:00.000Z",
+      "km": 16995,
+      "type": "tagliando",
+      "workshop": "Alberti Calcinato",
+      "isDiy": false,
+      "spareParts": "OLIO MOTORE, Filtro aria, Filtro carburante, Trittico distribuzione, pastiglie freni ant e post",
+      "cost": 250,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "554262ea-b6bc-483a-9abd-7004329e78c2",
+      "createdAt": "2026-02-11T14:03:04.227Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2019-02-17T23:00:00.000Z",
+      "km": 22754,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria, controllo generale",
+      "cost": 100,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "6f578cc7-4f88-4197-b344-8b42266f6ebd",
+      "createdAt": "2026-02-11T14:04:00.372Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2021-02-14T23:00:00.000Z",
+      "km": 26770,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria, controllo generale",
+      "cost": 90,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "80cf3cf0-f468-4797-a27b-548e86529c61",
+      "createdAt": "2026-02-11T14:04:33.410Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2024-02-19T23:00:00.000Z",
+      "km": 0,
+      "type": "tagliando",
+      "workshop": "",
+      "isDiy": true,
+      "spareParts": "Olio, filtri olio e aria, controllo generale, REVISIONE TOTALE FORCELLE ANTERIORI",
+      "cost": 299.99,
+      "notes": "",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "f8906d74-d1d1-46f6-81b1-ef3167f21d96",
+      "createdAt": "2026-02-11T14:05:32.342Z"
+    },
+    {
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-16T21:31:18.647Z",
+      "km": 150000,
+      "type": "tagliando",
+      "workshop": "Gabriel",
+      "isDiy": false,
+      "spareParts": "Olio, filtri olio e aria, controllo generale",
+      "cost": 160,
+      "notes": "",
+      "nextMaintenanceKm": 165000,
+      "nextMaintenanceDate": "2026-03-30T22:00:00.000Z",
+      "id": "19221382-ffc0-437c-956e-1bf6d0bd1533",
+      "createdAt": "2026-02-16T21:33:32.059Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-17T14:31:18.987Z",
+      "km": 153580,
+      "type": "altro",
+      "workshop": "Carglass Desenzano",
+      "isDiy": false,
+      "spareParts": "",
+      "cost": 0,
+      "notes": "scheggiatura parabrezza anteriore, riparato. Pietre in autostrada ",
+      "nextMaintenanceKm": null,
+      "nextMaintenanceDate": null,
+      "id": "4d90a432-1ba3-49bd-8bbe-1e5865b61007",
+      "createdAt": "2026-02-17T14:32:37.476Z"
+    }
+  ],
+  "expenses": [
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "category": "assicurazione",
+      "date": "2024-06-13T22:00:00.000Z",
+      "amount": 248,
+      "paymentMethod": "altro",
+      "description": "Allianz Direct ",
+      "km": 165500,
+      "validityStart": "2024-06-13T22:00:00.000Z",
+      "validityEnd": "2025-06-12T22:00:00.000Z",
+      "id": "b9d522fa-8add-4186-a88e-e4548a92623c",
+      "createdAt": "2026-02-11T15:44:08.132Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "category": "assicurazione",
+      "date": "2025-06-13T22:00:00.000Z",
+      "amount": 266,
+      "paymentMethod": "altro",
+      "description": "Allianz Direct ",
+      "km": 165500,
+      "validityStart": "2025-06-13T22:00:00.000Z",
+      "validityEnd": "2026-06-13T22:00:00.000Z",
+      "id": "3ab35ccf-2190-432b-84cd-b6b21c799386",
+      "createdAt": "2026-02-11T15:46:58.416Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "category": "assicurazione",
+      "date": "2026-03-22T23:00:00.000Z",
+      "amount": 0.1,
+      "paymentMethod": "altro",
+      "description": "Al momento sospesa ",
+      "km": 30000,
+      "validityStart": "2026-03-22T23:00:00.000Z",
+      "validityEnd": "2027-02-11T18:30:07.005Z",
+      "id": "c454138a-edbf-4610-977f-1da5b29079bc",
+      "createdAt": "2026-02-11T18:30:35.816Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "category": "bollo",
+      "date": "2025-05-30T22:00:00.000Z",
+      "amount": 57,
+      "paymentMethod": "altro",
+      "description": "",
+      "km": 30000,
+      "validityEnd": "2026-05-30T22:00:00.000Z",
+      "id": "36acdbf9-384f-4cfb-a9a3-bbf3760868e5",
+      "createdAt": "2026-02-11T18:31:47.066Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "category": "accessori",
+      "date": "2025-07-27T22:00:00.000Z",
+      "amount": 48,
+      "paymentMethod": "carta",
+      "description": "Localizzatore CarLock",
+      "km": 152992,
+      "id": "06fc0c54-1dba-43e5-816c-3a4629027cd7",
+      "createdAt": "2026-02-12T00:02:57.856Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "category": "accessori",
+      "date": "2026-02-12T16:13:15.632Z",
+      "amount": 48,
+      "paymentMethod": "altro",
+      "description": "Dash CAM",
+      "km": 152050,
+      "id": "a9425a4a-88de-4748-81a0-fd35714ce03c",
+      "createdAt": "2026-02-12T16:14:06.109Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "category": "carburante",
+      "date": "2026-02-12T16:14:45.041Z",
+      "amount": 40,
+      "paymentMethod": "carta",
+      "description": "Gasolio",
+      "km": 153014,
+      "id": "c624bdae-68f2-4765-9e96-fadac83d4da0",
+      "createdAt": "2026-02-12T16:15:03.328Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "category": "accessori",
+      "date": "2025-12-19T23:00:00.000Z",
+      "amount": 48,
+      "paymentMethod": "altro",
+      "description": "Dash CAM",
+      "km": 15700,
+      "id": "7bde2636-8d3d-422c-83ac-0479d6e2f730",
+      "createdAt": "2026-02-12T16:32:06.559Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "category": "assicurazione",
+      "date": "2025-03-09T23:00:00.000Z",
+      "amount": 624,
+      "paymentMethod": "carta",
+      "description": "Allianz Direct ",
+      "km": 113900,
+      "validityStart": "2025-03-09T23:00:00.000Z",
+      "validityEnd": "2026-03-09T23:00:00.000Z",
+      "id": "ffbe8813-be0d-4489-adf5-644bec1640c5",
+      "createdAt": "2026-02-14T07:53:19.673Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "category": "assicurazione",
+      "date": "2025-05-13T23:00:00.000Z",
+      "amount": 217,
+      "paymentMethod": "carta",
+      "description": "Allianz Direct",
+      "km": 29400,
+      "validityStart": "2025-05-13T23:00:00.000Z",
+      "validityEnd": "2026-05-10T23:00:00.000Z",
+      "id": "7a463159-bf9c-4da9-9624-7b8e580781fb",
+      "createdAt": "2026-02-11T14:17:37.325Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "category": "bollo",
+      "date": "2025-06-29T23:00:00.000Z",
+      "amount": 57,
+      "paymentMethod": "carta",
+      "description": "",
+      "km": 30000,
+      "validityEnd": "2026-06-10T23:00:00.000Z",
+      "id": "d32e616a-73d0-4656-a051-81debe04e8c6",
+      "createdAt": "2026-02-11T14:18:28.487Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "category": "revisione",
+      "date": "2025-07-28T23:00:00.000Z",
+      "amount": 80,
+      "paymentMethod": "carta",
+      "description": "",
+      "km": 30000,
+      "validityEnd": "2028-02-11T14:19:05.989Z",
+      "id": "1e6e6efb-a95f-40a0-9302-044eed7688e9",
+      "createdAt": "2026-02-11T14:19:44.508Z"
+    },
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "category": "carburante",
+      "date": "2026-02-17T12:23:19.737Z",
+      "amount": 40,
+      "paymentMethod": "carta",
+      "description": "",
+      "km": 153580,
+      "id": "e2c04ab7-9fb8-4bc0-a919-f67b2d9d68e4",
+      "createdAt": "2026-02-17T12:23:58.820Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "category": "pneumatici",
+      "date": "2026-02-17T17:21:25.347Z",
+      "amount": 194,
+      "paymentMethod": "carta",
+      "description": "Cambiate solo anteriore ",
+      "km": 16720,
+      "id": "1fd8f485-5696-4716-b36a-5088ef16e34f",
+      "createdAt": "2026-02-17T17:22:19.865Z"
+    }
+  ],
+  "legal": [
+    {
+      "id": "66d3d938-9fd7-4477-9b36-09cb3e7304e9",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "insurance": {
+        "id": "b1ae7c88-44fd-4f6e-9087-ef2c19a0304f",
+        "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+        "company": "Allianz Direct ",
+        "policyNumber": "",
+        "startDate": "2025-03-09T23:00:00.000Z",
+        "endDate": "2026-03-09T23:00:00.000Z",
+        "amount": 624,
+        "notes": "Registrata da spesa il 14/02/2026"
+      },
+      "tax": {
+        "id": "c553857a-c972-4241-8a41-1838a0a45ca2",
+        "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+        "year": 2026,
+        "region": "Lombardia",
+        "dueDate": "2026-09-29T22:00:00.000Z",
+        "paidDate": "2025-09-29T22:00:00.000Z",
+        "amount": 176.44,
+        "notes": "Registrato da spesa il 10/02/2026"
+      },
+      "inspection": {
+        "id": "6c87d2be-e3cd-432a-8f19-780641b74f55",
+        "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+        "lastDate": "2025-11-17T23:00:00.000Z",
+        "nextDate": "2027-11-17T23:00:00.000Z",
+        "result": "superata",
+        "notes": "Registrata da spesa il 18/11/2025"
+      }
+    },
+    {
+      "id": "d37a9c41-3ba6-4cfd-8c59-7306e4a669e0",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "insurance": {
+        "id": "e957a4bf-717e-4b08-8c46-dd080de2c33f",
+        "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+        "company": "Allianz Direct",
+        "policyNumber": "",
+        "startDate": "2025-05-13T23:00:00.000Z",
+        "endDate": "2026-05-10T23:00:00.000Z",
+        "amount": 217,
+        "notes": "Registrata da spesa il 11/02/2026",
+        "statoPolizza": "attiva",
+        "dataScadenzaAttuale": "2026-05-10T23:00:00.000Z",
+        "dataInizioSospensione": null,
+        "giorniSospensioneTotali": 305,
+        "giorniSospensioneResidui": 305,
+        "richiedeNuovoDocumento": false,
+        "insuranceDocumentName": null,
+        "insuranceDocumentDataUrl": null
+      },
+      "tax": {
+        "id": "08a8625b-cd00-472c-892f-ae28ecf8c2d2",
+        "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+        "year": 2026,
+        "region": "",
+        "dueDate": "2026-06-10T23:00:00.000Z",
+        "paidDate": "2025-06-29T23:00:00.000Z",
+        "amount": 52.4,
+        "notes": "Registrato da spesa il 11/02/2026"
+      },
+      "inspection": {
+        "id": "df6c56ca-29a0-41d4-8628-388f4f301bec",
+        "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+        "lastDate": "2025-07-28T23:00:00.000Z",
+        "nextDate": "2028-02-11T14:19:05.989Z",
+        "result": "superata",
+        "cost": 80,
+        "notes": "Registrata da spesa il 11/02/2026"
+      }
+    },
+    {
+      "id": "389eb227-717a-43cd-9447-8ecd883626d9",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "insurance": {
+        "id": "61d3d002-f61b-4dfd-8d3c-4d7f82f6308e",
+        "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+        "company": "Allianz Direct ",
+        "policyNumber": "474562783",
+        "startDate": "2025-06-13T22:00:00.000Z",
+        "endDate": "2026-06-13T22:00:00.000Z",
+        "amount": 266,
+        "notes": "Registrata da spesa il 11/02/2026"
+      },
+      "tax": {
+        "id": "5be3f191-3c32-4658-ba77-764261588dcc",
+        "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+        "year": 2026,
+        "region": "Lombardia",
+        "dueDate": "2027-02-08T23:00:00.000Z",
+        "paidDate": "2024-01-08T23:00:00.000Z",
+        "amount": 0,
+        "notes": "Esenzione Legge 104"
+      },
+      "inspection": {
+        "id": "d8c71a50-a4ba-45ab-af34-3f3ff39017e1",
+        "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+        "lastDate": "2023-09-28T22:00:00.000Z",
+        "nextDate": "2027-09-28T22:00:00.000Z",
+        "result": "da_effettuare",
+        "notes": ""
+      }
+    },
+    {
+      "id": "bce25cd5-356a-4700-9d10-aaf27c767f3b",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "insurance": {
+        "id": "a0c85290-111a-4231-9910-e0a35dd3bf26",
+        "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+        "company": "Allianz Direct ",
+        "policyNumber": "DI300889369-004",
+        "startDate": "2025-10-02T22:00:00.000Z",
+        "endDate": "2026-10-02T22:00:00.000Z",
+        "amount": 555,
+        "notes": ""
+      },
+      "tax": {
+        "id": "90e0cab5-3b9a-4a57-bc03-094db6f5f23e",
+        "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+        "year": 2026,
+        "region": "Lombardia",
+        "dueDate": "2026-02-27T23:00:00.000Z",
+        "paidDate": "2025-02-27T23:00:00.000Z",
+        "amount": 253.2,
+        "notes": ""
+      },
+      "inspection": {
+        "id": "e49e5811-bb83-4f98-9b55-58e5af44122e",
+        "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+        "lastDate": "2025-02-27T23:00:00.000Z",
+        "nextDate": "2027-02-27T23:00:00.000Z",
+        "result": "superata",
+        "notes": ""
+      }
+    }
+  ],
+  "logs": [
+    {
+      "id": "b98e3b28-ab1e-4701-a72a-1a9a88a8f024",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:17:33.707Z",
+      "action": "VEICOLO_AGGIUNTO",
+      "details": "Aggiunto Mercedes  CLA 280d"
+    },
+    {
+      "id": "cae3d351-c36a-411a-b380-310b4b233548",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:20:36.963Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "742699f8-2c42-4914-811a-4528548a571c",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:23:29.281Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "909f2b8e-ad64-46a4-95fc-9c6eab2667a3",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:25:00.618Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €163"
+    },
+    {
+      "id": "d4d0b41e-59c6-49cc-984f-010ac1547f9d",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:25:23.487Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "carburante - €30"
+    },
+    {
+      "id": "3ebdacd0-3f07-43f2-a9dc-6e8b191262c8",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:27:01.898Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "d1baed3a-8562-4e23-a9b7-c28b7ebdfcd5",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:27:50.187Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "d2b8cf2f-7b9f-4fff-950d-9a705a35ad32",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:28:22.934Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "pedaggi - €2.5"
+    },
+    {
+      "id": "fa094a72-8683-4684-bc6c-d62db8466bc5",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-10T06:28:54.763Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "carburante - €10"
+    },
+    {
+      "id": "d19ddf70-050c-414c-956c-fecba90875fd",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-10T08:06:39.200Z",
+      "action": "VEICOLO_AGGIUNTO",
+      "details": "Aggiunto Kawasaki  Versys"
+    },
+    {
+      "id": "00a3d13a-b0c7-475d-ac7f-ff4318aae39b",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-10T08:08:52.490Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "ad91f12e-ce7c-48f0-ac20-04a6fd41ac1d",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-10T08:11:00.362Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "2f6a0757-07c8-45c5-87ce-5ed4647ef145",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-10T08:13:35.878Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €80"
+    },
+    {
+      "id": "e1e264dc-aed1-4a0d-9e64-8199f7f9baf1",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T07:44:18.409Z",
+      "action": "BATTERIA_AGGIUNTA",
+      "details": "Bosch 12V 80Ah"
+    },
+    {
+      "id": "be6a7365-073c-4f7c-8087-18316a5df004",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T07:45:28.976Z",
+      "action": "PNEUMATICI_AGGIUNTI",
+      "details": "Kleber  - 4_stagioni"
+    },
+    {
+      "id": "115cd90b-9630-4554-97a0-8d2cedc77369",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T08:11:49.616Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "83025780-38a9-4580-b993-5ac8cfd4c341",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:35:26.954Z",
+      "action": "VEICOLO_AGGIUNTO",
+      "details": "Aggiunto Hyundai  I10"
+    },
+    {
+      "id": "41617379-ade2-4881-a690-c8117eb6a119",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:37:52.764Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €264"
+    },
+    {
+      "id": "62f9709e-579d-4e73-abdc-397858c93418",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:41:09.023Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €295"
+    },
+    {
+      "id": "f6bc2b0f-e3e8-4faf-b897-0a066f7774bf",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:44:08.133Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "assicurazione - €248"
+    },
+    {
+      "id": "ad93d697-3e14-4e23-ac87-1628e92555f4",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:44:08.133Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "8cc9bd8f-c739-4502-b931-b160e97ea221",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:46:58.416Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "assicurazione - €266"
+    },
+    {
+      "id": "a8764df5-8510-49c0-a985-f11fb8244969",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:46:58.416Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "ffe4d612-1006-4192-8161-517ad6c3dd87",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:56:17.643Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "7fd6dc4c-770e-43f0-ae9b-71440b474a56",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T15:57:34.264Z",
+      "action": "KM_AGGIORNATI",
+      "details": "Chilometraggio aggiornato",
+      "previousValue": "165500",
+      "newValue": "16550"
+    },
+    {
+      "id": "207deddb-c437-4fcf-9ce7-3ebb85cfedd9",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:30:35.816Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "assicurazione - €0.1"
+    },
+    {
+      "id": "dcc8e92c-a9fb-40ce-bb99-9e85bfb68879",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:30:35.817Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "401e297c-3c45-4f16-8dac-1ef334d9a1de",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:31:47.066Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "bollo - €57"
+    },
+    {
+      "id": "39e3863e-681f-47f4-8951-4f0b3bea1962",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:31:47.067Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "6a5aa76a-b7fb-4d83-9cc5-92051817b012",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:32:34.376Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "f56ba975-75b2-43a7-a4fc-a14d7813c271",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:32:52.557Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "7d772ab5-1b64-491a-9d2e-450d73dda3bf",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T18:36:30.145Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "9001062b-70e1-465d-ad4d-ad612a4a6306",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T18:36:43.105Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "91689ffd-9662-436c-9c2e-f491f4f7275f",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T18:39:52.691Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "94f26537-c3c2-4599-a5e1-782ac419eb9f",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T18:40:24.900Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "a2cd269a-e890-4028-817e-c7465a401b75",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T18:40:37.077Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "72131a89-55c3-4b67-8699-4824e492121d",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T18:41:44.878Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "a33f4ef0-3805-416f-943d-a87b814d1c53",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T18:42:14.164Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "bcd57108-1a25-456e-ad75-318bcdafbb0b",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T18:45:33.599Z",
+      "action": "SPESA_ELIMINATA",
+      "details": "carburante eliminata"
+    },
+    {
+      "id": "b5149e61-be92-459b-b48c-cf467e78a3f3",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T18:45:35.496Z",
+      "action": "SPESA_ELIMINATA",
+      "details": "pedaggi eliminata"
+    },
+    {
+      "id": "1980a4c6-eb28-4011-b6bc-da195e528999",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-11T18:45:37.974Z",
+      "action": "SPESA_ELIMINATA",
+      "details": "carburante eliminata"
+    },
+    {
+      "id": "1f833156-0afa-47a5-8d4c-570257a7b29f",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-11T23:29:59.405Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "4b29e844-fdd4-4abf-8b50-a6dd2e6fe29f",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T00:00:19.600Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "fb982fee-9c4a-4655-adfc-d1d16e558054",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T00:00:42.989Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "fe940d73-c222-47fa-a03a-a9233abcb1d8",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-12T00:01:13.126Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "4174c496-8a63-4a4f-abf6-60ebb4a89b70",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T00:02:57.856Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "accessori - €48"
+    },
+    {
+      "id": "e499ba57-2e6e-4889-85e6-a43418e64914",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T15:53:15.086Z",
+      "action": "KM_AGGIORNATI",
+      "details": "Chilometraggio aggiornato",
+      "previousValue": "152992",
+      "newValue": "153014"
+    },
+    {
+      "id": "8891ed20-f11e-4e4c-9940-300fb4a48055",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T15:54:39.025Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "a3d2c077-6275-43c4-9a3e-9eff8046a082",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T16:03:59.149Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €904"
+    },
+    {
+      "id": "a38436ff-daf3-484d-89c4-261caf8d8af2",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T16:07:46.438Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €0"
+    },
+    {
+      "id": "e7ac1512-17fc-4d04-9858-5baff62fafcb",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T16:09:59.663Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €3840"
+    },
+    {
+      "id": "d5b99873-ca12-4b74-bf97-761c8d30bee7",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T16:14:06.110Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "accessori - €48"
+    },
+    {
+      "id": "f94baee5-5d35-4e58-b488-ab34e37bc73b",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-12T16:15:03.328Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "carburante - €40"
+    },
+    {
+      "id": "221add0e-aac7-4b1f-8807-34be69c9991a",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-12T16:28:35.030Z",
+      "action": "PNEUMATICI_AGGIUNTI",
+      "details": "Michelin  Road - 4_stagioni"
+    },
+    {
+      "id": "8d9b6b1f-6997-4c9f-ae03-2fbbb5cdf515",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-12T16:30:00.165Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "e26028a9-df3e-45f8-9b9f-2c48b9e6426c",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-12T16:30:14.815Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "5bbe2c99-6894-487d-8cc3-1a18c917dc84",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-12T16:32:06.559Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "accessori - €48"
+    },
+    {
+      "id": "4d89877b-7f45-40e5-892a-80a8b79f8276",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-13T13:06:16.037Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "carburante - €30"
+    },
+    {
+      "id": "42f1973f-e1b2-4998-8ceb-34fd6ebb0d94",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-13T13:08:24.910Z",
+      "action": "SPESA_ELIMINATA",
+      "details": "carburante eliminata"
+    },
+    {
+      "id": "71d53e13-a643-4d6c-bc03-8db386657ef1",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-14T07:53:19.673Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "assicurazione - €624"
+    },
+    {
+      "id": "eb588587-58ce-4ed0-b4e8-0bfacdb6bf08",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-14T07:53:19.674Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "8d4a18e9-b0b6-4bd6-a9b2-4408968a9f26",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-14T21:12:30.107Z",
+      "action": "VEICOLO_AGGIUNTO",
+      "details": "Aggiunto BMW Serie 1 F20"
+    },
+    {
+      "id": "dbbefd91-e479-42c3-8ed2-8aa848376dfa",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-14T21:24:23.095Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "43f38c2e-345e-48c3-9829-51199eb8cc34",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-14T21:26:01.339Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "6b0ce556-46b8-424d-bde4-2bb0758d0624",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-14T21:26:49.637Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "53da0c2e-2d0b-46db-91ff-a5ca2b494a4e",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-14T21:29:40.221Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €110"
+    },
+    {
+      "id": "3c3a7ec1-51cf-4bfe-b89c-59987ff16f8d",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:00:41.845Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €90"
+    },
+    {
+      "id": "bce5fb29-c166-4341-9101-d81db843cd94",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:01:15.958Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €90"
+    },
+    {
+      "id": "627e503e-25e5-46b6-8e99-bfaf2586232a",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:01:46.445Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €0"
+    },
+    {
+      "id": "a97f3efb-7f3b-4ade-a858-0acd93d2f164",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:03:04.228Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €250"
+    },
+    {
+      "id": "874a4566-e342-41c3-b949-22b65290ace2",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:04:00.374Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €100"
+    },
+    {
+      "id": "5f68febd-e252-4a1a-ad4f-9bb6ca954651",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:04:33.412Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €0"
+    },
+    {
+      "id": "438f2f85-1c24-486d-bfff-e18f3c017813",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:05:32.344Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €100"
+    },
+    {
+      "id": "02eb4b0b-ea70-400a-b3a0-37a65eefeb3e",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:06:44.926Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €9"
+    },
+    {
+      "id": "290d2f76-746b-479e-99c8-413789f9f297",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:06:59.090Z",
+      "action": "MANUTENZIONE_ELIMINATA",
+      "details": "tagliando eliminata"
+    },
+    {
+      "id": "6240914f-c64f-4ac5-a374-f11e7a74cf1a",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:09:42.154Z",
+      "action": "BATTERIA_AGGIUNTA",
+      "details": "Yuasa YTX12 12 V 12 12V 12Ah"
+    },
+    {
+      "id": "57c1f72a-72e7-43b4-a6f5-4ddc8ba9fd9c",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:15:03.060Z",
+      "action": "PNEUMATICI_AGGIUNTI",
+      "details": "Metzeler  Sportec M5 - estivi"
+    },
+    {
+      "id": "b26ef2d2-cffa-46c3-bd9b-6b9c937ce521",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:15:43.374Z",
+      "action": "CATENA_INGRASSATA",
+      "details": "Ingrassaggio a 30000 km"
+    },
+    {
+      "id": "c61ba7f2-27a0-47fe-a04d-604bed41bfa5",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:17:37.326Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "assicurazione - €217"
+    },
+    {
+      "id": "e5e0b156-6d6e-4a85-9adc-db990213afe7",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:17:37.327Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "d5bb3d92-2d6c-4e85-968c-3e14ce47e53a",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:18:28.488Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "bollo - €57"
+    },
+    {
+      "id": "91c58a7d-4347-4c8a-8768-48a07d38a2b2",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:18:28.489Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "b40ea475-105e-4226-b268-96bac2115679",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:19:44.509Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "revisione - €80"
+    },
+    {
+      "id": "20abc084-d18b-44a6-8766-85fd1b3c9151",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-11T14:19:44.509Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "2cff76fa-a9b5-44fd-832c-dcdf0573010b",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-16T21:29:58.727Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "b7c10a7d-b4d5-42ef-a072-f5684a6e8e95",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-16T21:30:18.485Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "f81e5d60-1c44-44cd-a609-42d7a0c469ab",
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2026-02-16T21:30:38.354Z",
+      "action": "DOCUMENTO_AGGIORNATO",
+      "details": "Documento legale aggiornato"
+    },
+    {
+      "id": "46b6dc57-35fc-489c-91ae-c980582a8745",
+      "vehicleId": "284f3d4c-635b-4283-94ae-eac97ff09a4c",
+      "date": "2026-02-16T21:33:32.063Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "tagliando - €160"
+    },
+    {
+      "id": "37f80e8e-1d17-4634-a7c8-dd11b73796ca",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-17T12:23:58.820Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "carburante - €40"
+    },
+    {
+      "id": "c77e19d0-1ef4-43a9-8d6d-02eaea813ef9",
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "date": "2026-02-17T14:32:37.477Z",
+      "action": "MANUTENZIONE_AGGIUNTA",
+      "details": "altro - €0"
+    },
+    {
+      "id": "cbc8cc56-e65b-46bc-a8b3-de139507fbe6",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-17T17:20:51.377Z",
+      "action": "PNEUMATICI_AGGIUNTI",
+      "details": "Kumo  - estivi"
+    },
+    {
+      "id": "cfc16e09-e915-4918-a84d-cbad813d0abb",
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "date": "2026-02-17T17:22:19.865Z",
+      "action": "SPESA_AGGIUNTA",
+      "details": "pneumatici - €194"
+    }
+  ],
+  "obdLogs": [],
+  "batteries": [
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "installDate": "2024-11-02T23:00:00.000Z",
+      "replaceDate": null,
+      "brand": "Bosch",
+      "voltage": 12,
+      "amperage": 80,
+      "notes": "",
+      "id": "f53fe824-17b0-4a0f-ab82-4d9999ae81b6",
+      "createdAt": "2026-02-11T07:44:18.408Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "installDate": "2024-02-21T23:00:00.000Z",
+      "replaceDate": null,
+      "brand": "Yuasa YTX12 12 V 12",
+      "voltage": 12,
+      "amperage": 12,
+      "notes": "",
+      "id": "52150996-2578-4a4e-bbf9-2a93d5dbb3bd",
+      "createdAt": "2026-02-11T14:09:42.153Z"
+    }
+  ],
+  "tires": [
+    {
+      "vehicleId": "bec4d710-51e1-4a5d-b0cc-5422d1085f0d",
+      "mountDate": "2026-02-11T07:44:21.581Z",
+      "mountKm": 152992,
+      "brand": "Kleber",
+      "model": "",
+      "type": "4_stagioni",
+      "frontSize": "225/45 R17",
+      "frontPressure": 2.3,
+      "rearSize": "225/45 R-7",
+      "rearPressure": 2.3,
+      "notes": "",
+      "id": "b194dc10-ead8-4066-a565-31b2dd78c81d",
+      "createdAt": "2026-02-11T07:45:28.976Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "mountDate": "2023-09-28T22:00:00.000Z",
+      "mountKm": 16550,
+      "brand": "Michelin ",
+      "model": "Road",
+      "type": "4_stagioni",
+      "frontSize": "175/65 R14 86T",
+      "frontPressure": 2.2,
+      "rearSize": "175/65 R14 86T",
+      "rearPressure": 2.2,
+      "notes": "",
+      "id": "dc550085-2a01-4962-8b26-4374152a2ad2",
+      "createdAt": "2026-02-12T16:28:35.029Z"
+    },
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "mountDate": "2019-04-11T23:00:00.000Z",
+      "mountKm": 22548,
+      "brand": "Metzeler ",
+      "model": "Sportec M5",
+      "type": "estivi",
+      "frontSize": "120/70 ZR17 58W",
+      "frontPressure": 2.25,
+      "rearSize": "160/60 ZR17 69W",
+      "rearPressure": 2.5,
+      "notes": "",
+      "id": "7b4c8d97-eaa4-44aa-b08d-22a9e95212bd",
+      "createdAt": "2026-02-11T14:15:03.058Z"
+    },
+    {
+      "vehicleId": "fbe23515-74e1-4ba9-9b10-52a58cae5f33",
+      "mountDate": "2026-02-17T17:19:16.167Z",
+      "mountKm": 16720,
+      "brand": "Kumo",
+      "model": "",
+      "type": "estivi",
+      "frontSize": "185/55 R15",
+      "frontPressure": 2.2,
+      "rearSize": "",
+      "rearPressure": 2.2,
+      "notes": "Cambiate solo anteriore ",
+      "id": "e2dceaf4-d479-40b5-bfb6-f5e9c29cf8b3",
+      "createdAt": "2026-02-17T17:20:51.376Z"
+    }
+  ],
+  "chainLubes": [
+    {
+      "vehicleId": "9a88e7b7-3a19-4093-a8b7-a62d8a4cb03a",
+      "date": "2025-09-30T23:00:00.000Z",
+      "km": 30000,
+      "nextKm": 30500,
+      "notes": "",
+      "id": "2dd5e2ef-cf03-4799-b415-33966f269f79",
+      "createdAt": "2026-02-11T14:15:43.372Z"
+    }
+  ],
+  "settings": {
+    "theme": "light",
+    "currency": "€",
+    "dateFormat": "dd/MM/yyyy",
+    "distanceUnit": "km"
+  }
+}

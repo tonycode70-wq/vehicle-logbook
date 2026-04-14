@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Plus, Edit, Shield, FileCheck, Calendar, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
+import { Plus, Edit, Shield, FileCheck, Calendar, AlertTriangle, CheckCircle2, Clock, Car, Bike } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -49,27 +49,27 @@ export function LegalStatus() {
 
   const getStatusBadge = (status: string | null, daysLeft?: number | null) => {
     if (!status || status === 'missing') {
-      return <Badge variant="outline">Non configurato</Badge>;
+      return <Badge variant="outline" className="border-white/10 text-muted-foreground uppercase text-[10px] font-bold tracking-widest">Non configurato</Badge>;
     }
     
     switch (status) {
       case 'ok': 
         return (
-          <Badge variant="success" className="gap-1">
+          <Badge variant="success" className="gap-1 bg-green-500/10 text-green-500 border-green-500/20 uppercase text-[10px] font-bold tracking-widest px-3 py-1">
             <CheckCircle2 className="h-3 w-3" />
             In regola
           </Badge>
         );
       case 'in_scadenza': 
         return (
-          <Badge variant="warning" className="gap-1">
+          <Badge variant="warning" className="gap-1 bg-primary/10 text-primary border-primary/20 uppercase text-[10px] font-bold tracking-widest px-3 py-1 shadow-[0_0_10px_rgba(212,175,55,0.2)]">
             <Clock className="h-3 w-3" />
-            {daysLeft !== undefined && daysLeft !== null ? `${daysLeft} giorni` : 'In scadenza'}
+            {daysLeft !== undefined && daysLeft !== null ? `${daysLeft} GIORNI` : 'IN SCADENZA'}
           </Badge>
         );
       case 'scaduto': 
         return (
-          <Badge variant="destructive" className="gap-1">
+          <Badge variant="destructive" className="gap-1 bg-red-500/10 text-red-500 border-red-500/20 uppercase text-[10px] font-bold tracking-widest px-3 py-1">
             <AlertTriangle className="h-3 w-3" />
             Scaduto
           </Badge>
@@ -160,474 +160,230 @@ export function LegalStatus() {
   }, [data.vehicles, data.legal]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-7xl mx-auto pb-12 bg-[#0D0D0D] min-h-screen">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between px-4">
         <div>
-          <h1 className="text-2xl font-bold md:text-3xl">Stato Legale</h1>
-          <p className="text-muted-foreground">Gestisci assicurazione, bollo e revisione</p>
+          <h1 className="text-4xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-[linear-gradient(to_right,#D4AF37,#FBE795,#8A6621)] uppercase playfair-display mb-2">Stato Legale</h1>
+          <p className="text-muted-foreground font-medium uppercase tracking-[0.2em] text-[10px]">Gestisci assicurazione, bollo e revisione dei tuoi veicoli di lusso</p>
         </div>
       </div>
 
       {/* Stats Cards */}
       {data.vehicles.length > 0 && (
-        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-          <Card className="border-success/20 bg-success/5">
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10">
-                  <CheckCircle2 className="h-5 w-5 text-success" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-success">{stats.okCount}</p>
-                  <p className="text-xs text-muted-foreground">In regola</p>
-                </div>
+        <div className="grid gap-6 grid-cols-2 lg:grid-cols-4 px-4">
+          <div className="bg-[#1E1E1E]/80 backdrop-blur-[10px] p-6 border border-[#D4AF37]/20 rounded-3xl group hover:border-[#D4AF37]/40 transition-all duration-500 shadow-2xl">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/20 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                <CheckCircle2 className="h-6 w-6 text-[#D4AF37]" />
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-3xl font-extrabold text-[#D4AF37] drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">{stats.okCount}</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] opacity-60">In regola</p>
+              </div>
+            </div>
+          </div>
 
-          <Card className="border-warning/20 bg-warning/5">
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning/10">
-                  <Clock className="h-5 w-5 text-warning" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-warning">{stats.warningCount}</p>
-                  <p className="text-xs text-muted-foreground">In scadenza</p>
-                </div>
+          <div className="bg-[#1E1E1E]/80 backdrop-blur-[10px] p-6 border border-[#D4AF37]/20 rounded-3xl group hover:border-[#D4AF37]/40 transition-all duration-500 shadow-2xl">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                <Clock className="h-6 w-6 text-primary" />
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-3xl font-extrabold text-primary drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">{stats.warningCount}</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] opacity-60">In scadenza</p>
+              </div>
+            </div>
+          </div>
 
-          <Card className="border-destructive/20 bg-destructive/5">
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-destructive/10">
-                  <AlertTriangle className="h-5 w-5 text-destructive" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-destructive">{stats.expiredCount}</p>
-                  <p className="text-xs text-muted-foreground">Scaduti</p>
-                </div>
+          <div className="bg-[#1E1E1E]/80 backdrop-blur-[10px] p-6 border border-red-500/20 rounded-3xl group hover:border-red-500/40 transition-all duration-500 shadow-2xl">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                <AlertTriangle className="h-6 w-6 text-red-500" />
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-3xl font-extrabold text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.3)]">{stats.expiredCount}</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] opacity-60">Scaduti</p>
+              </div>
+            </div>
+          </div>
 
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
-                  <Shield className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{stats.missingCount}</p>
-                  <p className="text-xs text-muted-foreground">Da configurare</p>
-                </div>
+          <div className="bg-[#1E1E1E]/80 backdrop-blur-[10px] p-6 border border-white/5 rounded-3xl group transition-all duration-500 shadow-2xl">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:scale-110 transition-transform">
+                <Shield className="h-6 w-6 text-muted-foreground/60" />
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-3xl font-extrabold text-white">{stats.missingCount}</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] opacity-60">Da impostare</p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Filtro veicolo */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium">Veicolo:</span>
+      <div className="px-4">
+        <div className="bg-[#1E1E1E]/80 backdrop-blur-[10px] p-6 border border-[#D4AF37]/10 rounded-3xl shadow-2xl">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-[#D4AF37]/10 rounded-lg">
+                <Car className="h-5 w-5 text-[#D4AF37]" />
+              </div>
+              <span className="text-xs font-bold text-white uppercase tracking-[0.2em]">Veicolo:</span>
+            </div>
             <Select value={selectedVehicle} onValueChange={setSelectedVehicle}>
-              <SelectTrigger className="w-[250px]">
+              <SelectTrigger className="w-full sm:w-[300px] h-12 bg-black/40 border-white/10 focus:ring-[#D4AF37]/20 rounded-xl font-bold text-white">
                 <SelectValue placeholder="Seleziona veicolo" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tutti i veicoli</SelectItem>
+              <SelectContent className="bg-black/95 backdrop-blur-2xl border-[#D4AF37]/20 rounded-xl">
+                <SelectItem value="all" className="focus:bg-[#D4AF37]/10 focus:text-[#D4AF37] font-bold uppercase tracking-widest text-[10px]">Tutti i veicoli</SelectItem>
                 {data.vehicles.map(v => (
-                  <SelectItem key={v.id} value={v.id}>
+                  <SelectItem key={v.id} value={v.id} className="focus:bg-[#D4AF37]/10 focus:text-[#D4AF37] font-bold uppercase tracking-widest text-[10px]">
                     {v.brand} {v.model} ({v.plate})
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Tabs per tipo documento */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as LegalTab)}>
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="insurance" className="gap-2">
-            <Shield className="h-4 w-4" />
-            <span className="hidden sm:inline">Assicurazione</span>
-          </TabsTrigger>
-          <TabsTrigger value="tax" className="gap-2">
-            <FileCheck className="h-4 w-4" />
-            <span className="hidden sm:inline">Bollo</span>
-          </TabsTrigger>
-          <TabsTrigger value="inspection" className="gap-2">
-            <Calendar className="h-4 w-4" />
-            <span className="hidden sm:inline">Revisione</span>
-          </TabsTrigger>
-        </TabsList>
+      <div className="px-4">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as LegalTab)} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 bg-[#1E1E1E]/80 backdrop-blur-[10px] p-1.5 h-16 border border-[#D4AF37]/10 rounded-3xl shadow-2xl overflow-hidden">
+            <TabsTrigger value="insurance" className="rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-[linear-gradient(135deg,#D4AF37_0%,#FBE795_50%,#C5A028_100%)] data-[state=active]:text-black transition-all duration-500 gap-2 border border-transparent data-[state=active]:border-white/20">
+              <Shield className="h-4 w-4" />
+              <span className="hidden sm:inline">Assicurazione</span>
+            </TabsTrigger>
+            <TabsTrigger value="tax" className="rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-[linear-gradient(135deg,#D4AF37_0%,#FBE795_50%,#C5A028_100%)] data-[state=active]:text-black transition-all duration-500 gap-2 border border-transparent data-[state=active]:border-white/20">
+              <FileCheck className="h-4 w-4" />
+              <span className="hidden sm:inline">Bollo Auto</span>
+            </TabsTrigger>
+            <TabsTrigger value="inspection" className="rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] data-[state=active]:bg-[linear-gradient(135deg,#D4AF37_0%,#FBE795_50%,#C5A028_100%)] data-[state=active]:text-black transition-all duration-500 gap-2 border border-transparent data-[state=active]:border-white/20">
+              <Calendar className="h-4 w-4" />
+              <span className="hidden sm:inline">Revisione</span>
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Assicurazione */}
-        <TabsContent value="insurance" className="mt-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-8 md:grid-cols-2">
             {filteredVehicles.map(vehicle => {
               const legal = getLegalData(vehicle.id);
-              const insurance = legal?.insurance;
-              const status = insurance?.endDate ? calculateLegalStatus(insurance.endDate) : null;
-              const daysLeft = insurance?.endDate ? getDaysUntilExpiry(insurance.endDate) : null;
-
-              return (
-                <Card key={vehicle.id} className={cn(
-                  status === 'scaduto' && "border-destructive/50",
-                  status === 'in_scadenza' && "border-warning/50"
-                )}>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base">
-                        {vehicle.brand} {vehicle.model}
-                      </CardTitle>
-                      {getStatusBadge(status, daysLeft)}
-                    </div>
-                    <CardDescription>{vehicle.plate}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {insurance ? (
-                      <>
-                        <div className="space-y-1 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Compagnia</span>
-                            <span className="font-medium">{insurance.company}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Polizza</span>
-                            <span className="font-mono text-xs">{insurance.policyNumber}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Periodo</span>
-                            <span>{formatDate(insurance.startDate)} - {formatDate(insurance.endDate)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Importo</span>
-                            <span className="font-medium">{formatCurrency(insurance.amount)}</span>
-                          </div>
-                          {daysLeft !== null && (
-                            <div className={cn(
-                              "mt-2 rounded-md p-2 text-center text-sm font-medium",
-                              status === 'ok' ? "bg-success/10 text-success" :
-                              status === 'in_scadenza' ? "bg-warning/10 text-warning" :
-                              "bg-destructive/10 text-destructive"
-                            )}>
-                              {daysLeft < 0 
-                                ? `Scaduta da ${Math.abs(daysLeft)} giorni` 
-                                : `${daysLeft} giorni alla scadenza`}
-                            </div>
-                          )}
-                        </div>
-                        {vehicle.type === 'moto' && (
-                          <div className="mt-3 space-y-3">
-                            <div className="flex items-center justify-between">
-                              <Badge variant={insurance.statoPolizza === 'sospesa' ? 'warning' : 'success'}>
-                                {insurance.statoPolizza === 'sospesa' ? 'Sospesa' : 'Attiva'}
-                              </Badge>
-                              <Button
-                                size="sm"
-                                variant={insurance.statoPolizza === 'sospesa' ? 'default' : 'outline'}
-                                onClick={() => {
-                                  if (insurance.statoPolizza === 'sospesa') {
-                                    riattivaPolizza(vehicle.id);
-                                  } else {
-                                    sospendiPolizza(vehicle.id);
-                                  }
-                                }}
-                              >
-                                {insurance.statoPolizza === 'sospesa' ? 'Riattiva Polizza' : 'Sospendi Polizza'}
-                              </Button>
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                              Giorni di sospensione residui: <span className="font-medium">
-                                {insurance.giorniSospensioneResidui ?? 0}
-                              </span> su <span className="font-medium">
-                                {insurance.giorniSospensioneTotali ?? 305}
-                              </span>
-                            </p>
-                            {insurance.richiedeNuovoDocumento && (
-                              <div className="rounded-md border border-warning/30 bg-warning/10 p-3">
-                                <p className="text-sm font-medium text-warning mb-2">
-                                  Hai riattivato la polizza, carica il nuovo certificato PDF
-                                </p>
-                                <input
-                                  type="file"
-                                  accept="application/pdf"
-                                  onChange={async (e) => {
-                                    const file = e.target.files?.[0];
-                                    if (!file) return;
-                                    const reader = new FileReader();
-                                    reader.onload = () => {
-                                      const dataUrl = String(reader.result || '');
-                                      updateLegalDocument(vehicle.id, {
-                                        insurance: {
-                                          ...insurance,
-                                          insuranceDocumentName: file.name,
-                                          insuranceDocumentDataUrl: dataUrl,
-                                          richiedeNuovoDocumento: false,
-                                        },
-                                      });
-                                    };
-                                    reader.readAsDataURL(file);
-                                  }}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        )}
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => setShowForm({ type: 'insurance', vehicleId: vehicle.id })}
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Modifica
-                        </Button>
-                      </>
-                    ) : (
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={() => setShowForm({ type: 'insurance', vehicleId: vehicle.id })}
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Aggiungi Assicurazione
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </TabsContent>
-
-        {/* Bollo - AGGIORNATO CON ESENZIONE */}
-        <TabsContent value="tax" className="mt-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredVehicles.map(vehicle => {
-              const legal = getLegalData(vehicle.id);
-              const tax = legal?.tax;
+              const inspectionInfo = getInspectionInfo(vehicle.id);
               
-              // Applica logica esenzione Legge 104/Elettrico/Ibrido
-              const taxStatus = calculateRoadTaxStatus(vehicle);
-              const isExempt = taxStatus !== 'Payable';
+              let status: string | null = 'missing';
+              let date: string | undefined = undefined;
+              let amount: number | undefined = undefined;
+              let daysLeft: number | null = null;
 
-              const status = isExempt ? 'ok' : (tax?.dueDate ? calculateLegalStatus(tax.dueDate) : null);
-              const daysLeft = tax?.dueDate ? getDaysUntilExpiry(tax.dueDate) : null;
+              if (activeTab === 'insurance') {
+                date = legal?.insurance?.endDate;
+                amount = legal?.insurance?.amount;
+                status = date ? calculateLegalStatus(date) : 'missing';
+                if (date) daysLeft = getDaysUntilExpiry(date);
+              } else if (activeTab === 'tax') {
+                const taxStatus = calculateRoadTaxStatus(vehicle);
+                if (taxStatus !== 'Payable') {
+                  status = 'ok';
+                  date = 'Esenzione attiva';
+                } else {
+                  date = legal?.tax?.dueDate;
+                  amount = legal?.tax?.amount;
+                  status = date ? calculateLegalStatus(date) : 'missing';
+                  if (date) daysLeft = getDaysUntilExpiry(date);
+                }
+              } else if (activeTab === 'inspection') {
+                date = inspectionInfo?.nextDate;
+                status = date ? calculateLegalStatus(date) : 'missing';
+                if (date) daysLeft = getDaysUntilExpiry(date);
+              }
 
               return (
-                <Card key={vehicle.id} className={cn(
-                  status === 'scaduto' && "border-destructive/50",
-                  status === 'in_scadenza' && "border-warning/50"
-                )}>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base">
-                        {vehicle.brand} {vehicle.model}
-                      </CardTitle>
-                      {getStatusBadge(status, daysLeft)}
-                    </div>
-                    <CardDescription>{vehicle.plate}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {isExempt ? (
-                      <div className="space-y-4">
-                        <div className="rounded-md bg-emerald-500/10 p-3 text-emerald-600 text-sm font-medium text-center border border-emerald-500/20">
-                           {taxStatus === 'Exempt (Law 104/Disability)' ? 'Esenzione Legge 104' : taxStatus}
-                        </div>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => setShowForm({ type: 'tax', vehicleId: vehicle.id })}
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Modifica Dati
-                        </Button>
+                <div key={vehicle.id} className="bg-[#1E1E1E]/80 backdrop-blur-[10px] p-8 flex flex-col justify-between group border border-[#D4AF37]/10 hover:border-[#D4AF37]/40 rounded-[32px] transition-all duration-500 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                    {activeTab === 'insurance' ? <Shield size={80} className="text-[#D4AF37]" /> : activeTab === 'tax' ? <FileCheck size={80} className="text-[#D4AF37]" /> : <Calendar size={80} className="text-[#D4AF37]" />}
+                  </div>
+
+                  <div className="flex items-start justify-between mb-8">
+                    <div className="flex items-center gap-5">
+                      <div className="h-14 w-14 rounded-2xl bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/20 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                        {vehicle.type === 'auto' ? <Car className="h-7 w-7 text-[#D4AF37]" /> : <Bike className="h-7 w-7 text-[#D4AF37]" />}
                       </div>
-                    ) : tax ? (
-                      <>
-                        <div className="space-y-1 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Anno</span>
-                            <span className="font-medium">{tax.year}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Regione</span>
-                            <span>{tax.region}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Scadenza</span>
-                            <span>{formatDate(tax.dueDate)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Importo</span>
-                            <span className="font-medium">{formatCurrency(tax.amount)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Pagato</span>
-                            <span className={tax.paidDate ? "text-success" : "text-warning"}>
-                              {tax.paidDate ? formatDate(tax.paidDate) : 'Non pagato'}
-                            </span>
-                          </div>
-                          {daysLeft !== null && (
-                            <div className={cn(
-                              "mt-2 rounded-md p-2 text-center text-sm font-medium",
-                              status === 'ok' ? "bg-success/10 text-success" :
-                              status === 'in_scadenza' ? "bg-warning/10 text-warning" :
-                              "bg-destructive/10 text-destructive"
-                            )}>
-                              {daysLeft < 0 
-                                ? `Scaduto da ${Math.abs(daysLeft)} giorni` 
-                                : `${daysLeft} giorni alla scadenza`}
-                            </div>
-                          )}
-                        </div>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => setShowForm({ type: 'tax', vehicleId: vehicle.id })}
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Modifica
-                        </Button>
-                      </>
-                    ) : (
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={() => setShowForm({ type: 'tax', vehicleId: vehicle.id })}
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Aggiungi Bollo
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </TabsContent>
-
-        {/* Revisione - AGGIORNATO CON LOGICA AUTOMATICA */}
-        <TabsContent value="inspection" className="mt-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredVehicles.map(vehicle => {
-              const inspection = getInspectionInfo(vehicle.id);
-              const status = inspection?.nextDate ? calculateLegalStatus(inspection.nextDate) : null;
-              const daysLeft = inspection?.nextDate ? getDaysUntilExpiry(inspection.nextDate) : null;
-
-              return (
-                <Card key={vehicle.id} className={cn(
-                  status === 'scaduto' && "border-destructive/50",
-                  status === 'in_scadenza' && "border-warning/50"
-                )}>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base">
-                        {vehicle.brand} {vehicle.model}
-                      </CardTitle>
-                      {getStatusBadge(status, daysLeft)}
+                      <div>
+                        <h3 className="text-xl font-bold text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors duration-300 uppercase tracking-tighter">{vehicle.brand} {vehicle.model}</h3>
+                        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.3em] opacity-60 mt-1">{vehicle.plate}</p>
+                      </div>
                     </div>
-                    <CardDescription>{vehicle.plate}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {inspection ? (
-                      <>
-                        <div className="space-y-1 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Ultima revisione</span>
-                            <span>{inspection.lastDate ? formatDate(inspection.lastDate) : 'Da effettuare'}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Prossima</span>
-                            <span className="font-medium">{formatDate(inspection.nextDate)}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Esito</span>
-                            <Badge variant={inspection.result === 'superata' ? 'success' : inspection.result === 'non_superata' ? 'destructive' : 'outline'}>
-                              {inspection.result === 'superata' ? 'Superata' : 
-                               inspection.result === 'non_superata' ? 'Non superata' : 'Da effettuare'}
-                            </Badge>
-                          </div>
-                          {inspection.isAuto && (
-                            <p className="text-[10px] text-blue-500 font-medium italic mt-1">Calcolata da immatricolazione</p>
-                          )}
-                          {daysLeft !== null && (
-                            <div className={cn(
-                              "mt-2 rounded-md p-2 text-center text-sm font-medium",
-                              status === 'ok' ? "bg-success/10 text-success" :
-                              status === 'in_scadenza' ? "bg-warning/10 text-warning" :
-                              "bg-destructive/10 text-destructive"
-                            )}>
-                              {daysLeft < 0 
-                                ? `Scaduta da ${Math.abs(daysLeft)} giorni` 
-                                : `${daysLeft} giorni alla scadenza`}
-                            </div>
-                          )}
-                        </div>
+                    {getStatusBadge(status, daysLeft)}
+                  </div>
+
+                  <div className="space-y-5 relative z-10">
+                    <div className="flex justify-between items-center py-4 border-b border-white/5">
+                      <span className="text-[10px] font-bold text-[#A0A0A0] uppercase tracking-[0.2em]">
+                        {activeTab === 'insurance' ? 'Scadenza Polizza' : activeTab === 'tax' ? 'Scadenza Bollo' : 'Prossima Revisione'}
+                      </span>
+                      <span className={cn(
+                        "text-sm font-bold tracking-tight",
+                        date === 'Esenzione attiva' ? "text-[#D4AF37]" : "text-white"
+                      )}>
+                        {date && date !== 'Esenzione attiva' ? formatDate(date) : date || 'Non impostata'}
+                      </span>
+                    </div>
+                    {amount !== undefined && (
+                      <div className="flex justify-between items-center py-4 border-b border-white/5">
+                        <span className="text-[10px] font-bold text-[#A0A0A0] uppercase tracking-[0.2em]">Importo Premium</span>
+                        <span className="text-sm font-bold text-[#FBE795] drop-shadow-[0_0_5px_rgba(251,231,149,0.3)]">{formatCurrency(amount)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-8 flex gap-4 relative z-10">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1 rounded-2xl font-bold uppercase tracking-widest text-[10px] h-12 bg-[linear-gradient(135deg,#D4AF37_0%,#FBE795_50%,#C5A028_100%)] text-black border-none hover:brightness-110 shadow-lg shadow-[#D4AF37]/20 transition-all active:scale-95"
+                      onClick={() => setShowForm({ type: activeTab, vehicleId: vehicle.id })}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Modifica
+                    </Button>
+                    
+                    {activeTab === 'insurance' && legal?.insurance && (
+                      legal.insurance.statoPolizza === 'attiva' ? (
                         <Button 
                           variant="outline" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => setShowForm({ type: 'inspection', vehicleId: vehicle.id })}
+                          className="rounded-2xl font-bold uppercase tracking-widest text-[10px] h-12 border border-red-500/30 text-red-500 bg-red-500/5 hover:bg-red-500/10 px-6 transition-all active:scale-95"
+                          onClick={() => sospendiPolizza(vehicle.id)}
                         >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Modifica
+                          Sospendi
                         </Button>
-                      </>
-                    ) : (
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={() => setShowForm({ type: 'inspection', vehicleId: vehicle.id })}
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Aggiungi Revisione
-                      </Button>
+                      ) : (
+                        <Button 
+                          variant="outline" 
+                          className="rounded-2xl font-bold uppercase tracking-widest text-[10px] h-12 border border-green-500/30 text-green-500 bg-green-500/5 hover:bg-green-500/10 px-6 transition-all active:scale-95"
+                          onClick={() => riattivaPolizza(vehicle.id)}
+                        >
+                          Riattiva
+                        </Button>
+                      )
                     )}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               );
             })}
           </div>
-        </TabsContent>
-      </Tabs>
+        </Tabs>
+      </div>
 
-      {/* No vehicles message */}
-      {data.vehicles.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <Shield className="mx-auto h-12 w-12 text-muted-foreground/50" />
-            <p className="mt-4 text-lg font-medium">Nessun veicolo registrato</p>
-            <p className="text-muted-foreground">
-              Aggiungi prima un veicolo per gestire i documenti legali
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Form Dialogs */}
       <Dialog open={!!showForm} onOpenChange={(open) => !open && setShowForm(null)}>
-        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {showForm?.type === 'insurance' && 'Assicurazione'}
-              {showForm?.type === 'tax' && 'Bollo'}
-              {showForm?.type === 'inspection' && 'Revisione'}
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-black/95 backdrop-blur-2xl border-primary/20 rounded-[32px] p-8">
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-2xl font-extrabold text-white gold-text-gradient uppercase tracking-tight">
+              {showForm?.type === 'insurance' ? 'Dettagli Assicurazione' : 
+               showForm?.type === 'tax' ? 'Dettagli Bollo' : 'Dettagli Revisione'}
             </DialogTitle>
-            <DialogDescription>
-              {data.vehicles.find(v => v.id === showForm?.vehicleId)?.brand}{' '}
-              {data.vehicles.find(v => v.id === showForm?.vehicleId)?.model}
+            <DialogDescription className="text-muted-foreground font-medium">
+              Aggiorna le informazioni legali del veicolo
             </DialogDescription>
           </DialogHeader>
           

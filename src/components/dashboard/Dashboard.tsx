@@ -1,24 +1,24 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   Car, 
   Bike, 
-  AlertTriangle, 
-  CheckCircle2, 
-  Clock,
-  Fuel,
-  Gauge,
-  Shield,
-  FileText,
-  Wrench,
+  Calendar, 
+  Wrench, 
+  Activity, 
+  Plus, 
+  Gauge, 
+  Fuel, 
+  Shield, 
+  FileText, 
+  CheckCircle2,
+  ChevronRight,
   TrendingUp,
+  TrendingDown,
   ChevronDown,
-  Calendar,
-  Zap,
-  Activity
+  Bell,
+  Truck,
+  ImagePlus
 } from 'lucide-react';
-import { GlassmorphicCard, GlassmorphicCardHeader, GlassmorphicCardTitle } from '@/components/ui/glassmorphic-card';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,749 +26,527 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import { useVehicleContext } from '@/contexts/VehicleContext';
-import { formatCurrency, formatKm, formatDate, calculateLegalStatus, getDaysUntilExpiry } from '@/lib/utils/dates';
+import { formatKm, formatDate, getDaysUntilExpiry, formatCurrency } from '@/lib/utils/dates';
 import { cn } from '@/lib/utils';
-// Nuovi import per logiche flotta
-import { 
-  calculateVehicleAge, 
-  calculateRoadTaxStatus, 
-  calculateEfficiencyIndex 
-} from '@/lib/utils/vehicleCalculations';
 
-export function Dashboard() {
+interface DashboardProps {
+  onAddVehicle?: () => void;
+  onSelectVehicle?: (id: string) => void;
+  onEditVehicle?: (vehicle: any) => void;
+  onTabChange?: (tab: any) => void;
+}
+
+export function Dashboard({ onAddVehicle, onSelectVehicle, onEditVehicle, onTabChange }: DashboardProps) {
   const { data, isLoaded } = useVehicleContext();
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | 'all'>(() => {
     const saved = localStorage.getItem('selectedVehicleId');
     return (saved && saved.length > 0 ? saved : 'all') as 'all' | string;
   });
+  const [period, setPeriod] = useState('Questo mese');
+
+  const lineChartRef = useRef<HTMLCanvasElement>(null);
+  const donutChartRef = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
     localStorage.setItem('selectedVehicleId', selectedVehicleId as string);
   }, [selectedVehicleId]);
-  
-  // Canvas refs per grafici
-  const monthlyChartRef = useRef<HTMLCanvasElement>(null);
-  const distributionChartRef = useRef<HTMLCanvasElement>(null);
 
-  const selectedVehicle = useMemo(() => {
-    return selectedVehicleId === 'all' 
-      ? null 
-      : data.vehicles.find(v => v.id === selectedVehicleId);
-  }, [selectedVehicleId, data.vehicles]);
-
-  // --- NUOVA LOGICA FLOTTA INTEGRATA ---
-  const fleetStats = useMemo(() => {
-    if (data.vehicles.length === 0) return { avgEfficiency: 0, totalTaxExempt: 0 };
-
-    const exemptVehicles = data.vehicles.filter(v => {
-      const age = v.registrationDate ? calculateVehicleAge(v.registrationDate).ageYears : 0;
-      const status = calculateRoadTaxStatus(v, age);
-      return status.includes('Exempt');
-    }).length;
-
-    if (selectedVehicleId !== 'all') {
-      const vehicle = data.vehicles.find(v => v.id === selectedVehicleId);
-      if (!vehicle) {
-        return {
-          avgEfficiency: 0,
-          totalTaxExempt: exemptVehicles
-        };
-      }
-
-      const vMaintenances = data.maintenance.filter(m => m.vehicleId === vehicle.id);
-      const efficiency = calculateEfficiencyIndex(vehicle, vMaintenances).score;
-
-      return {
-        avgEfficiency: efficiency,
-        totalTaxExempt: exemptVehicles
-      };
-    }
-
-    const totalEfficiency = data.vehicles.reduce((acc, v) => {
-      const vMaintenances = data.maintenance.filter(m => m.vehicleId === v.id);
-      return acc + calculateEfficiencyIndex(v, vMaintenances).score;
-    }, 0);
-
-    return {
-      avgEfficiency: Math.round(totalEfficiency / data.vehicles.length),
-      totalTaxExempt: exemptVehicles
-    };
-  }, [data, selectedVehicleId]);
-
-  // Filtra dati per veicolo selezionato - MEMOIZED
-  const filteredExpenses = useMemo(() => {
-    return selectedVehicleId === 'all' 
-      ? data.expenses 
-      : data.expenses.filter(e => e.vehicleId === selectedVehicleId);
-  }, [data.expenses, selectedVehicleId]);
-  
-  const filteredMaintenance = useMemo(() => {
-    return selectedVehicleId === 'all'
-      ? data.maintenance
-      : data.maintenance.filter(m => m.vehicleId === selectedVehicleId);
-  }, [data.maintenance, selectedVehicleId]);
-
-  // KPI Calculations - MEMOIZED
-  const kpiData = useMemo(() => {
-    const totalExpensesSelected = filteredExpenses.reduce((sum, e) => sum + e.amount, 0) 
-      + filteredMaintenance.reduce((sum, m) => sum + m.cost, 0);
-    
-    const totalExpensesAll = data.expenses.reduce((sum, e) => sum + e.amount, 0) 
-      + data.maintenance.reduce((sum, m) => sum + m.cost, 0);
-
-    // Media mensile (ultimi 12 mesi)
-    const now = new Date();
-    const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-    const recentExpenses = [...filteredExpenses, ...filteredMaintenance.map(m => ({ ...m, amount: m.cost, date: m.date }))]
-      .filter(e => new Date(e.date) >= oneYearAgo);
-    const monthlyAverage = recentExpenses.length > 0 
-      ? recentExpenses.reduce((sum, e) => sum + e.amount, 0) / 12 
-      : 0;
-
-    // Km attuali
-    const currentKm = selectedVehicle?.currentKm || 
-      (data.vehicles.length > 0 ? Math.max(...data.vehicles.map(v => v.currentKm)) : 0);
-
-    return { totalExpensesSelected, totalExpensesAll, monthlyAverage, currentKm };
-  }, [filteredExpenses, filteredMaintenance, data.expenses, data.maintenance, data.vehicles, selectedVehicle]);
-
-  // Avvisi scadenze - MEMOIZED
-  const alerts = useMemo(() => {
-    const vehiclesForAlerts = selectedVehicleId === 'all' 
-      ? data.vehicles 
-      : data.vehicles.filter(v => v.id === selectedVehicleId);
-
-    return data.legal.flatMap(doc => {
-      const vehicle = vehiclesForAlerts.find(v => v.id === doc.vehicleId);
-      if (!vehicle) return [];
-      
-      const warnings: { type: string; vehicle: string; vehicleId: string; status: string; daysLeft: number; icon: React.ReactNode }[] = [];
-      
-      if (doc.insurance?.endDate) {
-        const status = calculateLegalStatus(doc.insurance.endDate);
-        if (status !== 'ok') {
-          warnings.push({
-            type: 'Assicurazione',
-            vehicle: `${vehicle.brand} ${vehicle.model}`,
-            vehicleId: vehicle.id,
-            status,
-            daysLeft: getDaysUntilExpiry(doc.insurance.endDate),
-            icon: <Shield className="h-4 w-4" />
-          });
-        }
-      }
-      
-      if (doc.tax?.dueDate) {
-        const status = calculateLegalStatus(doc.tax.dueDate);
-        if (status !== 'ok') {
-          warnings.push({
-            type: 'Bollo',
-            vehicle: `${vehicle.brand} ${vehicle.model}`,
-            vehicleId: vehicle.id,
-            status,
-            daysLeft: getDaysUntilExpiry(doc.tax.dueDate),
-            icon: <FileText className="h-4 w-4" />
-          });
-        }
-      }
-      
-      if (doc.inspection?.nextDate) {
-        const status = calculateLegalStatus(doc.inspection.nextDate);
-        if (status !== 'ok') {
-          warnings.push({
-            type: 'Revisione',
-            vehicle: `${vehicle.brand} ${vehicle.model}`,
-            vehicleId: vehicle.id,
-            status,
-            daysLeft: getDaysUntilExpiry(doc.inspection.nextDate),
-            icon: <Wrench className="h-4 w-4" />
-          });
-        }
-      }
-      
-      return warnings;
-    }).sort((a, b) => a.daysLeft - b.daysLeft);
-  }, [data.legal, data.vehicles, selectedVehicleId]);
-
-  const activeAlerts = alerts.length;
-
-  // Stato generale - MEMOIZED
-  const overallStatus = useMemo(() => {
-    const expiredCount = alerts.filter(a => a.status === 'scaduto').length;
-    const warningCount = alerts.filter(a => a.status === 'in_scadenza').length;
-    
-    if (expiredCount > 0) return { label: 'Criticità', color: 'destructive' as const, icon: AlertTriangle };
-    if (warningCount > 0) return { label: 'Avvisi', color: 'warning' as const, icon: AlertTriangle };
-    return { label: 'Tutto OK', color: 'success' as const, icon: CheckCircle2 };
-  }, [alerts]);
-
-  // Stato legale per veicoli selezionati - MEMOIZED
-  const legalStatuses = useMemo(() => {
-    const vehicleIds = selectedVehicleId === 'all' 
-      ? data.vehicles.map(v => v.id)
-      : [selectedVehicleId];
-
-    return vehicleIds.map(vId => {
-      const legal = data.legal.find(l => l.vehicleId === vId);
-      const vehicle = data.vehicles.find(v => v.id === vId);
-      if (!vehicle) return null;
-
-      return {
-        vehicleId: vId,
-        vehicleName: `${vehicle.brand} ${vehicle.model}`,
-        insurance: legal?.insurance?.endDate ? calculateLegalStatus(legal.insurance.endDate) : 'missing',
-        insuranceExpiry: legal?.insurance?.endDate,
-        tax: legal?.tax?.dueDate ? calculateLegalStatus(legal.tax.dueDate) : 'missing',
-        taxExpiry: legal?.tax?.dueDate,
-        inspection: legal?.inspection?.nextDate ? calculateLegalStatus(legal.inspection.nextDate) : 'missing',
-        inspectionExpiry: legal?.inspection?.nextDate,
-      };
-    }).filter(Boolean);
-  }, [data.legal, data.vehicles, selectedVehicleId]);
-
-  // Ultime operazioni (max 8) - MEMOIZED
-  const recentOps = useMemo(() => {
-    return [
-      ...filteredExpenses.map(e => ({ 
-        type: 'expense' as const, 
-        date: e.date, 
-        desc: e.category,
-        amount: e.amount,
-        vehicleId: e.vehicleId
-      })),
-      ...filteredMaintenance.map(m => ({ 
-        type: 'maintenance' as const, 
-        date: m.date, 
-        desc: m.type,
-        amount: m.cost,
-        vehicleId: m.vehicleId
-      })),
-    ]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 8);
-  }, [filteredExpenses, filteredMaintenance]);
-
-  // Dati per grafici - MEMOIZED
-  const monthlyData = useMemo(() => {
-    const months: { [key: string]: number } = {};
-    const allData = [...filteredExpenses.map(e => ({ date: e.date, amount: e.amount })),
-                     ...filteredMaintenance.map(m => ({ date: m.date, amount: m.cost }))];
-    
-    // Ultimi 6 mesi
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date();
-      d.setMonth(d.getMonth() - i);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-      months[key] = 0;
-    }
-
-    allData.forEach(item => {
-      const d = new Date(item.date);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-      if (months[key] !== undefined) {
-        months[key] += item.amount;
-      }
-    });
-
-    return Object.entries(months).map(([key, value]) => ({
-      month: new Date(key + '-01').toLocaleDateString('it-IT', { month: 'short' }),
-      amount: value
-    }));
-  }, [filteredExpenses, filteredMaintenance]);
-
-  const distributionData = useMemo(() => {
-    const categories: { [key: string]: number } = {
-      'Carburante': 0,
-      'Manutenzione': 0,
-      'Assicurazione': 0,
-      'Bollo': 0,
-      'Altro': 0
-    };
-
-    filteredExpenses.forEach(e => {
-      if (e.category === 'carburante') categories['Carburante'] += e.amount;
-      else if (e.category === 'assicurazione') categories['Assicurazione'] += e.amount;
-      else if (e.category === 'bollo') categories['Bollo'] += e.amount;
-      else if (['parcheggio', 'pedaggi', 'lavaggio', 'revisione', 'tasse', 'accessori'].includes(e.category)) categories['Altro'] += e.amount;
-      else categories['Altro'] += e.amount;
-    });
-
-    filteredMaintenance.forEach(m => {
-      categories['Manutenzione'] += m.cost;
-    });
-
-    // Aggiungi assicurazioni/bollo dai dati legali se non già presenti come spese
-    data.legal.forEach(l => {
-      if (selectedVehicleId === 'all' || l.vehicleId === selectedVehicleId) {
-        // Solo se non ci sono già spese di quel tipo
-        const hasInsuranceExpense = filteredExpenses.some(e => e.category === 'assicurazione' && e.vehicleId === l.vehicleId);
-        const hasTaxExpense = filteredExpenses.some(e => e.category === 'bollo' && e.vehicleId === l.vehicleId);
-        
-        if (!hasInsuranceExpense && l.insurance?.amount) {
-          categories['Assicurazione'] += l.insurance.amount;
-        }
-        if (!hasTaxExpense && l.tax?.amount) {
-          categories['Bollo'] += l.tax.amount;
-        }
-      }
-    });
-
-    return Object.entries(categories)
-      .filter(([_, value]) => value > 0)
-      .map(([name, value]) => ({ name, value }));
-  }, [filteredExpenses, filteredMaintenance, data.legal, selectedVehicleId]);
-
-  // Render grafici con Canvas - LOGICA ORIGINALE INVARIATA
+  // Render Charts
   useEffect(() => {
     if (!isLoaded) return;
 
-    // Grafico barre mensili
-    if (monthlyChartRef.current) {
-      const ctx = monthlyChartRef.current.getContext('2d');
+    // Line Chart: Andamento consumi
+    if (lineChartRef.current) {
+      const ctx = lineChartRef.current.getContext('2d');
       if (ctx) {
-        const canvas = monthlyChartRef.current;
+        const canvas = lineChartRef.current;
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
-        
         canvas.width = rect.width * dpr;
         canvas.height = rect.height * dpr;
         ctx.scale(dpr, dpr);
-        
+
         const width = rect.width;
         const height = rect.height;
-        const padding = { top: 20, right: 20, bottom: 40, left: 60 };
+        const padding = { top: 20, right: 20, bottom: 30, left: 40 };
         const chartWidth = width - padding.left - padding.right;
         const chartHeight = height - padding.top - padding.bottom;
 
+        const months = ['Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov'];
+        const values = [14, 17.5, 14.2, 16.8, 15.5, 21];
+        const maxValue = 22;
+        const minValue = 10;
+
         ctx.clearRect(0, 0, width, height);
 
-        const maxValue = Math.max(...monthlyData.map(d => d.amount), 100);
-        const barWidth = chartWidth / monthlyData.length * 0.6;
-        const gap = chartWidth / monthlyData.length * 0.4;
-
-        // Stile basato su CSS variables
-        const isDark = document.documentElement.classList.contains('dark');
-        const textColor = isDark ? 'hsl(210, 20%, 65%)' : 'hsl(215, 16%, 47%)';
-        const barColor = isDark ? 'hsl(217, 91%, 60%)' : 'hsl(217, 91%, 45%)';
-        const gridColor = isDark ? 'hsl(217, 32%, 20%)' : 'hsl(214, 32%, 91%)';
-
-        // Griglia
-        ctx.strokeStyle = gridColor;
+        // Grid lines
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.05)';
         ctx.lineWidth = 1;
-        for (let i = 0; i <= 4; i++) {
-          const y = padding.top + (chartHeight / 4) * i;
+        for (let i = 0; i <= 3; i++) {
+          const y = padding.top + (chartHeight / 3) * i;
           ctx.beginPath();
           ctx.moveTo(padding.left, y);
           ctx.lineTo(width - padding.right, y);
           ctx.stroke();
-        }
-
-        // Etichette Y
-        ctx.fillStyle = textColor;
-        ctx.font = '11px system-ui';
-        ctx.textAlign = 'right';
-        for (let i = 0; i <= 4; i++) {
-          const value = maxValue - (maxValue / 4) * i;
-          const y = padding.top + (chartHeight / 4) * i;
-          ctx.fillText(`€${Math.round(value)}`, padding.left - 8, y + 4);
-        }
-
-        // Barre
-        monthlyData.forEach((d, i) => {
-          const x = padding.left + (chartWidth / monthlyData.length) * i + gap / 2;
-          const barHeight = (d.amount / maxValue) * chartHeight;
-          const y = padding.top + chartHeight - barHeight;
-
-          const gradient = ctx.createLinearGradient(x, y + barHeight, x, y);
-          gradient.addColorStop(0, barColor);
-          gradient.addColorStop(1, isDark ? 'hsl(217, 91%, 70%)' : 'hsl(217, 91%, 55%)');
           
-          ctx.fillStyle = gradient;
-          ctx.beginPath();
-          ctx.roundRect(x, y, barWidth, barHeight, 4);
-          ctx.fill();
-
-          ctx.fillStyle = textColor;
-          ctx.textAlign = 'center';
-          ctx.fillText(d.month, x + barWidth / 2, height - padding.bottom + 20);
-        });
-      }
-    }
-
-    // Grafico torta distribuzione - LOGICA ORIGINALE INVARIATA
-    if (distributionChartRef.current) {
-      const ctx = distributionChartRef.current.getContext('2d');
-      if (ctx) {
-        const canvas = distributionChartRef.current;
-        const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.getBoundingClientRect();
-        
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-        
-        const width = rect.width;
-        const height = rect.height;
-        const centerX = width * 0.35;
-        const centerY = height / 2;
-        const radius = Math.min(width * 0.3, height * 0.4);
-
-        ctx.clearRect(0, 0, width, height);
-
-        const isDark = document.documentElement.classList.contains('dark');
-        const textColor = isDark ? 'hsl(210, 20%, 98%)' : 'hsl(222, 47%, 11%)';
-        const mutedColor = isDark ? 'hsl(210, 20%, 65%)' : 'hsl(215, 16%, 47%)';
-
-        const colors = [
-          isDark ? 'hsl(217, 91%, 60%)' : 'hsl(217, 91%, 45%)',
-          isDark ? 'hsl(142, 76%, 42%)' : 'hsl(142, 76%, 36%)',
-          isDark ? 'hsl(38, 92%, 50%)' : 'hsl(38, 92%, 50%)',
-          isDark ? 'hsl(280, 65%, 55%)' : 'hsl(280, 65%, 45%)',
-          isDark ? 'hsl(0, 63%, 45%)' : 'hsl(0, 84%, 60%)',
-        ];
-
-        const total = distributionData.reduce((sum, d) => sum + d.value, 0);
-        
-        if (total === 0) {
-          ctx.fillStyle = mutedColor;
-          ctx.font = '14px system-ui';
-          ctx.textAlign = 'center';
-          ctx.fillText('Nessun dato', centerX, centerY);
-          return;
+          ctx.fillStyle = '#A0A0A0';
+          ctx.font = '10px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText((maxValue - (maxValue - minValue) / 3 * i).toString(), padding.left - 8, y + 4);
         }
 
-        let startAngle = -Math.PI / 2;
-        distributionData.forEach((d, i) => {
-          const sliceAngle = (d.value / total) * 2 * Math.PI;
-          ctx.beginPath();
-          ctx.moveTo(centerX, centerY);
-          ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
-          ctx.closePath();
-          ctx.fillStyle = colors[i % colors.length];
-          ctx.fill();
-          startAngle += sliceAngle;
-        });
+        // Line and area
+        const points = values.map((v, i) => ({
+          x: padding.left + (chartWidth / (values.length - 1)) * i,
+          y: padding.top + chartHeight - ((v - minValue) / (maxValue - minValue)) * chartHeight
+        }));
+
+        const gradient = ctx.createLinearGradient(0, padding.top, 0, padding.top + chartHeight);
+        gradient.addColorStop(0, 'rgba(212, 175, 55, 0.2)');
+        gradient.addColorStop(1, 'rgba(212, 175, 55, 0)');
 
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius * 0.55, 0, 2 * Math.PI);
-        ctx.fillStyle = isDark ? 'hsl(222, 47%, 11%)' : 'hsl(0, 0%, 100%)';
+        ctx.moveTo(points[0].x, points[0].y);
+        points.forEach(p => ctx.lineTo(p.x, p.y));
+        ctx.lineTo(points[points.length - 1].x, padding.top + chartHeight);
+        ctx.lineTo(points[0].x, padding.top + chartHeight);
+        ctx.fillStyle = gradient;
         ctx.fill();
 
-        ctx.fillStyle = textColor;
-        ctx.font = 'bold 16px system-ui';
-        ctx.textAlign = 'center';
-        ctx.fillText(formatCurrency(total), centerX, centerY - 5);
-        ctx.font = '11px system-ui';
-        ctx.fillStyle = mutedColor;
-        ctx.fillText('Totale', centerX, centerY + 12);
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        points.forEach(p => ctx.lineTo(p.x, p.y));
+        ctx.strokeStyle = '#D4AF37';
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
-        const legendX = width * 0.65;
-        let legendY = 20;
-        distributionData.forEach((d, i) => {
-          ctx.fillStyle = colors[i % colors.length];
+        // Points
+        points.forEach(p => {
           ctx.beginPath();
-          ctx.roundRect(legendX, legendY, 12, 12, 2);
+          ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+          ctx.fillStyle = '#0D0D0D';
           ctx.fill();
-          ctx.fillStyle = textColor;
-          ctx.font = '12px system-ui';
-          ctx.textAlign = 'left';
-          ctx.fillText(d.name, legendX + 18, legendY + 10);
-          ctx.fillStyle = mutedColor;
-          ctx.font = '11px system-ui';
-          ctx.fillText(formatCurrency(d.value), legendX + 18, legendY + 25);
-          legendY += 40;
+          ctx.strokeStyle = '#D4AF37';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        });
+
+        // X-axis labels
+        ctx.fillStyle = '#A0A0A0';
+        ctx.textAlign = 'center';
+        months.forEach((m, i) => {
+          ctx.fillText(m, padding.left + (chartWidth / (months.length - 1)) * i, height - 5);
         });
       }
     }
-  }, [monthlyData, distributionData, isLoaded]);
 
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case 'ok': return 'success';
-      case 'in_scadenza': return 'warning';
-      case 'scaduto': return 'destructive';
-      default: return 'outline';
+    // Donut Chart: Consumo medio
+    if (donutChartRef.current) {
+      const ctx = donutChartRef.current.getContext('2d');
+      if (ctx) {
+        const canvas = donutChartRef.current;
+        const dpr = window.devicePixelRatio || 1;
+        const size = 140;
+        canvas.width = size * dpr;
+        canvas.height = size * dpr;
+        ctx.scale(dpr, dpr);
+
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const radius = 55;
+        const thickness = 12;
+
+        ctx.clearRect(0, 0, size, size);
+
+        // Background track
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.05)';
+        ctx.lineWidth = thickness;
+        ctx.stroke();
+
+        // Progress arc (75%)
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, -Math.PI / 2, Math.PI);
+        ctx.strokeStyle = '#D4AF37';
+        ctx.lineWidth = thickness;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+
+        // Text
+        ctx.fillStyle = '#A0A0A0';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Consumo medio', centerX, centerY - 15);
+
+        ctx.fillStyle = '#F5F5F5';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('15,2', centerX, centerY + 10);
+
+        ctx.fillStyle = '#A0A0A0';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText('km/l', centerX, centerY + 28);
+      }
     }
-  };
+  }, [isLoaded]);
 
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'ok': return 'OK';
-      case 'in_scadenza': return 'Scadenza';
-      case 'scaduto': return 'Scaduto';
-      default: return 'N/D';
-    }
-  };
-
-  const getCategoryLabel = (category: string) => {
-    const labels: Record<string, string> = {
-      carburante: 'Carburante', parcheggio: 'Parcheggio', pedaggi: 'Pedaggi',
-      lavaggio: 'Lavaggio', accessori: 'Accessori', assicurazione: 'Assicurazione',
-      bollo: 'Bollo', revisione: 'Revisione', tasse: 'Tasse', altro: 'Altro',
-      tagliando: 'Tagliando', freni: 'Freni', gomme: 'Gomme', olio: 'Olio',
-      filtri: 'Filtri', batteria: 'Batteria', frizione: 'Frizione', sospensioni: 'Sospensioni',
+  // Stats for the dashboard
+  const stats = useMemo(() => {
+    return {
+      km: { value: 139, trend: -12 },
+      fuel: { value: 28.4, trend: -5 },
+      maintenance: { value: 2 },
+      totalSpent: { value: 96.50, trend: -8 }
     };
-    return labels[category] || category;
-  };
+  }, [data]);
 
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Caricamento...</div>
-      </div>
-    );
-  }
+  // Upcoming deadlines list
+  const deadlineList = useMemo(() => {
+    const items: { type: string; vehicle: string; days: number; status: 'ok' | 'warning' | 'critical'; icon: React.ReactNode }[] = [];
+    
+    data.legal.forEach(doc => {
+      const vehicle = data.vehicles.find(v => v.id === doc.vehicleId);
+      if (!vehicle) return;
+
+      const checkDate = (date: string | undefined, type: string, icon: React.ReactNode) => {
+        if (!date) return;
+        const days = getDaysUntilExpiry(date);
+        // Filtriamo le scadenze imminenti (es. entro 30 giorni) o già scadute
+        if (days > 30) return; 
+
+        let status: 'ok' | 'warning' | 'critical' = 'ok';
+        if (days < 0) status = 'critical';
+        else if (days <= 15) status = 'critical';
+        else if (days <= 30) status = 'warning';
+
+        items.push({ 
+          type, 
+          vehicle: `${vehicle.brand} ${vehicle.model}`, 
+          days, 
+          status, 
+          icon 
+        });
+      };
+
+      checkDate(doc.insurance?.endDate, 'Assicurazione', <Shield className="h-5 w-5" />);
+      checkDate(doc.tax?.dueDate, 'Bollo auto', <FileText className="h-5 w-5" />);
+      checkDate(doc.inspection?.nextDate, 'Revisione', <Truck className="h-5 w-5" />);
+    });
+
+    return items.sort((a, b) => a.days - b.days);
+  }, [data]);
+
+  if (!isLoaded) return <div className="p-8 text-center">Caricamento dashboard...</div>;
 
   return (
-    <motion.div 
-      className="space-y-6 pb-20 md:pb-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* === 1) HEADER DASHBOARD === */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="max-w-7xl mx-auto space-y-8 pb-12">
+      {/* Header Section */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-
-          <h1 className="text-2xl font-sans font-bold tracking-tight md:text-3xl">Dashboard</h1>
-
-          <p className="text-sm text-muted-foreground">Centro di controllo veicoli</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white gold-text-gradient">I miei veicoli</h1>
+          <p className="text-muted-foreground font-medium">Tutti i veicoli della tua famiglia, sempre sotto controllo</p>
         </div>
-        
-        <div className="flex items-center gap-3">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="min-w-[180px] justify-between">
-                <span className="flex items-center gap-2">
-                  {selectedVehicle ? (
-                    <>
-                      {selectedVehicle.type === 'auto' ? <Car className="h-4 w-4" /> : <Bike className="h-4 w-4" />}
-                      <span className="truncate">{selectedVehicle.brand} {selectedVehicle.model}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Activity className="h-4 w-4" />
-                      <span>Tutti i veicoli</span>
-                    </>
-                  )}
-                </span>
-                <ChevronDown className="h-4 w-4 opacity-50" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[200px]">
-              <DropdownMenuItem onClick={() => setSelectedVehicleId('all')}>
-                <Activity className="mr-2 h-4 w-4" />
-                Tutti i veicoli
-              </DropdownMenuItem>
-              {data.vehicles.map(v => (
-                <DropdownMenuItem key={v.id} onClick={() => setSelectedVehicleId(v.id)}>
-                  {v.type === 'auto' ? <Car className="mr-2 h-4 w-4" /> : <Bike className="mr-2 h-4 w-4" />}
-                  {v.brand} {v.model}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <Button 
+          onClick={onAddVehicle}
+          className="gold-gradient text-black hover:opacity-90 rounded-xl px-6 font-bold shadow-[0_0_20px_rgba(212,175,55,0.3)] h-12 border-0"
+        >
+          <Plus className="mr-2 h-5 w-5" />
+          Aggiungi veicolo
+        </Button>
+      </div>
 
-          <Badge 
-            variant={overallStatus.color === 'success' ? 'outline' : overallStatus.color === 'warning' ? 'outline' : 'destructive'}
-            className={cn(
-              "gap-1.5 px-3 py-1.5",
-              overallStatus.color === 'success' && "border-success text-success bg-success/10",
-              overallStatus.color === 'warning' && "border-warning text-warning bg-warning/10"
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Main Content Area */}
+        <div className="lg:col-span-8 space-y-8">
+          {/* Vehicles Horizontal Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {data.vehicles.length === 0 ? (
+               <div className="col-span-full py-16 text-center luxury-card border-dashed">
+                  <Car className="mx-auto h-12 w-12 text-primary/30 mb-4" />
+                  <p className="text-muted-foreground font-medium">Nessun veicolo trovato</p>
+                  <Button onClick={onAddVehicle} className="mt-4 rounded-full px-6 font-bold gold-gradient text-black">Aggiungi ora</Button>
+               </div>
+            ) : (
+              data.vehicles.map((vehicle, idx) => (
+                <ModernVehicleCard 
+                  key={vehicle.id} 
+                  vehicle={vehicle} 
+                  status={getDaysUntilExpiry(data.legal.find(l => l.vehicleId === vehicle.id)?.insurance?.endDate || '') <= 30 ? 'Attenzione' : 'Attivo'} 
+                  onClick={() => {
+                    onTabChange?.('vehicles');
+                    onSelectVehicle?.(vehicle.id);
+                  }}
+                  onEdit={() => onEditVehicle?.(vehicle)}
+                />
+              ))
             )}
-          >
-            <overallStatus.icon className="h-3.5 w-3.5" />
-            {overallStatus.label}
+          </div>
+
+          {/* Panoramica Mese */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <h2 className="text-xl font-bold tracking-tight text-white gold-text-gradient">Panoramica</h2>
+                <div className="h-6 w-px bg-primary/10 hidden sm:block" />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-9 px-3 gap-2 font-extrabold text-primary bg-primary/5 hover:bg-primary/10 rounded-lg border border-primary/10">
+                      {selectedVehicleId === 'all' ? 'Tutti i veicoli' : data.vehicles.find(v => v.id === selectedVehicleId)?.model}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="rounded-xl w-56 bg-black border-primary/20">
+                    <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary" onClick={() => setSelectedVehicleId('all')}>Tutti i veicoli</DropdownMenuItem>
+                    {data.vehicles.map(v => (
+                      <DropdownMenuItem key={v.id} className="focus:bg-primary/10 focus:text-primary" onClick={() => setSelectedVehicleId(v.id)}>
+                        {v.brand} {v.model}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="rounded-xl h-10 gap-2 font-bold text-muted-foreground border-primary/10 bg-white/5 hover:bg-white/10">
+                    {period} <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="rounded-xl bg-black border-primary/20">
+                  <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary" onClick={() => setPeriod('Questo mese')}>Questo mese</DropdownMenuItem>
+                  <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary" onClick={() => setPeriod('Ultimi 3 mesi')}>Ultimi 3 mesi</DropdownMenuItem>
+                  <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary" onClick={() => setPeriod('Ultimi 6 mesi')}>Ultimi 6 mesi</DropdownMenuItem>
+                  <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary" onClick={() => setPeriod('Quest\'anno')}>Quest'anno</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <StatsSmallCard 
+                icon={<Activity className="h-5 w-5 text-primary" />}
+                value={`${stats.km.value} km`}
+                label="Percorsi totali"
+                trend={stats.km.trend}
+                color="gold"
+                onClick={() => onTabChange?.('analytics')}
+              />
+              <StatsSmallCard 
+                icon={<Fuel className="h-5 w-5 text-primary" />}
+                value={`${stats.fuel.value} l`}
+                label="Carburante"
+                trend={stats.fuel.trend}
+                color="gold"
+                onClick={() => onTabChange?.('expenses')}
+              />
+              <StatsSmallCard 
+                icon={<Wrench className="h-5 w-5 text-primary" />}
+                value={stats.maintenance.value.toString()}
+                label="Manutenzioni"
+                color="gold"
+                onClick={() => onTabChange?.('maintenance')}
+              />
+              <StatsSmallCard 
+                icon={<span className="text-primary font-bold">€</span>}
+                value={formatCurrency(stats.totalSpent.value)}
+                label="Spesa totale"
+                trend={stats.totalSpent.trend}
+                color="gold"
+                onClick={() => onTabChange?.('analytics')}
+              />
+            </div>
+          </div>
+
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 luxury-card p-6">
+              <h3 className="text-sm font-bold text-white mb-6">Andamento consumi <span className="text-muted-foreground font-normal ml-1">(ultimi 6 mesi)</span></h3>
+              <canvas ref={lineChartRef} className="w-full h-[200px]" />
+            </div>
+            <div className="luxury-card p-6 flex flex-col items-center justify-center">
+              <canvas ref={donutChartRef} className="w-[140px] h-[140px]" />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar Widgets */}
+        <div className="lg:col-span-4 space-y-8">
+          <div className="luxury-card p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+                  <Bell className="h-5 w-5 text-primary" />
+                </div>
+                <h2 className="text-lg font-bold tracking-tight text-white">Scadenze imminenti</h2>
+              </div>
+              <ChevronRight className="h-5 w-5 text-muted-foreground cursor-pointer hover:text-primary transition-colors" onClick={() => onTabChange?.('legal')} />
+            </div>
+            
+            <div className="space-y-5">
+              {deadlineList.length === 0 ? (
+                <div className="py-8 text-center">
+                  <CheckCircle2 className="h-10 w-10 text-primary/20 mx-auto mb-2" />
+                  <p className="text-xs text-muted-foreground">Tutto in regola</p>
+                </div>
+              ) : (
+                deadlineList.map((item, i) => (
+                  <div 
+                    key={i} 
+                    className="flex items-center justify-between p-1 cursor-pointer hover:translate-x-1 transition-transform group"
+                    onClick={() => onTabChange?.('legal')}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={cn(
+                        "p-3 rounded-2xl border border-primary/10 transition-colors group-hover:border-primary/30",
+                        item.status === 'critical' ? "bg-red-500/10 text-red-500" : 
+                        item.status === 'warning' ? "bg-primary/10 text-primary" : 
+                        "bg-white/5 text-muted-foreground"
+                      )}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-white group-hover:text-primary transition-colors">{item.type}</p>
+                        <p className="text-xs text-muted-foreground font-medium">{item.vehicle}</p>
+                      </div>
+                    </div>
+                    <div className={cn(
+                      "px-3 py-1 rounded-full text-[10px] font-bold shadow-sm",
+                      item.status === 'critical' ? "bg-red-500 text-white" : 
+                      item.status === 'warning' ? "bg-primary text-black" : 
+                      "bg-white/10 text-white"
+                    )}>
+                      Tra {item.days} giorni
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <Button 
+              variant="link" 
+              className="w-full mt-8 text-primary font-bold hover:no-underline flex items-center justify-center gap-2 hover:opacity-80"
+              onClick={() => onTabChange?.('legal')}
+            >
+              Vedi tutte le scadenze <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Helper Components
+function StatsSmallCard({ icon, value, label, trend, onClick }: any) {
+  return (
+    <div 
+      className="luxury-card p-5 space-y-3 cursor-pointer group"
+      onClick={onClick}
+    >
+      <div className="p-2.5 rounded-xl w-fit bg-primary/10 border border-primary/10 group-hover:border-primary/30 transition-colors shadow-[0_0_10px_rgba(212,175,55,0.05)]">
+        {icon}
+      </div>
+      <div>
+        <p className="text-2xl font-extrabold tracking-tight text-white group-hover:text-primary transition-colors">{value}</p>
+        <div className="flex items-center justify-between mt-1">
+          <p className="text-[10px] font-bold text-muted-foreground truncate uppercase tracking-widest opacity-60">{label}</p>
+          {trend !== undefined && (
+            <div className={cn(
+              "flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-sm",
+              trend < 0 ? "bg-green-500/10 text-green-500 border border-green-500/20" : "bg-red-500/10 text-red-500 border border-red-500/20"
+            )}>
+              {trend < 0 ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
+              {Math.abs(trend)}%
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ModernVehicleCard({ vehicle, status, onClick, onEdit }: { vehicle: any, status: string, onClick: () => void, onEdit?: () => void }) {
+  return (
+    <div 
+      className="luxury-card p-5 space-y-4 group cursor-pointer relative overflow-hidden"
+    >
+      <div 
+        className="relative h-36 bg-black/40 rounded-[24px] overflow-hidden border border-white/5 group-hover:border-primary/20 transition-all duration-500"
+        onClick={onClick}
+      >
+        {vehicle.imageUrl ? (
+          <div className="w-full h-full relative p-2">
+            <img 
+              src={vehicle.imageUrl} 
+              alt={vehicle.model} 
+              className="w-full h-full object-contain vehicle-shadow transition-transform duration-700 group-hover:scale-105" 
+            />
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+          </div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            {vehicle.type === 'moto' ? 
+              <Bike className="h-16 w-16 text-primary/10 transition-colors group-hover:text-primary/20" /> : 
+              <Car className="h-16 w-16 text-primary/10 transition-colors group-hover:text-primary/20" />
+            }
+          </div>
+        )}
+        <div className="absolute top-4 right-4">
+          <Badge className={cn(
+            "rounded-full px-3 py-1 font-bold shadow-lg border-0 text-[10px] uppercase tracking-[0.1em]",
+            status === 'Attivo' ? "bg-green-500/20 text-green-500 border border-green-500/20" : "bg-primary/20 text-primary border border-primary/20"
+          )}>
+            {status}
           </Badge>
         </div>
       </div>
-
-      {/* === 2) KPI CARDS === */}
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
-        {/* KPI 1: Efficienza */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4 }}>
-        <GlassmorphicCard className="border-l-2 border-l-violet-500">
-          <CardContent className="p-4">
-
-            <p className="text-[13px] font-sans font-bold text-red-600 uppercase tracking-widest mb-1">Efficienza Media</p>
-            <div className="text-2xl font-bold text-blue-600 text-foreground">{fleetStats.avgEfficiency}/100</div>
-
-          </CardContent>
-        </GlassmorphicCard>
-        </motion.div>
-
-        {/* KPI 2: Esenzioni */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }}>
-        <GlassmorphicCard className="border-l-2 border-l-teal-500">
-          <CardContent className="p-4">
-
-            <p className="text-[11px] font-sans text--primary uppercase tracking-widest mb-1">Esenti Bollo</p>
-            <div className="text-2xl font-sans font-medium text-foreground">{fleetStats.totalTaxExempt}</div>
-
-            </CardContent>
-        </GlassmorphicCard>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4 }}>
-        <Card>
-          <CardHeader className="pb-2 pt-4 px-4">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Spese Veicolo
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-
-            <div className="text-2xl font-sans font-bolt font-medium text-blue-600">{formatCurrency(kpiData.totalExpensesSelected)}</div>
-
-            <p className="text-xs text-muted-foreground mt-1 truncate">
-              {selectedVehicle ? `${selectedVehicle.brand} ${selectedVehicle.model}` : 'Selezionato'}
-            </p>
-          </CardContent>
-        </Card>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4 }}>
-        <Card>
-          <CardHeader className="pb-2 pt-4 px-4">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Media Mensile
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <div className="text-2xl font-bold text-foreground">{formatCurrency(kpiData.monthlyAverage)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Ultimi 12 mesi</p>
-          </CardContent>
-        </Card>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4 }}>
-        <Card className={cn(activeAlerts > 0 && "border-warning/50 bg-warning/5")}>
-          <CardHeader className="pb-2 pt-4 px-4">
-            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-              <AlertTriangle className={cn("h-3.5 w-3.5", activeAlerts > 0 && "text-warning")} />
-              Avvisi
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <div className={cn("text-2xl font-bold", activeAlerts > 0 ? "text-warning" : "text-foreground")}>{activeAlerts}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {alerts.filter(a => a.status === 'scaduto').length} scaduti
-            </p>
-          </CardContent>
-        </Card>
-        </motion.div>
+      
+      <div className="space-y-1.5" onClick={onClick}>
+        <h3 className="text-lg font-extrabold text-white group-hover:text-primary transition-colors truncate">{vehicle.brand} {vehicle.model}</h3>
+        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-50">
+          {vehicle.type === 'auto' ? 'Auto' : 'Moto'} • {vehicle.plate}
+        </p>
       </div>
 
-      {/* === 3) STATO LEGALE === */}
-      <GlassmorphicCard>
-        <GlassmorphicCardHeader>
-
-          <GlassmorphicCardTitle className="flex items-center gap-2 text-lg font-sans font-semibold">
-
-            <Shield className="h-5 w-5 text-primary" />
-            Stato Legale & Verifiche
-          </GlassmorphicCardTitle>
-        </GlassmorphicCardHeader>
-        <CardContent>
-          {data.vehicles.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4 text-center">Aggiungi un veicolo per vedere lo stato legale</p>
-          ) : legalStatuses.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4 text-center">Nessun documento legale configurato</p>
-          ) : (
-            <div className="space-y-3">
-              {legalStatuses.slice(0, selectedVehicleId === 'all' ? 3 : 1).map((status, idx) => (
-                <div 
-                  key={idx} 
-                  className="flex flex-wrap items-center gap-3 p-3 rounded-lg bg-muted/50"
-                >
-                  <span className="text-sm font-medium min-w-[120px]">{status!.vehicleName}</span>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant={getStatusBadgeVariant(status!.insurance)} className="gap-1">
-                      Assicurazione: {getStatusLabel(status!.insurance)}
-                    </Badge>
-                    <Badge variant={getStatusBadgeVariant(status!.tax)} className="gap-1">
-                      Bollo: {getStatusLabel(status!.tax)}
-                    </Badge>
-                    <Badge variant={getStatusBadgeVariant(status!.inspection)} className="gap-1">
-                      Revisione: {getStatusLabel(status!.inspection)}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </GlassmorphicCard>
-
-      {/* === 4) ATTIVITÀ RECENTI & 5) ANALISI RAPIDA === */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              Attività Recenti
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {recentOps.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">Nessuna operazione registrata</p>
-            ) : (
-              <div className="space-y-2">
-                {recentOps.map((op, idx) => {
-                  const vehicle = data.vehicles.find(v => v.id === op.vehicleId);
-                  return (
-                    <div 
-                      key={idx} 
-                      className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/50 transition-colors"
-                    >
-                      <div className={cn(
-                        "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg",
-                        op.type === 'expense' ? "bg-primary/10" : "bg-success/10"
-                      )}>
-                        {op.type === 'expense' ? <Fuel className="h-4 w-4 text-primary" /> : <Wrench className="h-4 w-4 text-success" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="text-sm font-medium truncate">{getCategoryLabel(op.desc)}</p>
-                          <span className="text-sm font-semibold shrink-0">{formatCurrency(op.amount)}</span>
-                        </div>
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="text-xs text-muted-foreground truncate">{vehicle?.brand} {vehicle?.model}</p>
-                          <span className="text-xs text-muted-foreground shrink-0">{formatDate(op.date)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <div className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                Spese Mensili
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <canvas ref={monthlyChartRef} className="w-full" style={{ height: '160px' }} />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base font-semibold">Distribuzione Costi</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <canvas ref={distributionChartRef} className="w-full" style={{ height: '180px' }} />
-            </CardContent>
-          </Card>
+      <div className="flex items-center gap-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60" onClick={onClick}>
+        <div className="flex items-center gap-1.5 group-hover:text-primary/80 transition-colors">
+          <Fuel className="h-3 w-3 text-primary/60" />
+          <span>{vehicle.fuel}</span>
+        </div>
+        <div className="flex items-center gap-1.5 group-hover:text-primary/80 transition-colors">
+          <Calendar className="h-3 w-3 text-primary/60" />
+          <span>{vehicle.year}</span>
         </div>
       </div>
-    </motion.div>
+
+      <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/5" onClick={onClick}>
+        <div>
+          <p className="text-[13px] font-extrabold text-white group-hover:text-primary transition-colors">{formatKm(vehicle.currentKm)}</p>
+          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter opacity-40">Distanza totale</p>
+        </div>
+        <div>
+          <div className="flex items-center gap-1">
+            <p className="text-[13px] font-extrabold text-white group-hover:text-primary transition-colors">15,4 km/l</p>
+            <TrendingDown className="h-3 w-3 text-green-500" />
+          </div>
+          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter opacity-40">Consumo medio</p>
+        </div>
+      </div>
+
+      <div className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
+        <Button 
+          variant="secondary" 
+          size="icon" 
+          className="h-8 w-8 rounded-full shadow-2xl gold-gradient border-0 hover:scale-110 active:scale-90"
+          title="Modifica veicolo"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit?.();
+          }}
+        >
+          <ImagePlus className="h-4 w-4 text-black" />
+        </Button>
+      </div>
+    </div>
   );
 }

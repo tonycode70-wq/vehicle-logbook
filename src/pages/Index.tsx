@@ -23,10 +23,18 @@ function AppContent() {
   const [currentTab, setCurrentTab] = useState<TabId>('dashboard');
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
   const [vehicleToEdit, setVehicleToEdit] = useState<Vehicle | null>(null);
+  const [isAddingVehicle, setIsAddingVehicle] = useState(false);
 
   const renderContent = () => {
     switch (currentTab) {
-      case 'dashboard': return <Dashboard />;
+      case 'dashboard': return (
+        <Dashboard 
+          onAddVehicle={() => setIsAddingVehicle(true)} 
+          onSelectVehicle={setSelectedVehicleId}
+          onEditVehicle={(vehicle) => setVehicleToEdit(vehicle)}
+          onTabChange={handleTabChange}
+        />
+      );
       
       case 'vehicles': 
         if (selectedVehicleId) {
@@ -42,6 +50,7 @@ function AppContent() {
           <VehicleList 
             onSelectVehicle={setSelectedVehicleId} 
             onEditVehicle={setVehicleToEdit} // Permette la modifica dalla lista
+            onAddVehicle={() => setIsAddingVehicle(true)}
           />
         );
         
@@ -52,7 +61,7 @@ function AppContent() {
       case 'history': return <History />;
       case 'obd': return <OBDDiagnostics />;
       case 'settings': return <Settings />;
-      default: return <Dashboard />;
+      default: return <Dashboard onAddVehicle={() => setIsAddingVehicle(true)} />;
     }
   };
 
@@ -62,7 +71,11 @@ function AppContent() {
   };
 
   return (
-    <AppLayout currentTab={currentTab} onTabChange={handleTabChange}>
+    <AppLayout 
+      currentTab={currentTab} 
+      onTabChange={handleTabChange}
+      onAddVehicle={() => setIsAddingVehicle(true)}
+    >
       <FleetAlerts /> 
       
       {renderContent()}
@@ -80,6 +93,19 @@ function AppContent() {
               onComplete={() => setVehicleToEdit(null)}
             />
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog Unificato per l'Aggiunta */}
+      <Dialog open={isAddingVehicle} onOpenChange={setIsAddingVehicle}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Aggiungi Veicolo</DialogTitle>
+            <DialogDescription>Inserisci i dati del nuovo veicolo da gestire.</DialogDescription>
+          </DialogHeader>
+          <VehicleForm 
+            onComplete={() => setIsAddingVehicle(false)}
+          />
         </DialogContent>
       </Dialog>
     </AppLayout>

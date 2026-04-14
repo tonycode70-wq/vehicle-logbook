@@ -58,6 +58,7 @@ export interface Vehicle {
   registrationDate: string; // YYYY-MM-DD formato ISO
   euroClass: string;        // Aggiunto per risolvere errore riga 121
   disabilityExemption?: boolean; // Esenzione Legge 104/Disabilità
+  imageUrl?: string; // URL immagine veicolo caricata dall'utente
 }
 
 export interface Insurance {

@@ -62,182 +62,180 @@ export function VehicleDetail({ vehicleId, onBack, onEdit }: VehicleDetailProps)
   const horsepower = vehicle.power ? Math.round(Number(vehicle.power) * 1.35962) : null;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Button variant="ghost" onClick={onBack} className="gap-2">
-          <ChevronLeft className="h-4 w-4" />
-          Torna alla flotta
+    <div className="space-y-8 max-w-7xl mx-auto pb-12">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Button variant="ghost" onClick={onBack} className="gap-2 text-muted-foreground hover:text-primary transition-all w-fit group">
+          <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+          <span className="font-bold uppercase tracking-widest text-xs">Torna alla flotta</span>
         </Button>
-        <div className="flex gap-2">
-          {/* Tasto Modifica ora FUNZIONANTE */}
-          <Button variant="outline" size="sm" onClick={() => onEdit?.(vehicle)}>
+        <div className="flex gap-3">
+          <Button 
+            variant="outline" 
+            className="rounded-xl px-6 font-bold border-primary/20 text-primary hover:bg-primary/10 transition-all"
+            onClick={() => onEdit?.(vehicle)}
+          >
             Modifica
           </Button>
-          <Button variant="destructive" size="sm">Elimina</Button>
+          <Button 
+            variant="outline" 
+            className="rounded-xl px-6 font-bold border-red-500/20 text-red-500 hover:bg-red-500/10 transition-all"
+          >
+            Elimina
+          </Button>
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card className="md:col-span-1 bg-gradient-to-br from-primary/5 to-transparent">
-          <CardContent className="pt-6 text-center">
-            <div className="mx-auto h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-              {vehicle.type === 'auto' ? <Car className="h-10 w-10 text-primary" /> : <Bike className="h-10 w-10 text-primary" />}
+      <div className="grid gap-8 md:grid-cols-12">
+        <div className="md:col-span-4">
+          <div className="luxury-card p-8 text-center space-y-6 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            <div className="mx-auto h-24 w-24 rounded-3xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-[0_0_20px_rgba(212,175,55,0.1)] group-hover:scale-105 transition-transform duration-500">
+              {vehicle.type === 'auto' ? <Car className="h-12 w-12 text-primary" /> : <Bike className="h-12 w-12 text-primary" />}
             </div>
-            <h2 className="text-xl font-bold">{vehicle.brand} {vehicle.model}</h2>
-            <p className="text-sm text-muted-foreground uppercase tracking-widest font-mono mt-1">
-              {vehicle.plate}
-            </p>
-            <div className="flex justify-center gap-2 mt-4">
-              <Badge variant="outline">{vehicle.fuel}</Badge>
-              <Badge variant="secondary">{ageData.ageYears} anni</Badge>
+            <div>
+              <h2 className="text-2xl font-extrabold text-white gold-text-gradient uppercase tracking-tight">{vehicle.brand} {vehicle.model}</h2>
+              <p className="text-xs text-muted-foreground uppercase tracking-[0.3em] font-bold mt-2 opacity-50">
+                {vehicle.plate}
+              </p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex justify-center gap-3">
+              <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-1.5 rounded-xl font-bold uppercase text-[10px] tracking-widest">
+                {vehicle.fuel}
+              </Badge>
+              <Badge className="bg-white/5 text-white border-white/10 px-4 py-1.5 rounded-xl font-bold uppercase text-[10px] tracking-widest">
+                {ageData.ageYears} anni
+              </Badge>
+            </div>
+          </div>
+        </div>
 
-        <div className="md:col-span-2 grid gap-4 grid-cols-2">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                <Zap className="h-4 w-4" />
-                <span className="text-xs uppercase font-medium">Chilometraggio</span>
-              </div>
-              <div className="text-2xl font-bold">{formatKm(vehicle.currentKm)}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                <Droplets className="h-4 w-4 text-blue-500" />
-                <span className="text-xs uppercase font-medium">Alimentazione</span>
-              </div>
-              <div className="text-2xl font-bold capitalize">{vehicle.fuel}</div>
-            </CardContent>
-          </Card>
+        <div className="md:col-span-8 grid gap-6 sm:grid-cols-2">
+          <div className="luxury-card p-8 flex flex-col justify-center space-y-2 group">
+            <div className="flex items-center gap-3 text-muted-foreground group-hover:text-primary transition-colors">
+              <Zap className="h-5 w-5 text-primary" />
+              <span className="text-[10px] uppercase font-bold tracking-[0.2em]">Chilometraggio</span>
+            </div>
+            <div className="text-3xl font-extrabold text-white">{formatKm(vehicle.currentKm)}</div>
+          </div>
+          <div className="luxury-card p-8 flex flex-col justify-center space-y-2 group">
+            <div className="flex items-center gap-3 text-muted-foreground group-hover:text-primary transition-colors">
+              <Droplets className="h-5 w-5 text-primary" />
+              <span className="text-[10px] uppercase font-bold tracking-[0.2em]">Alimentazione</span>
+            </div>
+            <div className="text-3xl font-extrabold text-white capitalize">{vehicle.fuel}</div>
+          </div>
         </div>
       </div>
 
       <Tabs defaultValue="info" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="info">Specifiche</TabsTrigger>
-          <TabsTrigger value="docs">Documenti</TabsTrigger>
-          <TabsTrigger value="history">Cronologia</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 luxury-card p-1.5 h-16 border-white/5 shadow-2xl">
+          <TabsTrigger value="info" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all">Specifiche</TabsTrigger>
+          <TabsTrigger value="docs" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all">Documenti</TabsTrigger>
+          <TabsTrigger value="history" className="rounded-xl font-extrabold text-xs uppercase tracking-widest data-[state=active]:gold-gradient data-[state=active]:text-black transition-all">Cronologia</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="info" className="mt-4 space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-semibold uppercase">Anagrafica Tecnica</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2">
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground text-sm">Immatricolazione</span>
-                <span className="font-medium text-sm">
+        <TabsContent value="info" className="mt-8 space-y-6">
+          <div className="luxury-card p-8 space-y-8">
+            <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 border-b border-white/5 pb-4">Anagrafica Tecnica</h3>
+            <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+              <div className="flex justify-between items-center py-4 border-b border-white/5 group">
+                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest opacity-60">Immatricolazione</span>
+                <span className="font-extrabold text-sm text-white group-hover:text-primary transition-colors">
                   {vehicle.registrationDate ? formatDate(vehicle.registrationDate) : 'N/D'}
                 </span>
               </div>
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground text-sm">Classe Ambientale</span>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              <div className="flex justify-between items-center py-4 border-b border-white/5 group">
+                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest opacity-60">Classe Ambientale</span>
+                <Badge className="bg-green-500/10 text-green-500 border-green-500/20 px-3 py-1 rounded-lg font-bold">
                   Euro {estimateEuroClass(vehicle)}
                 </Badge>
               </div>
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground text-sm">Stato Bollo</span>
-                <Badge variant="outline" className="text-[10px] uppercase tracking-tighter">
+              <div className="flex justify-between items-center py-4 border-b border-white/5 group">
+                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest opacity-60">Stato Bollo</span>
+                <Badge className="bg-primary/10 text-primary border-primary/20 px-3 py-1 rounded-lg font-bold uppercase text-[9px] tracking-tighter">
                   {taxStatus || 'N/D'}
                 </Badge>
               </div>
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground text-sm">Potenza</span>
+              <div className="flex justify-between items-center py-4 border-b border-white/5 group">
+                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest opacity-60">Potenza</span>
                 <div className="text-right">
-                  <span className="font-medium text-sm block">
+                  <span className="font-extrabold text-sm text-white group-hover:text-primary transition-colors block">
                     {vehicle.power ? `${vehicle.power} kW` : 'N/D'}
                   </span>
                   {horsepower && (
-                    <span className="text-[10px] text-muted-foreground italic">({horsepower} CV)</span>
+                    <span className="text-[10px] text-muted-foreground font-bold uppercase opacity-30 tracking-widest">({horsepower} CV)</span>
                   )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </TabsContent>
 
-        <TabsContent value="docs" className="mt-4">
-          <Card>
-            <CardContent className="pt-6 space-y-4">
-              <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/10 rounded">
-                    <Shield className="h-4 w-4 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Assicurazione</p>
-                    <p className="text-xs text-muted-foreground">
-                      Scade il {legalInfo?.insurance ? formatDate((legalInfo.insurance as any).dataScadenzaAttuale || legalInfo.insurance.endDate) : 'N/D'}
-                    </p>
-                    {vehicle.type === 'moto' && legalInfo?.insurance && (
-                      (() => {
-                        const ins: any = legalInfo.insurance;
-                        const totali = typeof ins.giorniSospensioneTotali === 'number' ? ins.giorniSospensioneTotali : 0;
-                        const residui = typeof ins.giorniSospensioneResidui === 'number' ? ins.giorniSospensioneResidui : 0;
-                        const sospesiTotali = Math.max(0, totali - residui);
-                        const costoAnnuale = Number(ins.amount || 0);
-                        const costoGiornaliero = costoAnnuale / 365;
-                        const valoreRecuperato = sospesiTotali * costoGiornaliero;
-                        const mesiEffettivi = (365 + sospesiTotali) / 30.44;
-                        const costoMensileReale = mesiEffettivi > 0 ? (costoAnnuale / mesiEffettivi) : 0;
-                        return (
-                          <div className="mt-1 text-[11px] text-muted-foreground">
-                            Risparmio/Recupero da Sospensione: <span className="font-medium">{valoreRecuperato.toFixed(2)}€</span>{' '}
-                            · Costo Mensile Reale: <span className="font-medium">{costoMensileReale.toFixed(2)}€</span>
-                          </div>
-                        );
-                      })()
-                    )}
-                  </div>
+        <TabsContent value="docs" className="mt-8">
+          <div className="luxury-card p-8 space-y-6">
+            <div className="flex items-center justify-between p-5 luxury-card border-white/5 hover:border-primary/30 transition-all cursor-pointer group">
+              <div className="flex items-center gap-5">
+                <div className="p-3 bg-primary/10 rounded-2xl border border-primary/10 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] transition-all">
+                  <Shield className="h-6 w-6 text-primary" />
                 </div>
-                <Button variant="ghost" size="sm">Vedi</Button>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-orange-500/10 rounded">
-                    <FileText className="h-4 w-4 text-orange-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Libretto di Circolazione</p>
-                    <p className="text-xs text-muted-foreground">Documento caricato</p>
-                  </div>
+                <div>
+                  <p className="text-sm font-extrabold text-white group-hover:text-primary transition-colors uppercase tracking-widest">Assicurazione</p>
+                  <p className="text-xs text-muted-foreground font-medium mt-1">
+                    Scade il {legalInfo?.insurance ? formatDate((legalInfo.insurance as any).dataScadenzaAttuale || legalInfo.insurance.endDate) : 'N/D'}
+                  </p>
                 </div>
-                <Button variant="ghost" size="sm">Vedi</Button>
               </div>
-              <Button variant="outline" className="w-full border-dashed gap-2" onClick={() => setShowDocForm('insurance')}>
-                <Plus className="h-4 w-4" />
-                Aggiungi Documento
-              </Button>
-            </CardContent>
-          </Card>
+              <Button variant="ghost" size="sm" className="text-primary font-bold hover:bg-primary/10 rounded-xl">Vedi</Button>
+            </div>
+            
+            <div className="flex items-center justify-between p-5 luxury-card border-white/5 hover:border-primary/30 transition-all cursor-pointer group">
+              <div className="flex items-center gap-5">
+                <div className="p-3 bg-primary/10 rounded-2xl border border-primary/10 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] transition-all">
+                  <FileText className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-extrabold text-white group-hover:text-primary transition-colors uppercase tracking-widest">Libretto di Circolazione</p>
+                  <p className="text-xs text-muted-foreground font-medium mt-1">Documento caricato</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm" className="text-primary font-bold hover:bg-primary/10 rounded-xl">Vedi</Button>
+            </div>
+
+            <Button 
+              variant="outline" 
+              className="w-full h-16 border-dashed border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary font-bold rounded-2xl gap-3 transition-all" 
+              onClick={() => setShowDocForm('insurance')}
+            >
+              <Plus className="h-5 w-5" />
+              Aggiungi Documento Premium
+            </Button>
+          </div>
         </TabsContent>
 
-        <TabsContent value="history" className="mt-4">
-          <Card>
-            <CardContent className="py-10 text-center">
-              <p className="text-sm text-muted-foreground italic">
-                Report storico generato correttamente per: {vehicle.brand} {vehicle.model}. Consulta la tab Analytics per esportare il PDF.
+        <TabsContent value="history" className="mt-8">
+          <div className="luxury-card p-16 text-center space-y-6">
+            <div className="bg-primary/10 p-6 rounded-full w-fit mx-auto border border-primary/10">
+              <Info className="h-10 w-10 text-primary/40" />
+            </div>
+            <div className="max-w-md mx-auto">
+              <p className="text-sm text-muted-foreground font-medium italic leading-relaxed">
+                Il report storico completo per <span className="text-white font-bold">{vehicle.brand} {vehicle.model}</span> è pronto. 
+                Puoi consultare l'analisi dettagliata nella sezione <span className="text-primary font-bold">Analytics</span> o scaricare il PDF ufficiale.
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
       
       <Dialog open={!!showDocForm} onOpenChange={(open) => !open && setShowDocForm(null)}>
-        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-black/95 backdrop-blur-2xl border-primary/20 rounded-[32px] p-8">
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-2xl font-extrabold text-white gold-text-gradient uppercase tracking-tight">
               {showDocForm === 'insurance' && 'Assicurazione'}
               {showDocForm === 'tax' && 'Bollo'}
               {showDocForm === 'inspection' && 'Revisione'}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-muted-foreground font-medium">
               Gestisci documenti per questo veicolo
             </DialogDescription>
           </DialogHeader>
