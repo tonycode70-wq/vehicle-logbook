@@ -1,11 +1,11 @@
 {
-  "name": "VehicleManager Pro",
-  "short_name": "VehicleManager",
-  "description": "Gestione completa veicoli auto e moto",
+  "name": "Barons Veicoli",
+  "short_name": "Barons",
+  "description": "Gestione lusso veicoli auto e moto",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1e3a5f",
-  "theme_color": "#2563eb",
+  "background_color": "#0D0D0D",
+  "theme_color": "#D4AF37",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="120" fill="#0D0D0D"/>
+  <defs>
+    <linearGradient id="gold-metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="50%" stop-color="#FBE795" />
+      <stop offset="100%" stop-color="#C5A028" />
+    </linearGradient>
+  </defs>
+  <!-- Silhouette dell'Auto -->
+  <path d="M100,320 C180,320 230,160 330,160 C430,160 480,250 500,320" 
+        stroke="url(#gold-metallic)" 
+        stroke-width="15" 
+        stroke-linecap="round" 
+        fill="none" 
+        transform="translate(-50, 0) scale(1.1)"/>
+  <!-- Testo stilizzato -->
+  <text x="256" y="420" text-anchor="middle" fill="url(#gold-metallic)" 
+        style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 40px; letter-spacing: 0.4em;">BARONS</text>
+</svg>

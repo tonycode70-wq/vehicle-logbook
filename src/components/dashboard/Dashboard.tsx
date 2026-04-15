@@ -194,19 +194,60 @@ export function Dashboard({ onAddVehicle, onSelectVehicle, onEditVehicle, onTabC
 
   // Stats for the dashboard
   const stats = useMemo(() => {
+    // Filtra i dati in base al veicolo selezionato
+    const filteredMaintenance = selectedVehicleId === 'all' 
+      ? data.maintenance 
+      : data.maintenance.filter(m => m.vehicleId === selectedVehicleId);
+      
+    const filteredExpenses = selectedVehicleId === 'all'
+      ? data.expenses
+      : data.expenses.filter(e => e.vehicleId === selectedVehicleId);
+
+    const fuelExpenses = filteredExpenses.filter(e => e.category === 'carburante');
+    
+    // Calcola i km totali (somma dei km correnti dei veicoli selezionati o totale flotta)
+    const totalKm = selectedVehicleId === 'all'
+      ? data.vehicles.reduce((sum, v) => sum + v.currentKm, 0)
+      : data.vehicles.find(v => v.id === selectedVehicleId)?.currentKm || 0;
+
+    const totalFuelLitres = fuelExpenses.reduce((sum, e) => {
+      // Assumiamo un costo medio se non abbiamo i litri nel DB (estensione futura)
+      // Per ora usiamo il valore di esempio normalizzato o calcolato se disponibile
+      return sum + (e.amount / 1.85); // Stima litri basata su prezzo medio
+    }, 0);
+
+    const totalSpent = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+
     return {
-      km: { value: 139, trend: -12 },
-      fuel: { value: 28.4, trend: -5 },
-      maintenance: { value: 2 },
-      totalSpent: { value: 96.50, trend: -8 }
+      km: { 
+        value: totalKm, 
+        label: selectedVehicleId === 'all' ? "Km totali flotta" : "Km percorsi" 
+      },
+      fuel: { 
+        value: totalFuelLitres.toFixed(1), 
+        label: "Litri stimati" 
+      },
+      maintenance: { 
+        value: filteredMaintenance.length,
+        label: "Interventi"
+      },
+      totalSpent: { 
+        value: totalSpent,
+        label: "Spesa totale"
+      }
     };
-  }, [data]);
+  }, [data, selectedVehicleId]);
 
   // Upcoming deadlines list
   const deadlineList = useMemo(() => {
     const items: { type: string; vehicle: string; days: number; status: 'ok' | 'warning' | 'critical'; icon: React.ReactNode }[] = [];
     
-    data.legal.forEach(doc => {
+    // Filtriamo le scadenze anche in base al veicolo selezionato se necessario
+    const relevantLegal = selectedVehicleId === 'all'
+      ? data.legal
+      : data.legal.filter(l => l.vehicleId === selectedVehicleId);
+
+    relevantLegal.forEach(doc => {
       const vehicle = data.vehicles.find(v => v.id === doc.vehicleId);
       if (!vehicle) return;
 
@@ -236,7 +277,7 @@ export function Dashboard({ onAddVehicle, onSelectVehicle, onEditVehicle, onTabC
     });
 
     return items.sort((a, b) => a.days - b.days);
-  }, [data]);
+  }, [data, selectedVehicleId]);
 
   if (!isLoaded) return <div className="p-8 text-center">Caricamento dashboard...</div>;
 
@@ -325,32 +366,29 @@ export function Dashboard({ onAddVehicle, onSelectVehicle, onEditVehicle, onTabC
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <StatsSmallCard 
                 icon={<Activity className="h-5 w-5 text-primary" />}
-                value={`${stats.km.value} km`}
-                label="Percorsi totali"
-                trend={stats.km.trend}
+                value={selectedVehicleId === 'all' ? stats.km.value.toLocaleString() : formatKm(stats.km.value)}
+                label={stats.km.label}
                 color="gold"
                 onClick={() => onTabChange?.('analytics')}
               />
               <StatsSmallCard 
                 icon={<Fuel className="h-5 w-5 text-primary" />}
                 value={`${stats.fuel.value} l`}
-                label="Carburante"
-                trend={stats.fuel.trend}
+                label={stats.fuel.label}
                 color="gold"
                 onClick={() => onTabChange?.('expenses')}
               />
               <StatsSmallCard 
                 icon={<Wrench className="h-5 w-5 text-primary" />}
                 value={stats.maintenance.value.toString()}
-                label="Manutenzioni"
+                label={stats.maintenance.label}
                 color="gold"
                 onClick={() => onTabChange?.('maintenance')}
               />
               <StatsSmallCard 
                 icon={<span className="text-primary font-bold">€</span>}
                 value={formatCurrency(stats.totalSpent.value)}
-                label="Spesa totale"
-                trend={stats.totalSpent.trend}
+                label={stats.totalSpent.label}
                 color="gold"
                 onClick={() => onTabChange?.('analytics')}
               />
